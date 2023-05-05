@@ -20,12 +20,54 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Ride.init({
-    startLocation: DataTypes.STRING,
-    destination: DataTypes.STRING,
-    departureTime: DataTypes.DATE,
-    arrivalTime: DataTypes.DATE,
-    price: DataTypes.INTEGER,
-    seats: DataTypes.INTEGER,
+    startLocation: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "Start location is required" },
+        notNull: { msg: "Start location is required" },
+      },
+    },
+    destination: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "Destination point is required" },
+        notNull: { msg: "Destination point is required" },
+      },
+    },
+    departureTime: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "Departure time is required" },
+        notNull: { msg: "Departure time is required" },
+      },
+    },
+    arrivalTime: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "Estimation of arrival time is required" },
+        notNull: { msg: "Estimation of arrival time is required" },
+      },
+    },
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "Price is required" },
+        notNull: { msg: "Price is required" },
+      },
+    },
+    seats: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "Total available seat is required" },
+        notNull: { msg: "Total available seat is required" },
+      },
+    },
     VehicleId: DataTypes.INTEGER
   }, {
     sequelize,
