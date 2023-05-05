@@ -41,7 +41,7 @@ class UserController {
         throw { name: "unauthorized" };
       }
 
-      const token = generateToken(selectedUser.id);
+      const token = generateToken({ id: selectedUser.id });
       res.status(200).json({
         access_token: token,
         username: selectedUser.name,

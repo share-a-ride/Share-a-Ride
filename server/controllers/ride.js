@@ -61,7 +61,7 @@ class RideController {
       const { id } = req.user;
       // console.log(id,"<<<<<");
       const ridesPerUser = await UserRide.findAll({
-        where: { UserId: 2 },
+        where: { UserId: id },
         include: Ride,
       });
       res.status(200).json(ridesPerUser);
@@ -79,13 +79,16 @@ class RideController {
         { paymentStatus: "paid" },
         {
           where: {
-            UserId: id,
             [Op.and]: [{ UserId: id }, { id: userRideId }],
           },
           returning: true,
         }
       );
-      // console.log(updatedRide, "<<<<<<<<<");
+      if (!updatedRide[0]) {
+        throw { name: "invalid_token" }
+      }
+      
+      console.log(updatedRide, "<<<<<<<<<");
       res.status(200).json(updatedRide);
     } catch (error) {
       // console.log(error);
