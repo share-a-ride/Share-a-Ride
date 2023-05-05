@@ -1,48 +1,62 @@
-import {
-  Button,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  ScrollView,
-  FlatList,
-} from "react-native";
-import Card from "../components/Card";
-import {logo_black} from "../assets/image/logo-black.png"
+import React, { useState } from "react";
+import { View, Text, FlatList, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
+const data = [
+  {
+    id: "1",
+    startLocation: "New York City",
+    destination: "Boston",
+    departureTime: "2023-05-10 10:00:00",
+    arrivalTime: "2023-05-10 13:00:00",
+    price: 50,
+    seats: 4,
+    user: "John Doe",
+  },
+  {
+    id: "2",
+    startLocation: "San Francisco",
+    destination: "Los Angeles",
+    departureTime: "2023-05-15 12:00:00",
+    arrivalTime: "2023-05-15 18:00:00",
+    price: 100,
+    seats: 7,
+    user: "Jane Doe",
+  },
+];
 
+export default function HomeScreen({ route }) {
+  const navigation = useNavigation();
+  const [user, setUser] = useState("John Doe");
 
-export default function HomeScreen({ navigation }) {
- 
+  const renderItem = ({ item }) => (
+    <View style={styles.card}>
+      <View style={styles.left}>
+        <Text style={styles.leftText}>{item.startLocation}</Text>
+        <Text style={styles.leftText}>{item.departureTime}</Text>
+        <View style={styles.line} />
+        <Text style={styles.leftText}>{item.destination}</Text>
+        <Text style={styles.leftText}>{item.arrivalTime}</Text>
+      </View>
+      <View style={styles.right}>
+        <Text style={styles.price}>${item.price}</Text>
+        <View style={styles.bottom}>
+          <Text style={styles.seats}>{item.seats} seats</Text>
+          <Text style={styles.user}>Posted by {item.user}</Text>
+        </View>
+      </View>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-      
-
-      <View style={styles.body}>
-        <View style={styles.jumbotron}>
-          <Image
-            source={{
-              uri: "https://i.imgur.com/1vsABTT.png",
-            }}
-            style={{ width: "100%", height: "100%" }}
-          />
-        </View>
-
-        <View style={styles.conten}>
-          <ScrollView>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-          </ScrollView>
-        </View>
-      </View>
+      <Text style={styles.title}>Welcome, {user}!</Text>
+      <FlatList
+        style={styles.list}
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
     </View>
   );
 }
@@ -50,70 +64,67 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#1f2d5a",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 20,
+  },
+  list: {
+    width: "100%",
+    paddingHorizontal: 10,
+  },
+  card: {
     backgroundColor: "#fff",
-  },
-  nav: {
-    flex: 1,
-  },
-  navHeader: {
-    flex: 2,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  textHeader: {
-    fontSize: 32,
-    fontFamily: "serif",
-    margin: 0,
-  },
-  textTop: {
-    fontSize: 8,
-    fontFamily: "serif",
-    margin: 0,
-  },
-  navMenu: {
-    flex: 1,
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 5,
+    marginHorizontal: 0,
     flexDirection: "row",
-    backgroundColor: "white",
+    justifyContent: "space-between",
+  },
+  left: {
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
-    borderStyle: "solid",
-    borderColor: "black",
-    borderWidth: 1,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-
-    elevation: 4,
+    justifyContent: "space-between",
   },
-  textMenu: {
-    margin: 4,
+  leftText: {
+    fontSize: 16,
+    marginTop: 5,
+    color: '#1f2d5a',
+    textAlign: 'left',
   },
-
-  body: {
-    flex: 4,
-    backgroundColor: "white",
+  line: {
+    width: 1,
+    height: 60,
+    backgroundColor: "#1f2d5a",
   },
-  jumbotron: {
-    flex: 1,
-    margin: 7,
-    backgroundColor: "green",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
+  right: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
   },
-  conten: {
-    flex: 3,
-    backgroundColor: "white",
+  price: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#1f2d5a",
+    marginBottom: 10,
+  },
+  bottom: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  seats: {
+    fontSize: 16,
+    color: "#8e9eb6",
+    marginRight: 10,
+  },
+  user: {
+    fontSize: 16,
+    color: "#8e9eb6",
   },
 });
