@@ -1,0 +1,12 @@
+[
+    {
+        "type": "sedan",
+        "plateNumber": "ABC-123",
+        "UserId": 1
+    },
+    {
+        "type": "suv",
+        "plateNumber": "XYZ-789",
+        "UserId": 2
+    }
+]

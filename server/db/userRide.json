@@ -1,0 +1,18 @@
+[
+    {
+        "UserId": 1,
+        "RideId": 1
+    },
+    {
+        "UserId": 2,
+        "RideId": 2
+    },
+    {
+        "UserId": 3,
+        "RideId": 1
+    },
+    {
+        "UserId": 4,
+        "RideId": 2
+    }
+]
