@@ -4,7 +4,7 @@ const rideRouter = express.Router()
 
 rideRouter.get("/", RideController.getAllRide)
 rideRouter.post("/", RideController.createRide)
-rideRouter.patch("/", RideController.updateStatusPayment)
 rideRouter.delete("/delete/:id", RideController.deleteRide)
+rideRouter.patch("/:id", RideController.updateStatusPayment)
 
 module.exports = rideRouter

@@ -15,7 +15,7 @@ class UserController {
         phoneNumber,
         photo,
         idCardImg,
-        status
+        status,
       });
 
       res
@@ -33,7 +33,7 @@ class UserController {
       if (!email || email === undefined) throw { name: "empty_email" };
       if (!password || password === undefined) throw { name: "empty_password" };
 
-      const selectedUser = await User.findOne({email});
+      const selectedUser = await User.findOne({ email });
       if (!selectedUser) {
         throw { name: "unauthorized" };
       }
@@ -41,7 +41,7 @@ class UserController {
         throw { name: "unauthorized" };
       }
 
-      const token = generateToken({ id: selectedUser.id });
+      const token = generateToken(selectedUser.id);
       res.status(200).json({
         access_token: token,
         username: selectedUser.name,
