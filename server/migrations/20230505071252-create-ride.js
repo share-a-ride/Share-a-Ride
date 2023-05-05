@@ -21,7 +21,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      arivalTime: {
+      arrivalTime: {
         allowNull: false,
         type: Sequelize.DATE
       },
