@@ -1,4 +1,4 @@
-const { Ride, Vehicle } = require("../models");
+const { Ride, Vehicle, User } = require("../models");
 
 class RideController {
   static async getAllRide(req, res, next) {
@@ -9,12 +9,73 @@ class RideController {
       }
       res.status(200).json(data);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
   static async createRide(req, res, next) {
     try {
-    } catch (error) {}
+      let userId = req.user.id
+      const { startLocation, destination, departureTime, arrivalTime, price, seats } = req.body
+
+      let user = await User.findByPk(userId, {
+        include: Vehicle
+      })
+
+      console.log(user.Vehicle, "{}{}{}{}{}{");
+      let ride = await Ride.create({
+        startLocation, destination, departureTime, arrivalTime, price, seats,
+        VehicleId: user.Vehicle.id
+      })
+      const message = `new entity with ${ride.id} created`
+      res.status(201).json(message)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async updateStatusPayment(req, res, next) {
+    try {
+      const { id } = req.user;
+      // console.log(id)
+      const updatedRide = await UserRide.update(
+        { paymentStatus: "paid" },
+        {
+          where: {
+            UserId: id,
+            [Op.and]: [{ UserId: id }, { paymentStatus: "pending" }],
+          },
+          returning: true,
+        }
+      );
+      console.log(updatedRide);
+      res.status(200).json(updatedRide);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
+  static async deleteRide(req, res, next) {
+    try {
+      let id = req.params.id
+      let ride = await Ride.findByPk(id)
+
+      if (!ride) {
+        throw { name: "not_found" }
+      }
+
+      await Ride.destroy({ where: { id } })
+
+      const message = `entity with id ${ride.id} deleted`
+      res.status(200).json({ message });
+
+    } catch (error) {
+      console.log(error);
+      next(error)
+    }
   }
 }
+
+
 module.exports = RideController;

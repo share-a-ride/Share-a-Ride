@@ -33,7 +33,7 @@ class UserController {
       if (!email || email === undefined) throw { name: "empty_email" };
       if (!password || password === undefined) throw { name: "empty_password" };
 
-      const selectedUser = await User.findOne(email);
+      const selectedUser = await User.findOne({email});
       if (!selectedUser) {
         throw { name: "unauthorized" };
       }
@@ -41,7 +41,7 @@ class UserController {
         throw { name: "unauthorized" };
       }
 
-      const token = generateToken(selectedUser.id);
+      const token = generateToken({ id: selectedUser.id });
       res.status(200).json({
         access_token: token,
         username: selectedUser.name,
@@ -51,6 +51,7 @@ class UserController {
         reting: selectedUser.rating,
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

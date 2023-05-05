@@ -8,13 +8,16 @@ const userAuthentication = async (req, res, next) => {
       throw { name: "invalid_token" };
     }
     const payload = verifyToken(access_token);
+    console.log(payload, "?????");
     const data = await User.findByPk(payload.id);
+    console.log(data, "><><><><");
     if (!data) {
       throw { name: "invalid_token" };
     }
     req.user = payload;
     next();
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
