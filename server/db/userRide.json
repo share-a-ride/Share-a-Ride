@@ -1,18 +1,24 @@
 [
     {
         "UserId": 1,
-        "RideId": 1
+        "RideId": 1,
+        "paymentStatus":"pending"
     },
     {
         "UserId": 2,
-        "RideId": 2
+        "RideId": 2,
+        "paymentStatus":"pending"
+
     },
     {
         "UserId": 3,
-        "RideId": 1
+        "RideId": 1,
+        "paymentStatus":"pending"
     },
     {
         "UserId": 4,
-        "RideId": 2
+        "RideId": 2,
+        "paymentStatus":"pending"
+
     }
 ]
