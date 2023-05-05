@@ -26,6 +26,9 @@ const errorHandler = (err, req, res, next) => {
   } else if (err.name === "invalid_token") {
     message = "Forbidden";
     code = 403;
+  } else if (err.name === "empty") {
+    message = "All Field Must Be Filled"
+    code = 400
   }
 
   res.status(code).json({ message });

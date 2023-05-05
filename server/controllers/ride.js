@@ -87,12 +87,47 @@ class RideController {
       if (!updatedRide[0]) {
         throw { name: "invalid_token" }
       }
-      
+
       console.log(updatedRide, "<<<<<<<<<");
       res.status(200).json(updatedRide);
     } catch (error) {
       // console.log(error);
       next(error);
+    }
+  }
+
+  static async updateRide(req, res, next) {
+    try {
+      const id = req.params.id
+      let ride = await Ride.findByPk(id);
+
+      if (!ride) {
+        throw ({ name: "not_found" });
+      }
+      let { startLocation, destination, departureTime, arrivalTime, price, seats } = req.body
+
+      if (!startLocation || !destination || !departureTime || !arrivalTime || !price || !seats) {
+        throw ({ name: "empty" })
+      }
+
+      let rideUpdate = await Ride.update({
+        startLocation,
+        destination,
+        departureTime,
+        arrivalTime,
+        price, 
+        seats
+      }, {
+        where: {
+          id
+        }
+      })
+      const message = `entity with id ${ride.id} updated`
+
+      res.status(200).json({ message })
+    } catch (error) {
+      console.log(error);
+      next(error)
     }
   }
 }
