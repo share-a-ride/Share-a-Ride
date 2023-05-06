@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const { Ride, Vehicle, UserRide, User } = require("../models");
+const midtransClient = require('midtrans-client')
 
 class RideController {
   static async getAllRide(req, res, next) {
@@ -115,7 +116,7 @@ class RideController {
         destination,
         departureTime,
         arrivalTime,
-        price, 
+        price,
         seats
       }, {
         where: {
@@ -128,6 +129,58 @@ class RideController {
     } catch (error) {
       console.log(error);
       next(error)
+    }
+  }
+
+  static async genMidtransToken(req, res, next) {
+    try {
+      console.log(1, '<<<<<<<<');
+
+      const checkUser = await UserRide.findByPk(req.user.id, {
+        include: User
+      })
+
+      console.log(checkUser.User.email, '<<<<<< checkUser.isPremium');
+
+      if (checkUser.paymentStatus === "paid") {
+        throw { name: 'ALREADY_BOOKED' };
+      }
+
+      console.log(3, '<<<<<<<<');
+
+      let snap = new midtransClient.Snap({
+        isProduction: false,
+        serverKey: "SB-Mid-server-xvUL2muo6OumITLOfsgy0pMP"
+      });
+
+      console.log(4, '<<<<<<<<');
+
+      let parameter = {
+        "transaction_details": {
+          "order_id": "TRANSACTION_" + Math.floor(Math.random() * (9999999999 - 100000000 + 1) + 100000000),
+          "gross_amount": 2000000 // 1juta
+        },
+        "credit_card": {
+          "secure": true
+        },
+        "customer_details": {
+          "email": checkUser.User.email,
+        }
+      }
+
+      console.log(5, '<<<<<<<<');
+
+      const midtransToken = await snap.createTransaction(parameter)
+
+
+      console.log(6, '<<<<<<<<');
+
+
+      res.status(200).json(midtransToken)
+
+    } catch (err) {
+      console.log(err);
+      next(err)
     }
   }
 }
