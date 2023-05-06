@@ -22,7 +22,11 @@ const errorHandler = (err, req, res, next) => {
   } else if (err.name === "unauthorized") {
     message = "Email / Password is wrong";
     code = 401;
-  } else if (err.name === "invalid_token" || err.name === "JsonWebTokenError") {
+  } else if (
+    err.name === "invalid_token" ||
+    err.name === "JsonWebTokenError" ||
+    err.name === "invalid_user"
+  ) {
     message = "Forbidden";
     code = 403;
   } else if (err.name === "access_token_missing") {
@@ -33,12 +37,21 @@ const errorHandler = (err, req, res, next) => {
     code = 400;
   } else if (err.name === "invalid_rating") {
     message = "Rating must be between 1-5";
-    code = 404;
+    code = 400;
   } else if (err.name === "ALREADY_BOOKED") {
     message = "You are already a booked";
   } else if (err.name === "self_rate") {
     message = "You cannot rate yourself";
-    code = 404;
+    code = 400;
+  } else if (err.name === "full_booked") {
+    message = "The ride is fully booked";
+    code = 400;
+  } else if (err.name === "invalid_seats") {
+    message = "Minimum seat number is 1";
+    code = 400;
+  } else if (err.name === "invalid_order") {
+    message = "You have ordered this ride";
+    code = 400;
   }
 
   res.status(code).json({ message });

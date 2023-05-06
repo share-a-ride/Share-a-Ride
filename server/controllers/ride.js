@@ -29,6 +29,10 @@ class RideController {
         seats,
       } = req.body;
 
+      if (seats <= 0) {
+        throw { name: "invalid_seats" };
+      }
+
       let user = await User.findByPk(userId, {
         include: Vehicle,
       });
@@ -43,7 +47,7 @@ class RideController {
         createdBy: userId,
         VehicleId: user.Vehicle.id,
       });
-      const message = `new entity with ${ride.id} created`;
+      const message = `New ride with ${ride.id} created`;
       res.status(201).json({ message });
     } catch (error) {
       next(error);
@@ -61,7 +65,7 @@ class RideController {
 
       await Ride.destroy({ where: { id } });
 
-      const message = `entity with id ${ride.id} deleted`;
+      const message = `Ride with id ${ride.id} deleted`;
       res.status(200).json({ message });
     } catch (error) {
       console.log(error);
@@ -205,9 +209,76 @@ class RideController {
       console.log(6, "<<<<<<<<");
 
       res.status(200).json(midtransToken);
+
+      // const paymentStatus = await checkPaymentStatus(orderId);
+
+      // if (!paymentStatus.success) {
+      //   throw { name: 'PAYMENT_FAILED', message: paymentStatus.message };
+      // }
+
+      // Update UserRide payment status to 'paid'
+      await checkUser.update({ paymentStatus: "paid" });
+      await Ride.update(
+        { seats: seats - 1 },
+        { where: { id: checkUser.RideId } }
+      );
     } catch (err) {
       console.log(err);
       next(err);
+    }
+  }
+
+  static async orderRide(req, res, next) {
+    try {
+      const rideId = req.params.id;
+      const userId = req.user.id;
+      console.log(req.user);
+
+      const ride = await Ride.findByPk(rideId, {
+        include: [{ model: UserRide }],
+      });
+      // console.log(ride.UserRides);
+      // check if user is in the ride
+      if (ride.UserRides.find((el) => el.UserId == userId)) {
+        throw { name: "invalid_order" };
+      }
+      if (!ride) {
+        throw { name: "not_found" };
+      }
+      if (ride.seats <= 0) {
+        throw { name: "full_booked" };
+      }
+
+      let newUserRide = await UserRide.create({
+        RideId: rideId,
+        UserId: userId,
+        paymentStatus: "pending",
+      });
+      const message = "Order received";
+      res.status(201).json({ message });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async cancelOrder(req, res, next) {
+    try {
+      const id = req.params.id;
+      const userId = req.user.id;
+
+      const order = await UserRide.findByPk(id);
+      if (!order) {
+        throw { name: "not_found" };
+      }
+      if (order.UserId !== userId) {
+        throw { name: "invalid_user" };
+      }
+
+      await UserRide.destroy({ where: { id } });
+      const message = `Order is cancelled`;
+      res.status(200).json({ message });
+    } catch (error) {
+      next(error);
     }
   }
 }
