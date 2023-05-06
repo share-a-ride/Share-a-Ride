@@ -9,6 +9,7 @@ import RegisterScreen from "../screen/register";
 import DetailScreen from "../screen/DetailScreen"
 import ProfileScreen from "../screen/ProfileScreen"
 import { SafeAreaView} from 'react-native';
+import MyRides from "../screen/MyRides";
 
 
 const Stack = createNativeStackNavigator();
@@ -22,6 +23,7 @@ export default function MainStack() {
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Details" component={DetailScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="MyRides" component={MyRides} />
       </Stack.Navigator>
   );
 }

@@ -59,13 +59,13 @@ const ProfileScreen = () => {
       </View>
 
       <View className="flex-row   mt-6">
-        <View className="flex-1 items-center justify-center py-8 border border-slate-500">
+        <View className="flex-1 items-center justify-center py-6 border border-slate-400 rounded-lg">
           <Text className=""> Ratings</Text>
-          <Text className="text-2xl">{user?.rating} / 5 </Text>
+          <Text className="text-2xl font-semibold">{user?.rating} / 5 </Text>
         </View>
-        <View className="flex-1 items-center justify-center py-10 border border-slate-500">
+        <View className="flex-1 items-center justify-center py-6 border border-slate-400 rounded-lg">
           <Text>Review </Text>
-          <Text className="text-2xl">{user?.review}</Text>
+          <Text className="text-2xl font-semibold">{user?.review}</Text>
         </View>
       </View>
 

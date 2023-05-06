@@ -83,12 +83,7 @@ const data = [
 export default function HomeScreen({ route }) {
   const navigation = useNavigation();
   const [user, setUser] = useState("John Doe");
-  const doubleTap = Gesture.Tap()
-    .maxDuration(250)
-    .numberOfTaps(2)
-    .onStart(() => {
-      navigation.navigate("Details");
-    });
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -97,7 +92,13 @@ export default function HomeScreen({ route }) {
   }, []);
 
   const renderItem = ({ item }) => (
-    <GestureDetector gesture={doubleTap}>
+    <GestureDetector gesture={doubleTap = Gesture.Tap()
+      .maxDuration(250)
+      .numberOfTaps(2)
+      .onStart(() => {
+        navigation.navigate("Details",{item});
+      })
+  }>
       <View style={styles.card}>
         <View style={styles.left}>
           <Text style={styles.leftText}>{item.startLocation}</Text>
