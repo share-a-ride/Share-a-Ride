@@ -12,9 +12,8 @@ class AdminController {
         password,
       });
 
-      res
-        .status(201)
-        .json({ message: `User ${newAdmin.name} has succesfully registered` });
+      const message = `User ${newAdmin.name} has succesfully registered`;
+      res.status(201).json({ message });
     } catch (error) {
       next(error);
     }

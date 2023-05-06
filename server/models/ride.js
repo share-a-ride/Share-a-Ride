@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Ride extends Model {
     /**
@@ -15,63 +13,73 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "RideId",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
-      Ride.belongsTo(models.Vehicle)
+      });
+      Ride.belongsTo(models.Vehicle);
     }
   }
-  Ride.init({
-    startLocation: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: "Start location is required" },
-        notNull: { msg: "Start location is required" },
+  Ride.init(
+    {
+      startLocation: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Start location is required" },
+          notNull: { msg: "Start location is required" },
+        },
+      },
+      destination: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Destination point is required" },
+          notNull: { msg: "Destination point is required" },
+        },
+      },
+      departureTime: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Departure time is required" },
+          notNull: { msg: "Departure time is required" },
+        },
+      },
+      arrivalTime: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Estimation of arrival time is required" },
+          notNull: { msg: "Estimation of arrival time is required" },
+        },
+      },
+      price: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Price is required" },
+          notNull: { msg: "Price is required" },
+        },
+      },
+      seats: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Total available seat is required" },
+          notNull: { msg: "Total available seat is required" },
+        },
+      },
+      createdBy: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      VehicleId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
     },
-    destination: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: "Destination point is required" },
-        notNull: { msg: "Destination point is required" },
-      },
-    },
-    departureTime: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: "Departure time is required" },
-        notNull: { msg: "Departure time is required" },
-      },
-    },
-    arrivalTime: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: "Estimation of arrival time is required" },
-        notNull: { msg: "Estimation of arrival time is required" },
-      },
-    },
-    price: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: "Price is required" },
-        notNull: { msg: "Price is required" },
-      },
-    },
-    seats: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: "Total available seat is required" },
-        notNull: { msg: "Total available seat is required" },
-      },
-    },
-    VehicleId: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'Ride',
-  });
+    {
+      sequelize,
+      modelName: "Ride",
+    }
+  );
   return Ride;
 };

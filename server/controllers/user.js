@@ -18,9 +18,8 @@ class UserController {
         status,
       });
 
-      res
-        .status(201)
-        .json({ message: `User ${name} has succesfully registered` });
+      const message = `User ${name} has succesfully registered`;
+      res.status(201).json({ message });
     } catch (error) {
       next(error);
     }
@@ -98,15 +97,55 @@ class UserController {
       if (userToUpdate.status === newStatus) {
         throw { name: "no_change" };
       }
+
       await User.update(
         { status: newStatus },
         {
           where: { id: userId },
         }
       );
-      res.status(200).json({
-        message: `Status of user with id ${userToUpdate.name} has been changed to ${newStatus}`,
-      });
+
+      const message = `Status of user with id ${userToUpdate.name} has been changed to ${newStatus}`;
+      res.status(200).json({ message });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async rateUser(req, res, next) {
+    try {
+      const id = Number(req.params.id);
+      const rating = Number(req.body.rating);
+      const userId = req.user.id;
+
+      // console.log(id, userId, rating);
+
+      let userToRate = await User.findByPk(id);
+      if (!userToRate) {
+        throw { name: "not_found" };
+      }
+
+      if (id == userId) {
+        throw { name: "self_rate" };
+      }
+
+      if (rating < 1) {
+        throw { name: "invalid_rating" };
+      } else if (rating > 5) {
+        throw { name: "invalid_rating" };
+      }
+
+      let newRating = (userToRate.rating + rating) / 2;
+
+      await User.update(
+        { rating: newRating },
+        {
+          where: { id },
+        }
+      );
+
+      const message = `Rated ${userToRate.name} with ${rating} successfully`;
+      res.status(200).json({ message });
     } catch (error) {
       next(error);
     }

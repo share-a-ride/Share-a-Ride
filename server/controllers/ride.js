@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
 const { Ride, Vehicle, UserRide, User } = require("../models");
-const midtransClient = require('midtrans-client')
+const midtransClient = require("midtrans-client");
 
 class RideController {
   static async getAllRide(req, res, next) {
@@ -18,42 +18,54 @@ class RideController {
 
   static async createRide(req, res, next) {
     try {
-      let userId = req.user.id
-      const { startLocation, destination, departureTime, arrivalTime, price, seats } = req.body
+      let userId = req.user.id;
+      const {
+        startLocation,
+        destination,
+        departureTime,
+        arrivalTime,
+        price,
+        seats,
+      } = req.body;
 
       let user = await User.findByPk(userId, {
-        include: Vehicle
-      })
+        include: Vehicle,
+      });
 
       console.log(user.Vehicle, "{}{}{}{}{}{");
       let ride = await Ride.create({
-        startLocation, destination, departureTime, arrivalTime, price, seats,
-        VehicleId: user.Vehicle.id
-      })
-      const message = `new entity with ${ride.id} created`
-      res.status(201).json(message)
+        startLocation,
+        destination,
+        departureTime,
+        arrivalTime,
+        price,
+        seats,
+        createdBy: userId,
+        VehicleId: user.Vehicle.id,
+      });
+      const message = `new entity with ${ride.id} created`;
+      res.status(201).json({ message });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
   static async deleteRide(req, res, next) {
     try {
-      let id = req.params.id
-      let ride = await Ride.findByPk(id)
+      let id = req.params.id;
+      let ride = await Ride.findByPk(id);
 
       if (!ride) {
-        throw { name: "not_found" }
+        throw { name: "not_found" };
       }
 
-      await Ride.destroy({ where: { id } })
+      await Ride.destroy({ where: { id } });
 
-      const message = `entity with id ${ride.id} deleted`
+      const message = `entity with id ${ride.id} deleted`;
       res.status(200).json({ message });
-
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
@@ -86,7 +98,7 @@ class RideController {
         }
       );
       if (!updatedRide[0]) {
-        throw { name: "invalid_token" }
+        throw { name: "invalid_token" };
       }
 
       console.log(updatedRide, "<<<<<<<<<");
@@ -99,91 +111,108 @@ class RideController {
 
   static async updateRide(req, res, next) {
     try {
-      const id = req.params.id
+      const id = req.params.id;
       let ride = await Ride.findByPk(id);
 
       if (!ride) {
-        throw ({ name: "not_found" });
+        throw { name: "not_found" };
       }
-      let { startLocation, destination, departureTime, arrivalTime, price, seats } = req.body
-
-      if (!startLocation || !destination || !departureTime || !arrivalTime || !price || !seats) {
-        throw ({ name: "empty" })
-      }
-
-      let rideUpdate = await Ride.update({
+      let {
         startLocation,
         destination,
         departureTime,
         arrivalTime,
         price,
-        seats
-      }, {
-        where: {
-          id
-        }
-      })
-      const message = `entity with id ${ride.id} updated`
+        seats,
+      } = req.body;
 
-      res.status(200).json({ message })
+      if (
+        !startLocation ||
+        !destination ||
+        !departureTime ||
+        !arrivalTime ||
+        !price ||
+        !seats
+      ) {
+        throw { name: "empty" };
+      }
+
+      let rideUpdate = await Ride.update(
+        {
+          startLocation,
+          destination,
+          departureTime,
+          arrivalTime,
+          price,
+          seats,
+        },
+        {
+          where: {
+            id,
+          },
+        }
+      );
+      const message = `Ride with id ${ride.id} updated`;
+
+      res.status(200).json({ message });
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
   static async genMidtransToken(req, res, next) {
     try {
-      console.log(1, '<<<<<<<<');
+      console.log(1, "<<<<<<<<");
 
       const checkUser = await UserRide.findByPk(req.user.id, {
-        include: User
-      })
+        include: User,
+      });
 
-      console.log(checkUser.User.email, '<<<<<< checkUser.isPremium');
+      console.log(checkUser.User.email, "<<<<<< checkUser.isPremium");
 
       if (checkUser.paymentStatus === "paid") {
-        throw { name: 'ALREADY_BOOKED' };
+        throw { name: "ALREADY_BOOKED" };
       }
 
-      console.log(3, '<<<<<<<<');
+      console.log(3, "<<<<<<<<");
 
       let snap = new midtransClient.Snap({
         isProduction: false,
-        serverKey: "SB-Mid-server-xvUL2muo6OumITLOfsgy0pMP"
+        serverKey: "SB-Mid-server-xvUL2muo6OumITLOfsgy0pMP",
       });
 
-      console.log(4, '<<<<<<<<');
+      console.log(4, "<<<<<<<<");
 
       let parameter = {
-        "transaction_details": {
-          "order_id": "TRANSACTION_" + Math.floor(Math.random() * (9999999999 - 100000000 + 1) + 100000000),
-          "gross_amount": 2000000 // 1juta
+        transaction_details: {
+          order_id:
+            "TRANSACTION_" +
+            Math.floor(
+              Math.random() * (9999999999 - 100000000 + 1) + 100000000
+            ),
+          gross_amount: 2000000, // 1juta
         },
-        "credit_card": {
-          "secure": true
+        credit_card: {
+          secure: true,
         },
-        "customer_details": {
-          "email": checkUser.User.email,
-        }
-      }
+        customer_details: {
+          email: checkUser.User.email,
+        },
+      };
 
-      console.log(5, '<<<<<<<<');
+      console.log(5, "<<<<<<<<");
 
-      const midtransToken = await snap.createTransaction(parameter)
+      const midtransToken = await snap.createTransaction(parameter);
 
+      console.log(6, "<<<<<<<<");
 
-      console.log(6, '<<<<<<<<');
-
-
-      res.status(200).json(midtransToken)
-
+      res.status(200).json(midtransToken);
     } catch (err) {
       console.log(err);
-      next(err)
+      next(err);
     }
   }
 }
-
 
 module.exports = RideController;

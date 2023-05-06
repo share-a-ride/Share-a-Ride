@@ -31,11 +31,14 @@ const errorHandler = (err, req, res, next) => {
   } else if (err.name === "no_change") {
     message = "No changes has been made";
     code = 400;
-  } else if (err.name === "invalid_status") {
-    message = "Invalid status";
+  } else if (err.name === "invalid_rating") {
+    message = "Rating must be between 1-5";
     code = 404;
   } else if (err.name === "ALREADY_BOOKED") {
-    message = "You are already a booked"
+    message = "You are already a booked";
+  } else if (err.name === "self_rate") {
+    message = "You cannot rate yourself";
+    code = 404;
   }
 
   res.status(code).json({ message });

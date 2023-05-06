@@ -8,9 +8,9 @@ const userAuthentication = async (req, res, next) => {
       throw { name: "invalid_token" };
     }
     const payload = verifyToken(access_token);
-    console.log(payload, "?????");
+    // console.log(payload, "?????");
     const data = await User.findByPk(payload.id);
-    console.log(data, "><><><><");
+    // console.log(data, "><><><><");
     if (!data) {
       throw { name: "invalid_token" };
     }
