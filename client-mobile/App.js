@@ -7,13 +7,13 @@ import MainStack from './navigators/MainStack';
 export default function App() {
   return (
    
+  <SafeAreaView className="flex-1 relative mt-10">
     <NavigationContainer>
-      <SafeAreaView className="flex-1 relative mt-10">
       <GestureHandlerRootView style={{ flex: 1 }}>
           <MainStack/>
       </GestureHandlerRootView>
-      </SafeAreaView>
     </NavigationContainer>
+  </SafeAreaView>
    
   );
 }
