@@ -1,6 +1,8 @@
 const { Op } = require("sequelize");
 const { Ride, Vehicle, UserRide, User } = require("../models");
 const midtransClient = require('midtrans-client')
+const axios = require("axios");
+const { checkPaymentStatus } = require("../helpers/checkPayment")
 
 class RideController {
   static async getAllRide(req, res, next) {
@@ -11,7 +13,6 @@ class RideController {
       }
       res.status(200).json(data);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -25,7 +26,6 @@ class RideController {
         include: Vehicle
       })
 
-      console.log(user.Vehicle, "{}{}{}{}{}{");
       let ride = await Ride.create({
         startLocation, destination, departureTime, arrivalTime, price, seats,
         VehicleId: user.Vehicle.id
@@ -52,7 +52,6 @@ class RideController {
       res.status(200).json({ message });
 
     } catch (error) {
-      console.log(error);
       next(error)
     }
   }
@@ -75,7 +74,6 @@ class RideController {
     try {
       const { id } = req.user;
       const userRideId = req.params.id;
-      // console.log(id)
       const updatedRide = await UserRide.update(
         { paymentStatus: "paid" },
         {
@@ -89,10 +87,8 @@ class RideController {
         throw { name: "invalid_token" }
       }
 
-      console.log(updatedRide, "<<<<<<<<<");
       res.status(200).json(updatedRide);
     } catch (error) {
-      // console.log(error);
       next(error);
     }
   }
@@ -127,62 +123,58 @@ class RideController {
 
       res.status(200).json({ message })
     } catch (error) {
-      console.log(error);
       next(error)
     }
   }
 
   static async genMidtransToken(req, res, next) {
     try {
-      console.log(1, '<<<<<<<<');
-
       const checkUser = await UserRide.findByPk(req.user.id, {
-        include: User
-      })
+        include: [User, Ride]
+      });
 
-      console.log(checkUser.User.email, '<<<<<< checkUser.isPremium');
-
-      if (checkUser.paymentStatus === "paid") {
+      if (checkUser.paymentStatus === 'paid') {
         throw { name: 'ALREADY_BOOKED' };
       }
 
-      console.log(3, '<<<<<<<<');
-
-      let snap = new midtransClient.Snap({
+      const snap = new midtransClient.Snap({
         isProduction: false,
-        serverKey: "SB-Mid-server-xvUL2muo6OumITLOfsgy0pMP"
+        serverKey: 'SB-Mid-server-xvUL2muo6OumITLOfsgy0pMP'
       });
 
-      console.log(4, '<<<<<<<<');
-
-      let parameter = {
-        "transaction_details": {
-          "order_id": "TRANSACTION_" + Math.floor(Math.random() * (9999999999 - 100000000 + 1) + 100000000),
-          "gross_amount": 2000000 // 1juta
+      const parameter = {
+        transaction_details: {
+          order_id: 'TRANSACTION_' + Math.floor(Math.random() * (9999999999 - 100000000 + 1) + 100000000),
+          gross_amount: checkUser.Ride.price // 1juta
         },
-        "credit_card": {
-          "secure": true
+        credit_card: {
+          secure: true
         },
-        "customer_details": {
-          "email": checkUser.User.email,
+        customer_details: {
+          email: checkUser.User.email,
         }
-      }
+      };
 
-      console.log(5, '<<<<<<<<');
+      const orderId = parameter.transaction_details.order_id;
+      const midtransToken = await snap.createTransaction(parameter);
 
-      const midtransToken = await snap.createTransaction(parameter)
+      res.status(200).json(midtransToken);
+      
+      // const paymentStatus = await checkPaymentStatus(orderId);
 
+      // if (!paymentStatus.success) {
+      //   throw { name: 'PAYMENT_FAILED', message: paymentStatus.message };
+      // }
 
-      console.log(6, '<<<<<<<<');
-
-
-      res.status(200).json(midtransToken)
+      // Update UserRide payment status to 'paid'
+      await checkUser.update({ paymentStatus: 'paid' });
 
     } catch (err) {
       console.log(err);
-      next(err)
+      next(err);
     }
   }
+
 }
 
 
