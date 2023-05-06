@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { View, Image, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export default function LandingScreen() {
   const navigation = useNavigation();
+  useLayoutEffect(()=>{
+    navigation.setOptions({
+      headerShown: false,
+    })
+  },[])
 
   return (
     <View style={styles.container}>

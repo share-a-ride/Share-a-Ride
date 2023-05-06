@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -26,7 +26,7 @@ export default function RegisterScreen() {
       // show an error message or alert
       return;
     }
-
+    navigation.navigate("Login")
     // handle registration logic here
   };
 
@@ -37,6 +37,12 @@ export default function RegisterScreen() {
   const handleUploadSelfie = () => {
     // handle upload selfie logic here
   };
+
+  useLayoutEffect(()=>{
+    navigation.setOptions({
+      headerShown: false,
+    })
+  },[])
 
   return (
     <View style={styles.container}>

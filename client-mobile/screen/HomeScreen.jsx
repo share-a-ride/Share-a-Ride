@@ -1,6 +1,16 @@
-import React, { useState } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import React, { useLayoutEffect, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 const data = [
   {
@@ -11,7 +21,10 @@ const data = [
     arrivalTime: "2023-05-10 13:00:00",
     price: 50,
     seats: 4,
+    seatsFilled: 1,
     user: "John Doe",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
   },
   {
     id: "2",
@@ -21,36 +34,131 @@ const data = [
     arrivalTime: "2023-05-15 18:00:00",
     price: 100,
     seats: 7,
+    seatsFilled: 3,
     user: "Jane Doe",
+    image:
+      "https://thumbs.dreamstime.com/b/female-avatar-profile-picture-vector-female-avatar-profile-picture-vector-102690279.jpg",
+  },
+  {
+    id: "3",
+    startLocation: "San Francisco",
+    destination: "Los Angeles",
+    departureTime: "2023-05-15 12:00:00",
+    arrivalTime: "2023-05-15 18:00:00",
+    price: 100,
+    seats: 7,
+    seatsFilled: 1,
+    user: "Jane Doe",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
+  },
+  {
+    id: "4",
+    startLocation: "San Francisco",
+    destination: "Los Angeles",
+    departureTime: "2023-05-15 12:00:00",
+    arrivalTime: "2023-05-15 18:00:00",
+    price: 100,
+    seats: 7,
+    seatsFilled: 1,
+    user: "Jane Doe",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
+  },
+  {
+    id: "5",
+    startLocation: "San Francisco",
+    destination: "Los Angeles",
+    departureTime: "2023-05-15 12:00:00",
+    arrivalTime: "2023-05-15 18:00:00",
+    price: 100,
+    seats: 7,
+    seatsFilled: 1,
+    user: "Jane Doe",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
   },
 ];
 
 export default function HomeScreen({ route }) {
   const navigation = useNavigation();
   const [user, setUser] = useState("John Doe");
+  const doubleTap = Gesture.Tap()
+    .maxDuration(250)
+    .numberOfTaps(2)
+    .onStart(() => {
+      navigation.navigate("Details");
+    });
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, []);
 
   const renderItem = ({ item }) => (
-    <View style={styles.card}>
-      <View style={styles.left}>
-        <Text style={styles.leftText}>{item.startLocation}</Text>
-        <Text style={styles.leftText}>{item.departureTime}</Text>
-        <View style={styles.line} />
-        <Text style={styles.leftText}>{item.destination}</Text>
-        <Text style={styles.leftText}>{item.arrivalTime}</Text>
-      </View>
-      <View style={styles.right}>
-        <Text style={styles.price}>${item.price}</Text>
-        <View style={styles.bottom}>
-          <Text style={styles.seats}>{item.seats} seats</Text>
-          <Text style={styles.user}>Posted by {item.user}</Text>
+    <GestureDetector gesture={doubleTap}>
+      <View style={styles.card}>
+        <View style={styles.left}>
+          <Text style={styles.leftText}>{item.startLocation}</Text>
+          <Text style={styles.leftText}>{item.departureTime}</Text>
+          <View style={styles.line} />
+          <Text style={styles.leftText}>{item.destination}</Text>
+          <Text style={styles.leftText}>{item.arrivalTime}</Text>
+        </View>
+        <View style={styles.right}>
+          <Text style={styles.price}>${item.price}</Text>
+          <View style={styles.bottom}>
+            <Text style={styles.seats}>
+              {item?.seatsFilled}/{item.seats} seats
+            </Text>
+          </View>
+          <View className="flex flex-row items-center ">
+            <Text className="text-slate-500 mr-2">{item.user}</Text>
+            <View className="bg-slate-200 rounded-full border w-10 h-10 justify-self-end ">
+              <Image
+                className="w-full h-full object-cover rounded-full "
+                style={styles.tinyLogo}
+                source={{ uri: item?.image }}
+              />
+            </View>
+          </View>
         </View>
       </View>
-    </View>
+    </GestureDetector>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome, {user}!</Text>
+      <View className="flex-row justify-between items-center  w-11/12 mt-5 mb-5 bg-slate-200 py-3 px-4 rounded-md">
+        <View>
+          <Text className="">Share A Ride</Text>
+          <Text className="text-xl text-green-900">Welcome, {user}!</Text>
+        </View>
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          <View className="w-12 h-12 bg-slate-300 rounded-md items-center justify-center">
+            <Image
+              className="w-full h-full "
+              source={{
+                uri: "https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector.png",
+              }}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.filter}>
+        <TouchableOpacity
+          style={styles.passwordToggle}
+          onPress={() => navigation.navigate("Landing")}
+        >
+          <MaterialCommunityIcons
+            name="filter-variant"
+            size={24}
+            color="#8e9eb6"
+          />
+        </TouchableOpacity>
+      </View>
+
       <FlatList
         style={styles.list}
         data={data}
@@ -95,8 +203,8 @@ const styles = StyleSheet.create({
   leftText: {
     fontSize: 16,
     marginTop: 5,
-    color: '#1f2d5a',
-    textAlign: 'left',
+    color: "#1f2d5a",
+    textAlign: "left",
   },
   line: {
     width: 1,
@@ -126,5 +234,13 @@ const styles = StyleSheet.create({
   user: {
     fontSize: 16,
     color: "#8e9eb6",
+  },
+  filter: {
+    backgroundColor: "white",
+    padding: 10,
+    marginBottom: 10,
+    marginRight: 10,
+    borderRadius: 10,
+    alignSelf: "flex-end",
   },
 });

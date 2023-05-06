@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect,useState } from "react";
 import {
   View,
   TextInput,
@@ -16,7 +16,15 @@ export default function LoginScreen() {
 
   const handleLogin = () => {
     // handle login logic here
+    navigation.navigate("Home")
   };
+
+  useLayoutEffect(()=>{
+    navigation.setOptions({
+      headerShown: false,
+    })
+  },[])
+
 
   return (
     <View style={styles.container}>
