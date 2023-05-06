@@ -312,7 +312,7 @@ _Response (200 - OK)_
 
 ```
 {
-  message: "Ride with id <ride id> deleted"
+  message: "Order is cancelled"
 }
 ```
 
@@ -321,6 +321,14 @@ _Response (404 - Not Found)_
 ```
 {
   "message": "Data not found"
+}
+```
+
+_Response (403 - Forbidden)_
+
+```
+{
+  "message": "Forbidden"
 }
 ```
 
