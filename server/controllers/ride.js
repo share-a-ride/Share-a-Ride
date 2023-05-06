@@ -1,6 +1,8 @@
 const { Op } = require("sequelize");
 const { Ride, Vehicle, UserRide, User } = require("../models");
 const midtransClient = require("midtrans-client");
+const axios = require("axios");
+const { checkPaymentStatus } = require("../helpers/checkPayment");
 
 class RideController {
   static async getAllRide(req, res, next) {
@@ -11,7 +13,6 @@ class RideController {
       }
       res.status(200).json(data);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -32,7 +33,6 @@ class RideController {
         include: Vehicle,
       });
 
-      console.log(user.Vehicle, "{}{}{}{}{}{");
       let ride = await Ride.create({
         startLocation,
         destination,
@@ -87,7 +87,6 @@ class RideController {
     try {
       const { id } = req.user;
       const userRideId = req.params.id;
-      // console.log(id)
       const updatedRide = await UserRide.update(
         { paymentStatus: "paid" },
         {
@@ -101,10 +100,8 @@ class RideController {
         throw { name: "invalid_token" };
       }
 
-      console.log(updatedRide, "<<<<<<<<<");
       res.status(200).json(updatedRide);
     } catch (error) {
-      // console.log(error);
       next(error);
     }
   }

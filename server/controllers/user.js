@@ -28,14 +28,19 @@ class UserController {
   static async login(req, res, next) {
     try {
       const { email, password } = req.body;
+      console.log(req.body, "?????????????");
 
       if (!email || email === undefined) throw { name: "empty_email" };
       if (!password || password === undefined) throw { name: "empty_password" };
 
-      const selectedUser = await User.findOne({ email });
+      const selectedUser = await User.findOne({ 
+        where: { email }
+       });
+      
       if (!selectedUser) {
         throw { name: "unauthorized" };
       }
+      console.log(selectedUser, "><><><><><");
       if (!Hash.verify(password, selectedUser.password)) {
         throw { name: "unauthorized" };
       }
