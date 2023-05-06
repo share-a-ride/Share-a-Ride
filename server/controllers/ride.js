@@ -113,7 +113,9 @@ class RideController {
   static async updateRide(req, res, next) {
     try {
       const id = req.params.id;
-      let ride = await Ride.findByPk(id);
+      let ride = await Ride.findByPk(id, {
+        include: [{ model: UserRide }],
+      });
 
       if (!ride) {
         throw { name: "not_found" };
@@ -127,15 +129,8 @@ class RideController {
         seats,
       } = req.body;
 
-      if (
-        !startLocation ||
-        !destination ||
-        !departureTime ||
-        !arrivalTime ||
-        !price ||
-        !seats
-      ) {
-        throw { name: "empty" };
+      if (ride.UserRides.length > 1) {
+        seats = seats - (ride.UserRides.length - 1);
       }
 
       let rideUpdate = await Ride.update(
@@ -277,6 +272,19 @@ class RideController {
       await UserRide.destroy({ where: { id } });
       const message = `Order is cancelled`;
       res.status(200).json({ message });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getRideById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const ride = await Ride.findByPk(id);
+      if (!ride) {
+        throw { name: "not_found" };
+      }
+      res.status(200).json(data);
     } catch (error) {
       next(error);
     }

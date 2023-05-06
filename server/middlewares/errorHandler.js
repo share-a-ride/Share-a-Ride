@@ -18,7 +18,7 @@ const errorHandler = (err, req, res, next) => {
     code = 400;
   } else if (err.name === "not_found") {
     message = "Data not found";
-    code = 400;
+    code = 404;
   } else if (err.name === "unauthorized") {
     message = "Email / Password is wrong";
     code = 401;
