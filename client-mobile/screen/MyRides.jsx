@@ -17,6 +17,7 @@ import {
   FontAwesome,
   AntDesign,
 } from "@expo/vector-icons";
+import CardMyRides from "../components/CardMyRides"
 
 const data = [
   {
@@ -94,45 +95,7 @@ const MyRides = () => {
     });
   }, []);
 
-  const card = ({ item }) => (
-    <View className="flex-1 mt-4 items-center ">
-      <View className="flex-row mx-6 px-4 py-2 bg-slate-100 rounded-md mt-4 space-x-2">
-        <View className="justify-center items-center text-center">
-          <Octicons name="dot-fill" size={24} color="grey" />
-          <View className="h-[85px] w-1 bg-slate-500"></View>
-          <Octicons name="dot-fill" size={24} color="grey" />
-        </View>
-
-        <View className="flex-row w-full justify-between">
-          <View>
-            <View>
-              <Text>{item?.startLocation}</Text>
-              <Text className="text-[11px]">{item?.departureTime}</Text>
-            </View>
-
-            <View className="h-[70px] w-1"></View>
-            <View>
-              <Text>{item?.destination}</Text>
-              <Text className="text-[11px]">{item?.arrivalTime}</Text>
-            </View>
-          </View>
-          <View className="mr-1 items-center">
-            <Text className="text-2xl font-bold">$ {item?.price}</Text>
-            <Text className="font-bold my-8">Seat : {item?.seats}</Text>
-            <TouchableOpacity
-            className=" py-3 rounded-lg px-5 bg-sky-400"
-              onPress={() => {
-                navigation.navigate("Home");
-              }}
-            >
-              <Text className="text-center text-[16px]">Paid</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    </View>
-  );
-
+ 
   return (
     <View className="flex-1 bg-white">
       <View className="mt-8 mx-8">
@@ -141,7 +104,7 @@ const MyRides = () => {
 
       <FlatList
         data={data}
-        renderItem={card}
+        renderItem={({ item }) => <CardMyRides item={item} />}
         keyExtractor={(item) => item.id}
       />
     </View>

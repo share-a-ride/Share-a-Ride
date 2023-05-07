@@ -27,7 +27,7 @@ const DetailScreen = () => {
     });
   }, []);
   return (
-    <View className="flex-1 bg-primary">
+    <View className="flex-1 bg-background">
       <View className="mx-6 my-4 mb-4 ">
         <TouchableOpacity
           onPress={() => {
@@ -117,6 +117,13 @@ const DetailScreen = () => {
           </Text>
         </View>
       </View>
+      
+      <TouchableOpacity onPress={()=>navigation.navigate("Chat",{item})}>
+        <View className="flex-row mt-6 mx-6 px-4 py-4 bg-slate-100 rounded-md shadow-md space-x-2 items-center "> 
+          <Ionicons name="chatbox-ellipses-outline" size={24} color="black" />
+          <Text className="text-xl">Chat</Text>
+        </View>
+      </TouchableOpacity>
 
       <View className="flex-1  justify-end ">
         <TouchableOpacity onPress={()=>navigation.navigate("MyRides")}>
@@ -125,6 +132,7 @@ const DetailScreen = () => {
           </View>
         </TouchableOpacity>
       </View>
+
     </View>
   );
 };
