@@ -9,8 +9,9 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import CardPost from "../components/CardPost"
 
 const data = [
   {
@@ -84,6 +85,7 @@ export default function HomeScreen({ route }) {
   const navigation = useNavigation();
   const [user, setUser] = useState("John Doe");
 
+  
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -91,43 +93,7 @@ export default function HomeScreen({ route }) {
     });
   }, []);
 
-  const renderItem = ({ item }) => (
-    <GestureDetector gesture={doubleTap = Gesture.Tap()
-      .maxDuration(250)
-      .numberOfTaps(2)
-      .onStart(() => {
-        navigation.navigate("Details",{item});
-      })
-  }>
-      <View style={styles.card}>
-        <View style={styles.left}>
-          <Text style={styles.leftText}>{item.startLocation}</Text>
-          <Text style={styles.leftText}>{item.departureTime}</Text>
-          <View style={styles.line} />
-          <Text style={styles.leftText}>{item.destination}</Text>
-          <Text style={styles.leftText}>{item.arrivalTime}</Text>
-        </View>
-        <View style={styles.right}>
-          <Text style={styles.price}>${item.price}</Text>
-          <View style={styles.bottom}>
-            <Text style={styles.seats}>
-              {item?.seatsFilled}/{item.seats} seats
-            </Text>
-          </View>
-          <View className="flex flex-row items-center ">
-            <Text className="text-slate-500 mr-2">{item.user}</Text>
-            <View className="bg-slate-200 rounded-full border w-10 h-10 justify-self-end ">
-              <Image
-                className="w-full h-full object-cover rounded-full "
-                style={styles.tinyLogo}
-                source={{ uri: item?.image }}
-              />
-            </View>
-          </View>
-        </View>
-      </View>
-    </GestureDetector>
-  );
+
 
   return (
     <View style={styles.container}>
@@ -147,23 +113,32 @@ export default function HomeScreen({ route }) {
           </View>
         </TouchableOpacity>
       </View>
-      <View style={styles.filter}>
-        <TouchableOpacity
-          style={styles.passwordToggle}
-          onPress={() => navigation.navigate("Landing")}
-        >
-          <MaterialCommunityIcons
-            name="filter-variant"
-            size={24}
-            color="#8e9eb6"
-          />
-        </TouchableOpacity>
+      <View className="flex-row justify-end items-end w-full">
+        <View style={styles.filter}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("PostRide")}
+          >
+            <MaterialIcons name="add-location-alt" size={24} color="grey" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.filter}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Landing")}
+          >
+            <MaterialCommunityIcons
+              name="filter-variant"
+              size={24}
+              color="#8e9eb6"
+            />
+          </TouchableOpacity>
+        </View>
+
       </View>
 
       <FlatList
         style={styles.list}
         data={data}
-        renderItem={renderItem}
+        renderItem={({ item }) => <CardPost item={item} />}
         keyExtractor={(item) => item.id}
       />
     </View>
@@ -242,6 +217,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginRight: 10,
     borderRadius: 10,
-    alignSelf: "flex-end",
   },
 });

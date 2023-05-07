@@ -10,6 +10,8 @@ import DetailScreen from "../screen/DetailScreen"
 import ProfileScreen from "../screen/ProfileScreen"
 import { SafeAreaView} from 'react-native';
 import MyRides from "../screen/MyRides";
+import PostRideScreen from "../screen/PostRideScreen";
+import ChatScreen from "../screen/ChatScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -24,6 +26,8 @@ export default function MainStack() {
         <Stack.Screen name="Details" component={DetailScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="MyRides" component={MyRides} />
+        <Stack.Screen name="PostRide" component={PostRideScreen} />
+        <Stack.Screen name="Chat" component={ChatScreen} />
       </Stack.Navigator>
   );
 }
