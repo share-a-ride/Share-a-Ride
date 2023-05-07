@@ -40,6 +40,7 @@ const errorHandler = (err, req, res, next) => {
     code = 400;
   } else if (err.name === "ALREADY_BOOKED") {
     message = "You are already a booked";
+    code = 400;
   } else if (err.name === "self_rate") {
     message = "You cannot rate yourself";
     code = 400;

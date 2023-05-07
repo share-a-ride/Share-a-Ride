@@ -213,8 +213,9 @@ class RideController {
 
       // Update UserRide payment status to 'paid'
       await checkUser.update({ paymentStatus: "paid" });
+      const ride = await Ride.findByPk(checkUser.RideId);
       await Ride.update(
-        { seats: seats - 1 },
+        { seats: ride.seats - 1 },
         { where: { id: checkUser.RideId } }
       );
     } catch (err) {

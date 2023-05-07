@@ -7,9 +7,9 @@ rideRouter.get("/", RideController.getAllRide);
 rideRouter.post("/", RideController.createRide);
 rideRouter.delete("/:id", userAuthorization, RideController.deleteRide);
 rideRouter.get("/:id", RideController.getRideById);
-rideRouter.patch("/:id", RideController.updateStatusPayment); //! belum dimasukkin api docs
+rideRouter.patch("/:id", RideController.updateStatusPayment);
 rideRouter.put("/:id", userAuthorization, RideController.updateRide);
-rideRouter.post("/generate-midtrans-token", RideController.genMidtransToken); //! belum dimasukkin api docs
+rideRouter.post("/generate-midtrans-token", RideController.genMidtransToken);
 rideRouter.post("/order/:id", RideController.orderRide);
 rideRouter.delete("/order/:id", RideController.cancelOrder);
 

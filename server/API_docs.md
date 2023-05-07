@@ -137,7 +137,7 @@ _Request Body_
 }
 ```
 
-_Response (200 - Created)_
+_Response (201 - Created)_
 
 ```
 {
@@ -191,6 +191,44 @@ _Response (404 - Not Found)_
 
 ---
 
+### PATCH /rides/:id
+
+> Edit user ride payment status with userRideId <id>
+
+_Request Header_
+
+```
+{
+  "access_token": "<your access token>"
+}
+```
+
+_Request Body_
+
+```
+not needed
+```
+
+_Response (200 - OK)_
+
+```
+[
+    <user ride id>,
+    [
+        {
+            "id": <user ride id>,
+            "UserId": <user id>,
+            "RideId": <ride id>,
+            "paymentStatus": "paid",
+            "createdAt": "2023-05-06T09:20:14.203Z",
+            "updatedAt": "2023-05-07T14:55:02.724Z"
+        }
+    ]
+]
+```
+
+---
+
 ### PUT /rides/:id
 
 > Edit ride with <id>
@@ -216,7 +254,7 @@ _Request Body_
 }
 ```
 
-_Response (200 - Created)_
+_Response (200 - OK)_
 
 ```
 {
@@ -237,6 +275,43 @@ _Response (404 - Not Found)_
 ```
 {
   "message": "Data not found"
+}
+```
+
+---
+
+### POST /rides/:generate-midtrans-token
+
+> Generate midtrans token and url for payment purposes and confirm booking
+
+_Request Header_
+
+```
+{
+  "access_token": "<your access token>"
+}
+```
+
+_Request Body_
+
+```
+not needed
+```
+
+_Response (200 - OK)_
+
+```
+{
+  "token": "<midtrans token>",
+  "redirect_url": "<midtrans url>"
+}
+```
+
+_Response (400 - Bad Request)_
+
+```
+{
+  "message": "You are already a booked"
 }
 ```
 
@@ -357,7 +432,7 @@ _Request Body_
 }
 ```
 
-_Response (200 - OK)_
+_Response (201 - Created)_
 
 ```
 {
@@ -556,7 +631,7 @@ _Request Body_
 }
 ```
 
-_Response (200 - OK)_
+_Response (201 - Created)_
 
 ```
 {
