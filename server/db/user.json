@@ -1,42 +1,42 @@
 [
-    {
-        "name": "John Doe",
-        "email": "johndoe@example.com",
-        "password": "mysecurepassword",
-        "phoneNumber": "555-1234",
-        "photo": "https://example.com/johndoe.png",
-        "idCardImg": "https://example.com/johndoe-id.png",
-        "rating": 4.5,
-        "status": "unverified"
-    },
-    {
-        "name": "Jane Smith",
-        "email": "janesmith@example.com",
-        "password": "myp@ssw0rd!",
-        "phoneNumber": "555-5678",
-        "photo": "https://example.com/janesmith.png",
-        "idCardImg": "https://example.com/janesmith-id.png",
-        "rating": 3.8,
-        "status": "unverified"
-    },
-    {
-        "name": "Bob Johnson",
-        "email": "bjohnson@example.com",
-        "password": "password123",
-        "phoneNumber": "555-2468",
-        "photo": "https://example.com/bobjohnson.png",
-        "idCardImg": "https://example.com/bobjohnson-id.png",
-        "rating": 4.2,
-        "status": "unverified"
-    },
-    {
-        "name": "Alice Lee",
-        "email": "alee@example.com",
-        "password": "letmein",
-        "phoneNumber": "555-1357",
-        "photo": "https://example.com/alicelee.png",
-        "idCardImg": "https://example.com/alicelee-id.png",
-        "rating": 4.7,
-        "status": "unverified"
-    }
+  {
+    "name": "Andi Susanto",
+    "email": "andisusanto@contoh.com",
+    "password": "sandikupassword",
+    "phoneNumber": "555-1234",
+    "photo": "https://contoh.com/andisusanto.png",
+    "idCardImg": "https://contoh.com/andisusanto-id.png",
+    "rating": 4.5,
+    "status": "unverified"
+  },
+  {
+    "name": "Dewi Rahayu",
+    "email": "dewirahayu@contoh.com",
+    "password": "sandikupassword!",
+    "phoneNumber": "555-5678",
+    "photo": "https://contoh.com/dewirahayu.png",
+    "idCardImg": "https://contoh.com/dewirahayu-id.png",
+    "rating": 3.8,
+    "status": "unverified"
+  },
+  {
+    "name": "Bambang Surya",
+    "email": "bsurya@contoh.com",
+    "password": "password123",
+    "phoneNumber": "555-2468",
+    "photo": "https://contoh.com/bambangsurya.png",
+    "idCardImg": "https://contoh.com/bambangsurya-id.png",
+    "rating": 4.2,
+    "status": "unverified"
+  },
+  {
+    "name": "Anita Wijaya",
+    "email": "awijaya@contoh.com",
+    "password": "biarkanaku",
+    "phoneNumber": "555-1357",
+    "photo": "https://contoh.com/anitawijaya.png",
+    "idCardImg": "https://contoh.com/anitawijaya-id.png",
+    "rating": 4.7,
+    "status": "unverified"
+  }
 ]
