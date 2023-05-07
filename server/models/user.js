@@ -22,12 +22,62 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   User.init({
-    name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    phoneNumber: DataTypes.STRING,
-    photo: DataTypes.STRING,
-    idCardImg: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "Username is required" },
+        notNull: { msg: "Username is required" },
+      },
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: {
+        msg: "Email is already used, please use another email",
+      },
+      validate: {
+        notEmpty: { msg: "Email is required" },
+        notNull: { msg: "Email is required" },
+        isEmail: { msg: "Invalid email format" },
+      },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "Password is required" },
+        notNull: { msg: "Password is required" },
+        len: {
+          args: [5],
+          msg: "Password minimum 5 characters",
+        },
+      },
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "Phone number is required" },
+        notNull: { msg: "Phone number is required" },
+      },
+    },
+    photo: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "Photo is required" },
+        notNull: { msg: "Photo is required" },
+      },
+    },
+    idCardImg: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "ID card photo is required" },
+        notNull: { msg: "ID card photo is required" },
+      },
+    },
     rating: DataTypes.INTEGER,
     status: DataTypes.STRING
   }, {

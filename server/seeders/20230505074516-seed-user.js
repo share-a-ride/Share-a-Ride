@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const Hash  = require("../helpers/bcrypt")
+const Hash = require("../helpers/bcrypt");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -13,16 +13,16 @@ module.exports = {
      *   name: 'John Doe',
      *   isBetaMember: false
      * }], {});
-    */
-    const db = require("../db/user.json")
+     */
+    const db = require("../db/user.json");
     // console.log(db, "<><><>");
-    const users = db.map(el => {
-      el.password = Hash.create(el.password)
+    const users = db.map((el) => {
+      el.password = Hash.create(el.password);
       el.createdAt = new Date();
       el.updatedAt = new Date();
-      return el
-    })
-    console.log(users);
+      return el;
+    });
+    // console.log(users);
     await queryInterface.bulkInsert("Users", users);
   },
 
@@ -34,5 +34,5 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     await queryInterface.bulkDelete("Users", null);
-  }
+  },
 };

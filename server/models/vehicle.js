@@ -18,8 +18,22 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Vehicle.init({
-    type: DataTypes.STRING,
-    plateNumber: DataTypes.STRING,
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "Vehicle type is required" },
+        notNull: { msg: "Vehicle type is required" },
+      },
+    },
+    plateNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: "Vehicle plate number is required" },
+        notNull: { msg: "Vehicle plate number is required" },
+      },
+    },
     UserId: DataTypes.INTEGER
   }, {
     sequelize,
