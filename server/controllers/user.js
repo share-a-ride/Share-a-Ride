@@ -28,19 +28,19 @@ class UserController {
   static async login(req, res, next) {
     try {
       const { email, password } = req.body;
-      console.log(req.body, "?????????????");
+      // console.log(req.body, "?????????????");
 
       if (!email || email === undefined) throw { name: "empty_email" };
       if (!password || password === undefined) throw { name: "empty_password" };
 
-      const selectedUser = await User.findOne({ 
-        where: { email }
-       });
-      
+      const selectedUser = await User.findOne({
+        where: { email },
+      });
+
       if (!selectedUser) {
         throw { name: "unauthorized" };
       }
-      console.log(selectedUser, "><><><><><");
+      // console.log(selectedUser, "><><><><><");
       if (!Hash.verify(password, selectedUser.password)) {
         throw { name: "unauthorized" };
       }
@@ -52,7 +52,7 @@ class UserController {
         email: selectedUser.email,
         phoneNumber: selectedUser.phoneNumber,
         photo: selectedUser.photo,
-        reting: selectedUser.rating,
+        rating: selectedUser.rating,
       });
     } catch (error) {
       console.log(error);
@@ -110,7 +110,7 @@ class UserController {
         }
       );
 
-      const message = `Status of user with id ${userToUpdate.name} has been changed to ${newStatus}`;
+      const message = `Status of user with id ${userToUpdate.id} has been changed to ${newStatus}`;
       res.status(200).json({ message });
     } catch (error) {
       next(error);
