@@ -1,10 +1,22 @@
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logo-no-background.png";
 import "./navbar.css"
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
-  const handleLogout = () => {
+
+  const navigate = useNavigate()
+
+  const handleLogout = (e) => {
     // handle logout logic here
+    e.preventDefault();
+
+    localStorage.clear();
+
+    toast.success("Logout-ed!");
+
+    navigate("/login");
   };
 
   return (

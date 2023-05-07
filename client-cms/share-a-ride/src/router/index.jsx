@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, redirect } from "react-router-dom";
 import Layout from "../components/layout";
 import LoginForm from "../views/login";
 import HomePage from "../views/home";
@@ -8,30 +8,53 @@ import RidesList from "../views/rides";
 
 const router = createBrowserRouter([
   {
+    loader: () => {
+      if (localStorage.access_token) {
+        return redirect("/");
+      }
+
+      return null;
+    },
+    path: "/login",
+    element: <LoginForm />,
+  },
+  {
+    loader: () => {
+      if (!localStorage.access_token) {
+        return redirect("/login");
+      }
+
+      return null;
+    },
     element: <Layout />,
     children: [
       {
-        path: "/",
+        path: "",
         element: <HomePage />,
       },
       {
-        path: "/login",
+        path: "login",
         element: <LoginForm />,
       },
       {
-        path: "/unverified-users",
+        path: "unverified-users",
         element: <UnverifiedUserList />,
       },
       {
-        path: "/users",
+        path: "users",
         element: <VerifiedUsersPage />,
       },
       {
-        path: "/rides",
+        path: "rides",
         element: <RidesList />,
       },
     ],
   },
+  {
+    path: "/login",
+    element: <LoginForm />,
+  },
 ]);
+
 
 export default router;

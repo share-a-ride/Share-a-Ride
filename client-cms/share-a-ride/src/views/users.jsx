@@ -1,32 +1,18 @@
 import { useState, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "../store/actions/actionCreator";
 
-const verifiedUsers = [
-  {
-    name: "John Doe",
-    email: "johndoe@contoh.com",
-    password: "johndoepassword",
-    phoneNumber: "555-5678",
-    photo: "https://contoh.com/johndoe.png",
-    idCardImage: "https://contoh.com/johndoe-id.png",
-    rating: 4.8,
-    status: "verified",
-  },
-  {
-    name: "Jane Doe",
-    email: "janedoe@contoh.com",
-    password: "janedoepassword",
-    phoneNumber: "555-6789",
-    photo: "https://contoh.com/janedoe.png",
-    idCardImage: "https://contoh.com/janedoe-id.png",
-    rating: 4.6,
-    status: "verified",
-  },
-];
 
 export default function VerifiedUsersPage() {
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [selectedUser, setSelectedUser] = useState(null);
+  // const [isLoading, setIsLoading] = useState(true);
+  const { user, userLoading } = useSelector((state) => {
+    return state.usersReducer
+  });
+
+  const verifiedUsers = user
+  const loading = userLoading;
 
   const handleEditUser = (user) => {
     //TODO
@@ -36,20 +22,23 @@ export default function VerifiedUsersPage() {
     //TODO
   };
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // Change the time to adjust how long the loading effect will last
-    return () => clearTimeout(timer);
+    // const timer = setTimeout(() => {
+    //   setIsLoading(false);
+    // }, 2000); // Change the time to adjust how long the loading effect will last
+    // return () => clearTimeout(timer);
+    dispatch(fetchUser())
   }, []);
 
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 bg-blue-900">
-      {isLoading ? (
+      {/* {isLoading ? (
         <h1 className="text-center text-2xl font-bold text-white sm:text-3xl">
-            Loading ...
-          </h1>
-      ) : (
+          Loading ...
+        </h1>
+      ) : ( */}
         <div className="mx-auto max-w-lg">
           <h1 className="text-center text-2xl font-bold text-white sm:text-3xl">
             Verified Users
@@ -94,7 +83,7 @@ export default function VerifiedUsersPage() {
           <UserModal user={selectedUser} onClose={handleCloseModal} />
         )} */}
         </div>
-      )}
+      {/* )} */}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { Provider } from "react-redux";
-// import store from "./store";
+import store from "./store";
 import "./App.css";
 import { RouterProvider } from "react-router-dom";
 import router from "./router/index";
@@ -8,11 +8,12 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    // <Provider>
-     
-    //   <ToastContainer />
-    // </Provider>
-    <RouterProvider router={router} />
+    <div className="App">
+      <ToastContainer />
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    </div>
   );
 }
 
