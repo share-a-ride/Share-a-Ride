@@ -1,0 +1,5 @@
+nav ul li:not(:first-child)::before {
+  content: "|";
+  margin-right: 0.5rem;
+  color: white;
+}
