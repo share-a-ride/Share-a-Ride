@@ -90,10 +90,10 @@ export default function HomeScreen({ route }) {
   const dispatch = useDispatch()
 
   const dataRides = useSelector((state)=>{
-    return state.rides
+    return state.ridesReducer.rides
   })
   
-  // console.log(dataRides)
+  console.log(dataRides,"<<<<inid ari data")
   console.log(data,"<<<datid adat")
 
 
@@ -106,6 +106,8 @@ export default function HomeScreen({ route }) {
       headerShown: false,
     });
     console.log(data,"<<<datid adat")
+    console.log(dataRides,"<<<<inid ari data")
+
   }, []);
 
 
@@ -152,7 +154,7 @@ export default function HomeScreen({ route }) {
 
       <FlatList
         style={styles.list}
-        data={data}
+        data={dataRides}
         renderItem={({ item }) => <CardPost item={item} />}
         keyExtractor={(item) => item.id}
       />

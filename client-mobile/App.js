@@ -8,7 +8,6 @@ import store from "./store"
 
 export default function App() {
   return (
-<<<<<<< HEAD
     
   <SafeAreaView className="flex-1 relative mt-10">
     <NavigationContainer>
@@ -19,17 +18,6 @@ export default function App() {
       </GestureHandlerRootView>
     </NavigationContainer>
   </SafeAreaView>
-=======
-   
-  <SafeAreaView className="flex-1 relative mt-10">
-    <NavigationContainer>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-          <MainStack/>
-      </GestureHandlerRootView>
-    </NavigationContainer>
-  </SafeAreaView>
-   
->>>>>>> 63d97960f97c772413c72f799894aa0c314a9f54
   );
 }
 

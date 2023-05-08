@@ -39,7 +39,7 @@ export function fetchDataRides() {
     try {
       const {data} = await axios.get(BASE_URL + "/rides");
      
-     
+      console.log(data,"><<<<<<<dari")
       dispatch(fetchRideSuccess(data))
     } catch (error) {
       console.log(error);

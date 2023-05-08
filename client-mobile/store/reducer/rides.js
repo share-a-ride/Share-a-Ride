@@ -9,7 +9,7 @@ const ridesReducer = (state = initialState, action)=>{
     case FETCH_RIDES:
       return {
         ...state,
-        news: action.payload,
+        rides: action.payload,
         
       };
     default:
