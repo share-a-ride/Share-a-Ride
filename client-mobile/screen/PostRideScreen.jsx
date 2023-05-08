@@ -55,7 +55,7 @@ const PostRideScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <View className="mx-10 mt-6 mb-12">
+      <View className="mx-10 mt-2 mb-12">
         <Text className="text-4xl font-bold">Post A Ride</Text>
       </View>
 
@@ -100,6 +100,15 @@ const PostRideScreen = () => {
         placeholderTextColor="#8e9eb6"
         onChangeText={newText => setRide({price:newText})}
         value={ride.price}
+      />
+      <TextInput
+        name="seats"
+        keyboardType="numeric"
+        className="bg-background text-white text-lg  py-4 w-10/12 items-center justify-center mx-auto rounded-2xl mb-4 px-4"
+        placeholder="Vehicle"
+        placeholderTextColor="#8e9eb6"
+        onChangeText={newText => setRide({seats:newText})}
+        value={ride.seats}
       />
       <TextInput
         name="seats"
