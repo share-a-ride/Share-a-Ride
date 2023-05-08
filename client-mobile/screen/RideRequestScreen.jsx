@@ -17,7 +17,7 @@ import {
   FontAwesome,
   AntDesign,
 } from "@expo/vector-icons";
-import CardMyRides from "../components/CardMyRides"
+import CardRequestRides from "../components/CardRequestRides"
 
 const data = [
   {
@@ -87,7 +87,7 @@ const data = [
   },
 ];
 
-const MyRides = () => {
+const RideRequestScreen = () => {
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -108,16 +108,18 @@ const MyRides = () => {
         </TouchableOpacity>
       </View>
       <View className="mt-4 mx-8">
-        <Text className="text-3xl">My Rides</Text>
+        <Text className="text-3xl">Request Ride</Text>
       </View>
 
       <FlatList
         data={data}
-        renderItem={({ item }) => <CardMyRides item={item} />}
+        renderItem={({ item }) => <CardRequestRides item={item} />}
         keyExtractor={(item) => item.id}
       />
     </View>
   );
 };
 
-export default MyRides;
+export default RideRequestScreen;
+
+

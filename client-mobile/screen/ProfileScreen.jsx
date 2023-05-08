@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity,Image } from "react-native";
+import { View, Text, Modal, TouchableOpacity,Image } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -10,8 +10,10 @@ import {
   Feather,
   SimpleLineIcons,
 } from "@expo/vector-icons";
+import ModalAddVihecle from "../components/ModalAddVihecle";
 
 const ProfileScreen = () => {
+  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const [user, setUser] = useState({
     name: "John Doe",
@@ -21,13 +23,30 @@ const ProfileScreen = () => {
     rating:4.5,
     review:142,
   });
+
+  const changeModalVisible=(bol)=>{
+    setModalVisible(bol)
+  }
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, []);
   return (
-    <View className="flex-1  bg-white">
+    <View className="relative w-full max-w-2xl h-full  bg-white">
+       <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            changeModalVisible(false);
+          }}>
+            <ModalAddVihecle
+            changeModalVisible={changeModalVisible}
+            />
+        </Modal>
       <View className="mx-6 my-2">
       <TouchableOpacity  onPress={() => {
           navigation.navigate("Home");
@@ -57,6 +76,11 @@ const ProfileScreen = () => {
         <Entypo name="address" size={24} color="black" />
         <Text> {user?.address}</Text>
       </View>
+      <View className="flex-row  mx-8 mt-3 space-x-4 items-center">
+        <FontAwesome5 name="car" size={24} color="black" />
+        <Text> Avanza </Text>
+        <Text> B - 60789 </Text>
+      </View>
 
       <View className="flex-row   mt-6">
         <View className="flex-1 items-center justify-center py-6 border border-slate-400 rounded-lg">
@@ -69,46 +93,39 @@ const ProfileScreen = () => {
         </View>
       </View>
 
+     
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Home");
-        }}
-      >
-        <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 py-4 bg-slate-100 rounded-md">
-          <FontAwesome5 name="history" size={24} color="black" />
-          <Text className="text-xl">Histroy Ride</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Home");
+          navigation.navigate("MyRides");
         }}
       >
         <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 py-4 bg-slate-100 rounded-md">
           <MaterialIcons name="payment" size={24} color="black" />
-          <Text className="text-xl">Payments</Text>
+          <Text className="text-xl">My Rides</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Home");
+          navigation.navigate("RideRequest");
         }}
       >
         <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 py-4 bg-slate-100 rounded-md">
           <AntDesign name="disconnect" size={24} color="black" />
-          <Text className="text-xl">Promotions</Text>
+          <Text className="text-xl">Requested Ride</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Home");
+          setModalVisible(true)
         }}
       >
         <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 py-4 bg-slate-100 rounded-md">
-          <Feather name="settings" size={24} color="black" />
-          <Text className="text-xl">Settings</Text>
+         <AntDesign name="pluscircleo" size={24} color="black" />
+          <Text className="text-xl">Add Vehicle</Text>
         </View>
       </TouchableOpacity>
+
+
       <TouchableOpacity
         onPress={() => {
           navigation.navigate("Login");
@@ -119,7 +136,12 @@ const ProfileScreen = () => {
           <Text className="text-xl text-red-600">Log out</Text>
         </View>
       </TouchableOpacity>
+
+
+
     </View>
+
+
   );
 };
 

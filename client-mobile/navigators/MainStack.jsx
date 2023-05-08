@@ -12,7 +12,7 @@ import { SafeAreaView} from 'react-native';
 import MyRides from "../screen/MyRides";
 import PostRideScreen from "../screen/PostRideScreen";
 import ChatScreen from "../screen/ChatScreen";
-
+import RideRequestScreen from "../screen/RideRequestScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +28,7 @@ export default function MainStack() {
         <Stack.Screen name="MyRides" component={MyRides} />
         <Stack.Screen name="PostRide" component={PostRideScreen} />
         <Stack.Screen name="Chat" component={ChatScreen} />
+        <Stack.Screen name="RideRequest" component={RideRequestScreen} />
       </Stack.Navigator>
   );
 }
