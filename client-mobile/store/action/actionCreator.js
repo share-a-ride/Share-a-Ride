@@ -1,6 +1,7 @@
-import { BASE_URL, FETCH_POST,FETCH_DETAIL_POST,LOGIN_USER,ADD_USER } from "./actionType";
+import { BASE_URL, FETCH_RIDES,FETCH_DETAIL_RIDE,LOGIN_USER,ADD_USER } from "./actionType";
 import axios from 'axios';
 import Swal from 'sweetalert2'
+
 
 export function loginSuccess(payload){
   return{
@@ -16,15 +17,15 @@ export function registerSuccess(payload){
   }
 }
 
-export function  fetchPostSuccess (payload) {
+export function  fetchRideSuccess (payload) {
   return {
-    type: FETCH_POST,
+    type: FETCH_RIDES,
     payload,
   }
 }
-export function  fetchDetailPostSuccess (payload) {
+export function  fetchDetailRideSuccess (payload) {
   return {
-    type: FETCH_DETAIL_POST,
+    type: FETCH_DETAIL_RIDE,
     payload,
   }
 }
@@ -32,14 +33,14 @@ export function  fetchDetailPostSuccess (payload) {
 
 
 
-export function fetchDataPost() {
+export function fetchDataRides() {
 
   return async (dispatch,getState)=>{
     try {
-      const {data} = await axios.get(BASE_URL + "/post");
+      const {data} = await axios.get(BASE_URL + "/rides");
      
      
-      dispatch(fetchPostSuccess(data))
+      dispatch(fetchRideSuccess(data))
     } catch (error) {
       console.log(error);
     } finally {

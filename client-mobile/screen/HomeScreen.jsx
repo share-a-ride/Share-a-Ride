@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState,useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -12,6 +13,8 @@ import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import CardPost from "../components/CardPost"
+import { fetchDataRides } from "../store/action/actionCreator";
+
 
 const data = [
   {
@@ -84,13 +87,24 @@ const data = [
 export default function HomeScreen({ route }) {
   const navigation = useNavigation();
   const [user, setUser] = useState("John Doe");
+  const dispatch = useDispatch()
 
+  const dataRides = useSelector((state)=>{
+    return state.rides
+  })
   
+  // console.log(dataRides)
+  console.log(data,"<<<datid adat")
 
-  useLayoutEffect(() => {
+ 
+
+  useEffect(() => {
+    dispatch(fetchDataRides())
+    console.log("tesss")
     navigation.setOptions({
       headerShown: false,
     });
+    console.log(data,"<<<datid adat")
   }, []);
 
 

@@ -1,12 +1,12 @@
-import { BASE_URL, FETCH_NEWS } from "../action/actionType";
+import { BASE_URL, FETCH_RIDES } from "../action/actionType";
 
 const initialState ={
-  user:[]
+  rides:[]
 };
-const userReducer = (state = initialState, action)=>{
+const ridesReducer = (state = initialState, action)=>{
   console.log(action)
   switch (action.type) {
-    case FETCH_NEWS:
+    case FETCH_RIDES:
       return {
         ...state,
         news: action.payload,
@@ -16,4 +16,4 @@ const userReducer = (state = initialState, action)=>{
       return state
   }
 }
-export default userReducer;
+export default ridesReducer;
