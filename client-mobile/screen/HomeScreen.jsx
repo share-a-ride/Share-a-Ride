@@ -96,6 +96,7 @@ export default function HomeScreen({ route }) {
   // console.log(dataRides)
   console.log(data,"<<<datid adat")
 
+
  
 
   useEffect(() => {
