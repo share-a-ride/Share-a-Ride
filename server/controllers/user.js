@@ -79,6 +79,7 @@ class UserController {
       let user = await User.findByPk(id, {
         attributes: {
           exclude: ["password"],
+          include: [{ model: Vehicle }],
         },
       });
       console.log(user);

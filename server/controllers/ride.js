@@ -97,7 +97,7 @@ class RideController {
       const { id } = req.user;
       const userRideId = req.params.id;
       const updatedRide = await UserRide.update(
-        { paymentStatus: "paid" },
+        { status: "paid" },
         {
           where: {
             [Op.and]: [{ UserId: id }, { id: userRideId }],
@@ -172,7 +172,7 @@ class RideController {
 
       console.log(checkUser.User.email, "<<<<<< checkUser.isPremium");
 
-      if (checkUser.paymentStatus === "paid") {
+      if (checkUser.status === "paid") {
         throw { name: "ALREADY_BOOKED" };
       }
 
@@ -217,7 +217,7 @@ class RideController {
       // }
 
       // Update UserRide payment status to 'paid'
-      await checkUser.update({ paymentStatus: "paid" });
+      await checkUser.update({ status: "paid" });
       const ride = await Ride.findByPk(checkUser.RideId);
       await Ride.update(
         { seats: ride.seats - 1 },
