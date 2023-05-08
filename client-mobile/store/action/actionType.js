@@ -1,9 +1,9 @@
 
 //URL
-export const BASE_URL = "http://localhost:3000"
+export const BASE_URL = "http://localhost:4002/rides"
 
 //action for all Post
-export const FETCH_POST ="fetchPost"
+export const FETCH_POST ="rides/fetchPost"
 
 // DETAIL Post
 export const FETCH_DETAIL_POST ="fetchDetailPost"

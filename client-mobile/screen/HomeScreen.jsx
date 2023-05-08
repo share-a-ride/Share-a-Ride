@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,8 @@ import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import CardPost from "../components/CardPost"
+import { useSelector, useDispatch } from "react-redux"
+import { fetchDataPost } from "../store/action/actionCreator";
 
 const data = [
   {
@@ -83,9 +85,17 @@ const data = [
 
 export default function HomeScreen({ route }) {
   const navigation = useNavigation();
-  const [user, setUser] = useState("John Doe");
+  const dispatch = useDispatch();
+  // const [user, setUser] = useState("John Doe");
 
+  const [ ride ] = useSelector((state) => {
+    console.log(state, "<><><><><><><><><><><><><");
+    return state
+  })
   
+  useEffect(() => {
+    dispatch(fetchDataPost())
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -137,7 +147,7 @@ export default function HomeScreen({ route }) {
 
       <FlatList
         style={styles.list}
-        data={data}
+        data={ride}
         renderItem={({ item }) => <CardPost item={item} />}
         keyExtractor={(item) => item.id}
       />
