@@ -1,48 +1,146 @@
+import React, { useLayoutEffect, useState } from "react";
 import {
-  Button,
-  StyleSheet,
-  Text,
   View,
-  Image,
-  ScrollView,
+  Text,
   FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
 } from "react-native";
-import Card from "../components/Card";
-import {logo_black} from "../assets/image/logo-black.png"
+import { useNavigation } from "@react-navigation/native";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import CardPost from "../components/CardPost"
+
+const data = [
+  {
+    id: "1",
+    startLocation: "New York City",
+    destination: "Boston",
+    departureTime: "2023-05-10 10:00:00",
+    arrivalTime: "2023-05-10 13:00:00",
+    price: 50,
+    seats: 4,
+    seatsFilled: 1,
+    user: "John Doe",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
+  },
+  {
+    id: "2",
+    startLocation: "San Francisco",
+    destination: "Los Angeles",
+    departureTime: "2023-05-15 12:00:00",
+    arrivalTime: "2023-05-15 18:00:00",
+    price: 100,
+    seats: 7,
+    seatsFilled: 3,
+    user: "Jane Doe",
+    image:
+      "https://thumbs.dreamstime.com/b/female-avatar-profile-picture-vector-female-avatar-profile-picture-vector-102690279.jpg",
+  },
+  {
+    id: "3",
+    startLocation: "San Francisco",
+    destination: "Los Angeles",
+    departureTime: "2023-05-15 12:00:00",
+    arrivalTime: "2023-05-15 18:00:00",
+    price: 100,
+    seats: 7,
+    seatsFilled: 1,
+    user: "Jane Doe",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
+  },
+  {
+    id: "4",
+    startLocation: "San Francisco",
+    destination: "Los Angeles",
+    departureTime: "2023-05-15 12:00:00",
+    arrivalTime: "2023-05-15 18:00:00",
+    price: 100,
+    seats: 7,
+    seatsFilled: 1,
+    user: "Jane Doe",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
+  },
+  {
+    id: "5",
+    startLocation: "San Francisco",
+    destination: "Los Angeles",
+    departureTime: "2023-05-15 12:00:00",
+    arrivalTime: "2023-05-15 18:00:00",
+    price: 100,
+    seats: 7,
+    seatsFilled: 1,
+    user: "Jane Doe",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
+  },
+];
+
+export default function HomeScreen({ route }) {
+  const navigation = useNavigation();
+  const [user, setUser] = useState("John Doe");
+
+  
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, []);
 
 
-
-export default function HomeScreen({ navigation }) {
- 
 
   return (
     <View style={styles.container}>
-      
-
-      <View style={styles.body}>
-        <View style={styles.jumbotron}>
-          <Image
-            source={{
-              uri: "https://i.imgur.com/1vsABTT.png",
-            }}
-            style={{ width: "100%", height: "100%" }}
-          />
+      <View className="flex-row justify-between items-center  w-11/12 mt-5 mb-5 bg-slate-200 py-3 px-4 rounded-md">
+        <View>
+          <Text className="">Share A Ride</Text>
+          <Text className="text-xl text-green-900">Welcome, {user}!</Text>
         </View>
-
-        <View style={styles.conten}>
-          <ScrollView>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-          </ScrollView>
-        </View>
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          <View className="w-12 h-12 bg-slate-300 rounded-md items-center justify-center">
+            <Image
+              className="w-full h-full "
+              source={{
+                uri: "https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector.png",
+              }}
+            />
+          </View>
+        </TouchableOpacity>
       </View>
+      <View className="flex-row justify-end items-end w-full">
+        <View style={styles.filter}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("PostRide")}
+          >
+            <MaterialIcons name="add-location-alt" size={24} color="grey" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.filter}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Landing")}
+          >
+            <MaterialCommunityIcons
+              name="filter-variant"
+              size={24}
+              color="#8e9eb6"
+            />
+          </TouchableOpacity>
+        </View>
+
+      </View>
+
+      <FlatList
+        style={styles.list}
+        data={data}
+        renderItem={({ item }) => <CardPost item={item} />}
+        keyExtractor={(item) => item.id}
+      />
     </View>
   );
 }
@@ -50,70 +148,74 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#1f2d5a",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 20,
+  },
+  list: {
+    width: "100%",
+    paddingHorizontal: 10,
+  },
+  card: {
     backgroundColor: "#fff",
-  },
-  nav: {
-    flex: 1,
-  },
-  navHeader: {
-    flex: 2,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  textHeader: {
-    fontSize: 32,
-    fontFamily: "serif",
-    margin: 0,
-  },
-  textTop: {
-    fontSize: 8,
-    fontFamily: "serif",
-    margin: 0,
-  },
-  navMenu: {
-    flex: 1,
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 5,
+    marginHorizontal: 0,
     flexDirection: "row",
-    backgroundColor: "white",
+    justifyContent: "space-between",
+  },
+  left: {
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
-    borderStyle: "solid",
-    borderColor: "black",
-    borderWidth: 1,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-
-    elevation: 4,
+    justifyContent: "space-between",
   },
-  textMenu: {
-    margin: 4,
+  leftText: {
+    fontSize: 16,
+    marginTop: 5,
+    color: "#1f2d5a",
+    textAlign: "left",
   },
-
-  body: {
-    flex: 4,
+  line: {
+    width: 1,
+    height: 60,
+    backgroundColor: "#1f2d5a",
+  },
+  right: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+  },
+  price: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#1f2d5a",
+    marginBottom: 10,
+  },
+  bottom: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  seats: {
+    fontSize: 16,
+    color: "#8e9eb6",
+    marginRight: 10,
+  },
+  user: {
+    fontSize: 16,
+    color: "#8e9eb6",
+  },
+  filter: {
     backgroundColor: "white",
-  },
-  jumbotron: {
-    flex: 1,
-    margin: 7,
-    backgroundColor: "green",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
-  },
-  conten: {
-    flex: 3,
-    backgroundColor: "white",
+    padding: 10,
+    marginBottom: 10,
+    marginRight: 10,
+    borderRadius: 10,
   },
 });
