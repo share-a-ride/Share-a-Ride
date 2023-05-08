@@ -1,6 +1,6 @@
 const Hash = require("../helpers/bcrypt");
 const { generateToken } = require("../helpers/jwt");
-const { User } = require("../models");
+const { User, Vehicle } = require("../models");
 
 class UserController {
   static async register(req, res, next) {
@@ -79,8 +79,8 @@ class UserController {
       let user = await User.findByPk(id, {
         attributes: {
           exclude: ["password"],
-          include: [{ model: Vehicle }],
         },
+        include: Vehicle,
       });
       console.log(user);
       if (!user) {
@@ -88,6 +88,7 @@ class UserController {
       }
       res.status(200).json(user);
     } catch (error) {
+      // console.log(error);
       next(error);
     }
   }

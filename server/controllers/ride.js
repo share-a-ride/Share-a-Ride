@@ -286,7 +286,9 @@ class RideController {
   static async getRideById(req, res, next) {
     try {
       const { id } = req.params;
-      const ride = await Ride.findByPk(id);
+      const ride = await Ride.findByPk(id, {
+        include: [{ model: UserRide }],
+      });
       if (!ride) {
         throw { name: "not_found" };
       }
