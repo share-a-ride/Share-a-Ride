@@ -52,7 +52,7 @@ class RideController {
         VehicleId: user.Vehicle.id,
       });
 
-      const message = `New ride with ${ride.id} created`;
+      const message = `New ride with id ${ride.id} is created`;
       res.status(201).json({ message });
     } catch (error) {
       next(error);
@@ -70,7 +70,7 @@ class RideController {
 
       await Ride.destroy({ where: { id } });
 
-      const message = `Ride with id ${ride.id} deleted`;
+      const message = `Ride with id ${ride.id} is deleted`;
       res.status(200).json({ message });
     } catch (error) {
       console.log(error);
@@ -87,29 +87,6 @@ class RideController {
         include: Ride,
       });
       res.status(200).json(ridesPerUser);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async updateStatusPayment(req, res, next) {
-    try {
-      const { id } = req.user;
-      const userRideId = req.params.id;
-      const updatedRide = await UserRide.update(
-        { paymentStatus: "paid" },
-        {
-          where: {
-            [Op.and]: [{ UserId: id }, { id: userRideId }],
-          },
-          returning: true,
-        }
-      );
-      if (!updatedRide[0]) {
-        throw { name: "invalid_token" };
-      }
-
-      res.status(200).json(updatedRide);
     } catch (error) {
       next(error);
     }
@@ -295,6 +272,38 @@ class RideController {
       next(error);
     }
   }
+
+  static async changeStatusOrder(req, res, next) {
+    try {
+      const id = req.params.id;
+      const userId = req.user.id;
+      const { status } = req.body;
+
+      const order = await UserRide.update(
+        { status },
+        {
+          where: {
+            [Op.and]: [{ UserId: userId }, { id }, { status: "requested" }],
+          },
+          returning: true,
+        }
+      );
+      if (!order) {
+        throw { name: "not_found" };
+      }
+      if (order.UserId !== userId) {
+        throw { name: "invalid_user" };
+      }
+
+      const message = `Order request is ${status}`;
+      res.status(200).json({ message });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
+  
 }
 
 module.exports = RideController;

@@ -7,10 +7,10 @@ rideRouter.get("/", RideController.getAllRide);
 rideRouter.post("/", RideController.createRide);
 rideRouter.delete("/:id", userAuthorization, RideController.deleteRide);
 rideRouter.get("/:id", RideController.getRideById);
-rideRouter.patch("/:id", RideController.updateStatusPayment);
 rideRouter.put("/:id", userAuthorization, RideController.updateRide);
 rideRouter.post("/generate-midtrans-token", RideController.genMidtransToken);
 rideRouter.post("/order/:id", RideController.orderRide);
 rideRouter.delete("/order/:id", RideController.cancelOrder);
+rideRouter.patch("/order/:id", RideController.changeStatusOrder);
 
 module.exports = rideRouter;
