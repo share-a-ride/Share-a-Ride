@@ -26,7 +26,9 @@ class AdminController {
       if (!email || email === undefined) throw { name: "empty_email" };
       if (!password || password === undefined) throw { name: "empty_password" };
 
-      const currentAdmin = await Admin.findOne({ email });
+      const currentAdmin = await Admin.findOne({ 
+        where: {email} 
+      });
       if (!currentAdmin) {
         throw { name: "unauthorized" };
       }
@@ -39,6 +41,7 @@ class AdminController {
         access_token: token,
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

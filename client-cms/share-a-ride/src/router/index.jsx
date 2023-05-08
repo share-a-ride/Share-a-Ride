@@ -5,6 +5,7 @@ import HomePage from "../views/home";
 import UnverifiedUserList from "../views/verify";
 import VerifiedUsersPage from "../views/users";
 import RidesList from "../views/rides";
+import EditUsers from "../views/edit";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "rides",
         element: <RidesList />,
+      },
+      {
+        path: "edit-users/:id",
+        element: <EditUsers />,
       },
     ],
   },

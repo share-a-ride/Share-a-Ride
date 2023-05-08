@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "postgres",
-    "password": "postgres",
+    "password": "zidhan1",
     "database": "share_a_ride_db",
     "host": "127.0.0.1",
     "dialect": "postgres",

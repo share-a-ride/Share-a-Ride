@@ -108,3 +108,28 @@ export function fetchUser() {
         }
     };
 }
+
+export function changeUserStatus(userId) {
+    return async function (dispatch) {
+        try {
+            let res = await fetch(`${BASE_URL}/users/${userId}`, {
+                method: "patch",
+                headers: {
+                    "Content-Type": "application/json",
+                    access_token: localStorage.access_token,
+                },
+            });
+
+            if (!res.ok) {
+                throw await res.text();
+            }
+
+            let data = await res.json();
+
+            await dispatch(fetchUser());
+            return data.message;
+        } catch (err) {
+            throw JSON.parse(err);
+        }
+    };
+}

@@ -7,7 +7,7 @@ const adminRouter = require("./admin");
 
 mainRouter.use("/users", userRouter);
 mainRouter.use("/admin", adminRouter);
-mainRouter.use(userAuthentication);
+// mainRouter.use(userAuthentication);
 mainRouter.use("/rides", rideRouter);
 
 module.exports = mainRouter;
