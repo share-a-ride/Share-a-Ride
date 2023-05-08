@@ -53,6 +53,9 @@ const errorHandler = (err, req, res, next) => {
   } else if (err.name === "invalid_order") {
     message = "You have ordered this ride";
     code = 400;
+  } else if (err.name === "no_vehicle") {
+    message = "You need to register a vehicle to create ride";
+    code = 400;
   }
 
   res.status(code).json({ message });

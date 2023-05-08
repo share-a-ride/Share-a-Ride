@@ -37,6 +37,10 @@ class RideController {
         include: Vehicle,
       });
 
+      if (!user.Vehicle) {
+        throw { name: "no_vehicle" };
+      }
+
       let ride = await Ride.create({
         startLocation,
         destination,
@@ -47,6 +51,7 @@ class RideController {
         createdBy: userId,
         VehicleId: user.Vehicle.id,
       });
+
       const message = `New ride with ${ride.id} created`;
       res.status(201).json({ message });
     } catch (error) {
@@ -248,7 +253,7 @@ class RideController {
       let newUserRide = await UserRide.create({
         RideId: rideId,
         UserId: userId,
-        paymentStatus: "pending",
+        status: "requested",
       });
       const message = "Order received";
       res.status(201).json({ message });

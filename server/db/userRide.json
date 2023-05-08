@@ -1,6 +1,6 @@
 [
-  { "UserId": 1, "RideId": 2, "paymentStatus": "pending" },
-  { "UserId": 2, "RideId": 1, "paymentStatus": "pending" },
-  { "UserId": 3, "RideId": 3, "paymentStatus": "pending" },
-  { "UserId": 4, "RideId": 4, "paymentStatus": "pending" }
+  { "UserId": 1, "RideId": 2, "status": "requested" },
+  { "UserId": 2, "RideId": 1, "status": "requested" },
+  { "UserId": 3, "RideId": 3, "status": "requested" },
+  { "UserId": 4, "RideId": 4, "status": "requested" }
 ]

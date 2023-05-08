@@ -149,7 +149,7 @@ _Response (400 - Bad Request)_
 
 ```
 {
-  "message": <validation error>
+  "message": <validation error> || "You need to register a vehicle to create ride"
 }
 ```
 
