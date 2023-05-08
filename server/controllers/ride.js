@@ -73,7 +73,7 @@ class RideController {
       const message = `Ride with id ${ride.id} deleted`;
       res.status(200).json({ message });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       next(error);
     }
   }
@@ -157,33 +157,33 @@ class RideController {
 
       res.status(200).json({ message });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       next(error);
     }
   }
 
   static async genMidtransToken(req, res, next) {
     try {
-      console.log(1, "<<<<<<<<");
+      // console.log(1, "<<<<<<<<");
 
       const checkUser = await UserRide.findByPk(req.user.id, {
         include: User,
       });
 
-      console.log(checkUser.User.email, "<<<<<< checkUser.isPremium");
+      // console.log(checkUser.User.email, "<<<<<< checkUser.isPremium");
 
       if (checkUser.status === "paid") {
         throw { name: "ALREADY_BOOKED" };
       }
 
-      console.log(3, "<<<<<<<<");
+      // console.log(3, "<<<<<<<<");
 
       let snap = new midtransClient.Snap({
         isProduction: false,
         serverKey: "SB-Mid-server-xvUL2muo6OumITLOfsgy0pMP",
       });
 
-      console.log(4, "<<<<<<<<");
+      // console.log(4, "<<<<<<<<");
 
       let parameter = {
         transaction_details: {
@@ -202,11 +202,11 @@ class RideController {
         },
       };
 
-      console.log(5, "<<<<<<<<");
+      // console.log(5, "<<<<<<<<");
 
       const midtransToken = await snap.createTransaction(parameter);
 
-      console.log(6, "<<<<<<<<");
+      // console.log(6, "<<<<<<<<");
 
       res.status(200).json(midtransToken);
 
@@ -224,7 +224,7 @@ class RideController {
         { where: { id: checkUser.RideId } }
       );
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       next(err);
     }
   }
@@ -233,7 +233,7 @@ class RideController {
     try {
       const rideId = req.params.id;
       const userId = req.user.id;
-      console.log(req.user);
+      // console.log(req.user);
 
       const ride = await Ride.findByPk(rideId, {
         include: [{ model: UserRide }],

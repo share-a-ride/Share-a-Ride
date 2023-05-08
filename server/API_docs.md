@@ -474,7 +474,7 @@ _Response (200 - OK)_
 ```
 {
   "access_token": "<access_token>",
-  "username": "<user username>",
+  "name": "<user username>",
   "email": "<user email>",
   "phoneNumber": "<user phone number>",
   "photo": "<user photo>",
@@ -526,7 +526,7 @@ _Response (200 - OK)_
     "id": 2,
     "UserId": 1,
     "RideId": 1,
-    "paymentStatus": "pending",
+    "status": "pending",
     "createdAt": "2023-05-06T09:20:14.203Z",
     "updatedAt": "2023-05-06T09:20:14.203Z",
     "Ride": {
@@ -547,7 +547,7 @@ _Response (200 - OK)_
     "id": "<user ride id>",
     "UserId": "<current user id>",
     "RideId": "<ride id>",
-    "paymentStatus": "<ride payment status>",
+    "status": "<ride payment status>",
     "createdAt": "2023-05-06T09:20:14.203Z",
     "updatedAt": "2023-05-06T09:20:14.203Z",
     "Ride": {

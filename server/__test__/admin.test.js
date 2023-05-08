@@ -1,6 +1,7 @@
 const app = require("../app");
 const request = require("supertest");
 const { sequelize } = require("../models");
+const Hash = require("../helpers/bcrypt");
 
 let user1 = {
   name: "Test User 1",
@@ -28,6 +29,7 @@ beforeAll(async () => {
       require("../db/user.json").map((el) => {
         el.createdAt = new Date();
         el.updatedAt = new Date();
+        el.password = Hash.create(el.password);
         return el;
       })
     );
@@ -98,6 +100,9 @@ describe("POST /admin/register", () => {
       const response = await request(app).post("/admin/register").send(user1);
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty("message", expect.any(String));
+      expect(response.body.message).toBe(
+        "Admin Test User 1 has succesfully registered"
+      );
     });
   });
 
@@ -231,6 +236,24 @@ describe("GET /admin/users", () => {
       expect(body[0]).toHaveProperty("status", expect.any(String));
     });
   });
+
+  describe("GET /admin/users fail", () => {
+    it("should response with status 400 and error message if access token is not given", async () => {
+      const { status, body } = await request(app).get("/admin/users");
+      expect(status).toBe(400);
+      expect(body).toBeInstanceOf(Object);
+      expect(body.message).toBe("Access Token Missing");
+    });
+
+    it("should response with status 403 and error message if access token is invalid", async () => {
+      const { status, body } = await request(app)
+        .get("/admin/users")
+        .set({ access_token: "wrongaccesstoken" });
+      expect(status).toBe(403);
+      expect(body).toBeInstanceOf(Object);
+      expect(body.message).toBe("Forbidden");
+    });
+  });
 });
 
 describe("GET /admin/users/:id", () => {
@@ -254,8 +277,8 @@ describe("GET /admin/users/:id", () => {
     });
   });
 
-  describe("GET /admin/users/:id fail", () => {
-    it("should response with status 404 and error message if user with <id> not found", async () => {
+  describe("GET /admin/users/:userId fail", () => {
+    it("should response with status 404 and error message if user with <userId> not found", async () => {
       const { status, body } = await request(app)
         .get("/admin/users/100")
         .set({ access_token: access_token });
@@ -335,7 +358,7 @@ describe("DELETE /admin/rides/:id", () => {
     });
   });
 
-  describe("PATCH /admin/rides/:id fail", () => {
+  describe("DELETE /admin/rides/:id fail", () => {
     it("should response with status 404 and error message if ride with <id> not found", async () => {
       const { status, body } = await request(app)
         .delete("/admin/rides/100")

@@ -31,6 +31,7 @@ class AdminController {
       if (!currentAdmin) {
         throw { name: "unauthorized" };
       }
+
       if (!Hash.verify(password, currentAdmin.password)) {
         throw { name: "unauthorized" };
       }
