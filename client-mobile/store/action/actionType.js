@@ -1,12 +1,14 @@
 
 //URL
-export const BASE_URL = "http://localhost:4002/rides"
+export const BASE_URL = "http://192.168.1.12:4002"
+
 
 //action for all Post
-export const FETCH_POST ="rides/fetchPost"
+export const FETCH_RIDES ="fetchrIDE"
+export const FETCH_USERS_RIDES ="fetchSuccess"
 
 // DETAIL Post
-export const FETCH_DETAIL_POST ="fetchDetailPost"
+export const FETCH_DETAIL_RIDE ="fetchDetailPost"
 
 export const LOGIN_USER ="loginUser"
 

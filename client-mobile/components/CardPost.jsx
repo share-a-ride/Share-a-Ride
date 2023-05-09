@@ -29,7 +29,7 @@ const CardPost = ({item}) => {
           <Text style={styles.leftText}>{item.arrivalTime}</Text>
         </View>
         <View style={styles.right}>
-          <Text style={styles.price}>${item.price}</Text>
+          <Text style={styles.price}>Rp.{item.price}</Text>
           <View style={styles.bottom}>
             <Text style={styles.seats}>
               {item?.seatsFilled}/{item.seats} seats

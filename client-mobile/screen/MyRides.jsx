@@ -8,7 +8,7 @@ import {
   Image,
   FlatList,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   Octicons,
@@ -18,6 +18,8 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import CardMyRides from "../components/CardMyRides"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchDataUserRides } from "../store/action/actionCreator";
 
 const data = [
   {
@@ -89,16 +91,33 @@ const data = [
 
 const MyRides = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch()
+
+  const dataUserRides = useSelector((state) => {
+    return state.ridesReducer.userRides
+  })
+
+  useEffect(() => {
+    dispatch(fetchDataUserRides())
+    console.log("tesss")
+    navigation.setOptions({
+      headerShown: false,
+    });
+    // console.log(data,"<<<datid adat")
+    // console.log(dataRides,"<<<<inid ari data")
+
+  }, []);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, []);
 
- 
+
   return (
     <View className="flex-1 bg-white">
-        <View className="mx-6 my-4  ">
+      <View className="mx-6 my-4  ">
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Home");
@@ -112,7 +131,7 @@ const MyRides = () => {
       </View>
 
       <FlatList
-        data={data}
+        data={dataUserRides}
         renderItem={({ item }) => <CardMyRides item={item} />}
         keyExtractor={(item) => item.id}
       />

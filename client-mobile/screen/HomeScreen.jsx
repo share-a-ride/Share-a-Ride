@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, useState, useEffect } from "react";
+import React, { useLayoutEffect, useState,useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -12,8 +13,8 @@ import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import CardPost from "../components/CardPost"
-import { useSelector, useDispatch } from "react-redux"
-import { fetchDataPost } from "../store/action/actionCreator";
+import { fetchDataRides } from "../store/action/actionCreator";
+
 
 const data = [
   {
@@ -85,22 +86,29 @@ const data = [
 
 export default function HomeScreen({ route }) {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
-  // const [user, setUser] = useState("John Doe");
+  const [user, setUser] = useState("John Doe");
+  const dispatch = useDispatch()
 
-  const [ ride ] = useSelector((state) => {
-    console.log(state, "<><><><><><><><><><><><><");
-    return state
+  const dataRides = useSelector((state)=>{
+    // console.log(state.ridesReducer, "<><><>")
+    return state.ridesReducer.rides
   })
   
-  useEffect(() => {
-    dispatch(fetchDataPost())
-  }, []);
+  // console.log(dataRides,"<<<<inid ari data")
+  // console.log(data,"<<<datid adat")
 
-  useLayoutEffect(() => {
+
+ 
+
+  useEffect(() => {
+    dispatch(fetchDataRides())
+    console.log("tesss")
     navigation.setOptions({
       headerShown: false,
     });
+    // console.log(data,"<<<datid adat")
+    // console.log(dataRides,"<<<<inid ari data")
+
   }, []);
 
 
@@ -147,7 +155,7 @@ export default function HomeScreen({ route }) {
 
       <FlatList
         style={styles.list}
-        data={ride}
+        data={dataRides}
         renderItem={({ item }) => <CardPost item={item} />}
         keyExtractor={(item) => item.id}
       />

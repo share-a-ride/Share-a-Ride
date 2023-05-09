@@ -76,14 +76,16 @@ class RideController {
 
   static async ridePerUser(req, res, next) {
     try {
-      const { id } = req.user;
+      // const { id } = req.user;
+      const id = 1
       // console.log(id,"<<<<<");
       const ridesPerUser = await UserRide.findAll({
         where: { UserId: id },
-        include: Ride,
+        include: [Ride, User],
       });
       res.status(200).json(ridesPerUser);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

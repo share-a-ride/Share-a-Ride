@@ -1,6 +1,7 @@
-import { BASE_URL, FETCH_POST, FETCH_DETAIL_POST, LOGIN_USER, ADD_USER } from "./actionType";
+import { BASE_URL, FETCH_RIDES, FETCH_DETAIL_RIDE, LOGIN_USER, ADD_USER, FETCH_USERS_RIDES } from "./actionType";
 import axios from 'axios';
 import Swal from 'sweetalert2'
+
 
 export function loginSuccess(payload) {
   return {
@@ -16,41 +17,53 @@ export function registerSuccess(payload) {
   }
 }
 
-export function fetchPostSuccess(payload) {
+export function fetchUserRideSuccess(payload) {
   return {
-    type: FETCH_POST,
-    payload,
-  }
-}
-export function fetchDetailPostSuccess(payload) {
-  return {
-    type: FETCH_DETAIL_POST,
-    payload,
+    type: FETCH_USERS_RIDES,
+    payload
   }
 }
 
+export function fetchRideSuccess(payload) {
+  return {
+    type: FETCH_RIDES,
+    payload,
+  }
+}
+export function fetchDetailRideSuccess(payload) {
+  return {
+    type: FETCH_DETAIL_RIDE,
+    payload,
+  }
+}
 
 
 
-export function fetchDataPost() {
+
+export function fetchDataRides() {
 
   return async (dispatch, getState) => {
     try {
-      const {data} = await axios.get(BASE_URL + "/");
-      // let res = await fetch(`${BASE_URL}/`, {
-      //   method: "get",
-      //   headers: {
-      //     access_token: localStorage.access_token,
-      //   },
-      // });
+      const { data } = await axios.get(BASE_URL + "/rides");
 
-      // if (!res.ok) {
-      //   throw await res.text();
-      // }
-      // let data = await res.json();
-      console.log(data, "{{}{}{}{}{}");
+      // console.log(data, "><<<<<<<dari")
+      dispatch(fetchRideSuccess(data))
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setLoading(false);
+    }
+  }
+}
 
-      dispatch(fetchPostSuccess(data))
+export function fetchDataUserRides() {
+
+  return async (dispatch, getState) => {
+    try {
+      const { data } = await axios.get(BASE_URL + "/users/rides");
+
+      dispatch(fetchUserRideSuccess(data))
+      console.log(data, "><<<<<<<dari")
     } catch (error) {
       console.log(error);
     } finally {
@@ -78,10 +91,10 @@ export function fetchDetailPost(id) {
 export function handleLogin(user) {
   return async (dispatch, getState) => {
     try {
-      let { data } = await axios.post(this.baseUrl + '/pub/login', user)
+      let { data } = await axios.post(this.baseUrl + '/users/login', user)
       localStorage.access_token = data.access_token
       localStorage.email = data.email
-      console.log(user, "<<<<normallll")
+      // console.log(user, "<<<<normallll")
       dispatch(registerSuccess(data))
       Swal.fire("Good job!", "Success Login!", "success");
 
