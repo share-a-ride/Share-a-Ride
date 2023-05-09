@@ -12,19 +12,25 @@ import {
 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ModalAddVihecle from "../components/ModalAddVihecle";
+import axios from "axios";
+const BASE_URL = "https://9e9e-36-73-33-46.ngrok-free.app";
+
 
 const ProfileScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
-  const [user, setUser] = useState({
-    name: "John Doe",
-    image:
-      "https://cdn.medcom.id/dynamic/content/2019/06/04/1029348/uPzxU4aEhF.jpg?w=700",
-    address: "jl.jendral ahmad yani no.10",
-    phoneNumber: "876546889",
-    rating: 4.5,
-    review: 142,
-  });
+  const [user, setCurrentUser] = useState(null);
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get(BASE_URL + "/users/currentUser", {
+        headers: { access_token: await AsyncStorage.getItem("access_token") },
+      });
+      console.log(data, "ini data");
+      setCurrentUser(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   async function handleLogout() {
     try {
@@ -42,6 +48,7 @@ const ProfileScreen = () => {
   };
 
   useLayoutEffect(() => {
+    fetchCurrentUser();
     navigation.setOptions({
       headerShown: false,
     });

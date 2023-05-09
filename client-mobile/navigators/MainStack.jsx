@@ -42,21 +42,34 @@ export default function MainStack() {
   console.log(verified);
   return (
     <Stack.Navigator initialRouteName="Home">
-      {verified && (
-        <>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Details" component={DetailScreen} />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
-          <Stack.Screen name="MyRides" component={MyRides} />
-          <Stack.Screen name="PostRide" component={PostRideScreen} />
-          <Stack.Screen name="Chat" component={ChatScreen} />
-          <Stack.Screen name="RideRequest" component={RideRequestScreen} />
-          <Stack.Screen name="ChatBox" component={ChatBox} />
-        </>
-      )}
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Details" component={DetailScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="MyRides" component={MyRides} />
+      <Stack.Screen name="PostRide" component={PostRideScreen} />
+      <Stack.Screen name="Chat" component={ChatScreen} />
+      <Stack.Screen name="RideRequest" component={RideRequestScreen} />
+      <Stack.Screen name="ChatBox" component={ChatBox} />
       <Stack.Screen name="Landing" component={LandingScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
     </Stack.Navigator>
+    // <Stack.Navigator initialRouteName="Home">
+    //   {verified && (
+    //     <>
+    //       <Stack.Screen name="Home" component={HomeScreen} />
+    //       <Stack.Screen name="Details" component={DetailScreen} />
+    //       <Stack.Screen name="Profile" component={ProfileScreen} />
+    //       <Stack.Screen name="MyRides" component={MyRides} />
+    //       <Stack.Screen name="PostRide" component={PostRideScreen} />
+    //       <Stack.Screen name="Chat" component={ChatScreen} />
+    //       <Stack.Screen name="RideRequest" component={RideRequestScreen} />
+    //       <Stack.Screen name="ChatBox" component={ChatBox} />
+    //     </>
+    //   )}
+    //   <Stack.Screen name="Landing" component={LandingScreen} />
+    //   <Stack.Screen name="Login" component={LoginScreen} />
+    //   <Stack.Screen name="Register" component={RegisterScreen} />
+    // </Stack.Navigator>
   );
 }

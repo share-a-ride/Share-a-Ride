@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { handleLogin } from "../store/action/actionCreator";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const BASE_URL = "http://localhost:4002";
+const BASE_URL = "https://9e9e-36-73-33-46.ngrok-free.app";
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -25,11 +25,13 @@ export default function LoginScreen() {
         email,
         password,
       });
-      console.log("disini");
-      console.log(data);
+      // console.log("disini");
+      // console.log(data);
+
       await AsyncStorage.setItem("access_token", data.access_token);
       const value = await AsyncStorage.getItem("access_token");
-      console.log(value);
+      
+      // console.log(value);
       navigation.navigate("Home");
     } catch (error) {
       console.log(error);

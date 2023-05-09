@@ -39,7 +39,7 @@ const errorHandler = (err, req, res, next) => {
     message = "Rating must be between 1-5";
     code = 400;
   } else if (err.name === "ALREADY_BOOKED") {
-    message = "You are already a booked";
+    message = "You have paid for this booking";
     code = 400;
   } else if (err.name === "self_rate") {
     message = "You cannot rate yourself";

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState,useEffect } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   View,
@@ -12,9 +12,10 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import CardPost from "../components/CardPost"
-import { fetchDataRides } from "../store/action/actionCreator";
-
+import CardPost from "../components/CardPost";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+const BASE_URL = "https://9e9e-36-73-33-46.ngrok-free.app";
 
 const data = [
   {
@@ -92,41 +93,51 @@ const data = [
 
 export default function HomeScreen({ route }) {
   const navigation = useNavigation();
-  const [user, setUser] = useState("John Doe");
-  const dispatch = useDispatch()
+  const [user, setCurrentUser] = useState({});
+  const [rides, setRides] = useState([]);
 
-  const dataRides = useSelector((state)=>{
-    return state.ridesReducer.rides
-  })
-  
-  // console.log(dataRides,"<<<<inid ari data home")
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get(BASE_URL + "/users/currentUser", {
+        headers: { access_token: await AsyncStorage.getItem("access_token") },
+      });
+      console.log(data, "ini data");
+      setCurrentUser(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-
- 
-
+  const fetchRides = async () => {
+    const { data } = await axios.get(BASE_URL + "/rides", {
+      headers: { access_token: await AsyncStorage.getItem("access_token") },
+    });
+    setRides(data);
+  };
   useEffect(() => {
-    dispatch(fetchDataRides())
-    // console.log("tesss")
+    fetchCurrentUser();
+    fetchRides();
+    // console.log(user.name, "ini user");
+    console.log(rides, "ini rides");
     navigation.setOptions({
       headerShown: false,
     });
   }, []);
 
-
-
   return (
+    // <View><Text>DISINI</Text></View>
     <View style={styles.container}>
       <View className="flex-row justify-between items-center  w-11/12 mt-5 mb-5 bg-slate-200 py-3 px-4 rounded-md">
         <View>
           <Text className="">Share A Ride</Text>
-          <Text className="text-xl text-green-900">Welcome, {user}!</Text>
+          <Text className="text-xl text-green-900">Welcome, {user.name}!</Text>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
           <View className="w-12 h-12 bg-slate-300 rounded-md items-center justify-center">
             <Image
               className="w-full h-full "
               source={{
-                uri: "https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector.png",
+                uri: user.image,
               }}
             />
           </View>
@@ -134,16 +145,12 @@ export default function HomeScreen({ route }) {
       </View>
       <View className="flex-row justify-end items-end w-full">
         <View style={styles.filter}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("PostRide")}
-          >
+          <TouchableOpacity onPress={() => navigation.navigate("PostRide")}>
             <MaterialIcons name="add-location-alt" size={24} color="grey" />
           </TouchableOpacity>
         </View>
         <View style={styles.filter}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Landing")}
-          >
+          <TouchableOpacity onPress={() => navigation.navigate("Landing")}>
             <MaterialCommunityIcons
               name="filter-variant"
               size={24}
@@ -151,12 +158,11 @@ export default function HomeScreen({ route }) {
             />
           </TouchableOpacity>
         </View>
-
       </View>
 
       <FlatList
         style={styles.list}
-        data={data}
+        data={rides}
         renderItem={({ item }) => <CardPost item={item} />}
         keyExtractor={(item) => item.id}
       />

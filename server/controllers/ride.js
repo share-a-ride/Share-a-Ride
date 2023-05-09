@@ -25,9 +25,6 @@ class RideController {
           },
         ],
       });
-      if (!data) {
-        throw { name: "not_found" };
-      }
       res.status(200).json(data);
     } catch (error) {
       next(error);
@@ -93,7 +90,7 @@ class RideController {
 
       await Ride.destroy({ where: { id } });
 
-      const message = `Ride with id ${ride.id} deleted`;
+      const message = `Ride with id ${ride.id} is deleted`;
       res.status(200).json({ message });
     } catch (error) {
       // console.log(error);
@@ -115,29 +112,6 @@ class RideController {
     }
   }
 
-  static async updateStatusPayment(req, res, next) {
-    try {
-      const { id } = req.user;
-      const userRideId = req.params.id;
-      const updatedRide = await UserRide.update(
-        { status: "paid" },
-        {
-          where: {
-            [Op.and]: [{ UserId: id }, { id: userRideId }],
-          },
-          returning: true,
-        }
-      );
-      if (!updatedRide[0]) {
-        throw { name: "invalid_token" };
-      }
-
-      res.status(200).json(updatedRide);
-    } catch (error) {
-      next(error);
-    }
-  }
-
   static async updateRide(req, res, next) {
     try {
       const id = req.params.id;
@@ -145,9 +119,6 @@ class RideController {
         include: [{ model: UserRide }],
       });
 
-      if (!ride) {
-        throw { name: "not_found" };
-      }
       let {
         startLocation,
         destination,
@@ -263,11 +234,11 @@ class RideController {
       });
       // console.log(ride.UserRides);
       // check if user is in the ride
-      if (ride.UserRides.find((el) => el.UserId == userId)) {
-        throw { name: "invalid_order" };
-      }
       if (!ride) {
         throw { name: "not_found" };
+      }
+      if (ride.UserRides.find((el) => el.UserId == userId)) {
+        throw { name: "invalid_order" };
       }
       if (ride.seats <= 0) {
         throw { name: "full_booked" };
@@ -310,13 +281,62 @@ class RideController {
     try {
       const { id } = req.params;
       const ride = await Ride.findByPk(id, {
-        include: [{ model: UserRide }],
+        include: [{model: Vehicle},
+          {
+            model: UserRide,
+            include: [
+              {
+                model: User,
+                attributes: {
+                  exclude: "password",
+                },
+              },
+            ],
+          },
+        ],
       });
       if (!ride) {
         throw { name: "not_found" };
       }
-      res.status(200).json(data);
+      res.status(200).json(ride);
     } catch (error) {
+      // console.log(error);
+      next(error);
+    }
+  }
+
+  static async changeStatusOrder(req, res, next) {
+    try {
+      const id = req.params.id;
+      const userId = req.user.id;
+      const { status } = req.body;
+
+      const orderToUpdate = await UserRide.findByPk(id, {
+        include: [{ model: Ride }],
+      });
+
+      if (!orderToUpdate) {
+        throw { name: "not_found" };
+      }
+
+      if (orderToUpdate.Ride.createdBy !== userId) {
+        throw { name: "invalid_user" };
+      }
+
+      const order = await UserRide.update(
+        { status },
+        {
+          where: {
+            [Op.and]: [{ id }, { status: "requested" }],
+          },
+          returning: true,
+        }
+      );
+
+      const message = `Order request is ${status}`;
+      res.status(200).json({ message });
+    } catch (error) {
+      console.log(error);
       next(error);
     }
   }
