@@ -3,7 +3,7 @@ import { LOGIN_LOADING, USER, USER_LOADING } from "../actions/actionType";
 const initialState = {
     usersLoading: false,
     user: [],
-    userLoading: false
+    userLoading: true
 }
 
 export default function usersReducer(state = initialState, { type, payload }) {

@@ -30,6 +30,10 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
+        path: "users/:id",
+        element: <EditUsers />,
+      },
+      {
         path: "",
         element: <HomePage />,
       },
@@ -44,15 +48,13 @@ const router = createBrowserRouter([
       {
         path: "users",
         element: <VerifiedUsersPage />,
+       
       },
       {
         path: "rides",
         element: <RidesList />,
       },
-      {
-        path: "edit-users/:id",
-        element: <EditUsers />,
-      },
+      
     ],
   },
   {

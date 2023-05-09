@@ -5,7 +5,7 @@ const userAuthentication = async (req, res, next) => {
   try {
     const { access_token } = req.headers;
     if (!access_token) {
-      throw { name: "invalid_token" };
+      throw { name: "access_token_missing" };
     }
     const payload = verifyToken(access_token);
     // console.log(payload, "?????");
@@ -17,7 +17,7 @@ const userAuthentication = async (req, res, next) => {
     req.user = payload;
     next();
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     next(error);
   }
 };

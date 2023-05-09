@@ -11,7 +11,7 @@ export default function VerifiedUsersPage() {
   // const [selectedUser, setSelectedUser] = useState(null);
   // const [isLoading, setIsLoading] = useState(true);
   const { user, userLoading } = useSelector((state) => {
-    console.log(state.usersReducer, "<><><><>");
+    // console.log(state.usersReducer, "<><><><>");
     return state.usersReducer
   });
 
@@ -67,21 +67,17 @@ export default function VerifiedUsersPage() {
             </tr>
           </thead>
           <tbody>
-            {verifiedUsers.map((user) => (
+            {
+            userLoading?
+            <div>Loadinggg ................</div>
+            :verifiedUsers.map((user) => (
               <tr key={user.id}>
                 <td className="p-2">{user.name}</td>
                 <td className="p-2">{user.email}</td>
                 <td className="p-2">{user.phoneNumber}</td>
                 <td className="p-2">{user.rating}</td>
                 <td className="p-2 flex space-x-2">
-                  <Link to={`edit-users/${user.id}`}>
-                    <button
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded"
-                      onClick={() => handleEditUser(user)}
-                    >
-                      Edit
-                    </button>
-                  </Link>
+                  
                   <button
                     className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
                     onClick={() => handleBanUser(user.id)}

@@ -29,7 +29,7 @@ export default function Navbar() {
           <ul className="flex space-x-4">
             <li>
               <NavLink
-                to="/dashboard"
+                to="/"
                 className="text-white font-medium hover:text-yellow-500"
                 activeClassName="text-yellow-500"
               >

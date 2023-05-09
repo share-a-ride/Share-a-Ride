@@ -1,5 +1,5 @@
 const errorHandler = (err, req, res, next) => {
-  // console.log(err)
+  // console.log(err);
   let message = "Internal server error";
   let code = 500;
 
@@ -39,7 +39,7 @@ const errorHandler = (err, req, res, next) => {
     message = "Rating must be between 1-5";
     code = 400;
   } else if (err.name === "ALREADY_BOOKED") {
-    message = "You are already a booked";
+    message = "You have paid for this booking";
     code = 400;
   } else if (err.name === "self_rate") {
     message = "You cannot rate yourself";
@@ -52,6 +52,9 @@ const errorHandler = (err, req, res, next) => {
     code = 400;
   } else if (err.name === "invalid_order") {
     message = "You have ordered this ride";
+    code = 400;
+  } else if (err.name === "no_vehicle") {
+    message = "You need to register a vehicle to create ride";
     code = 400;
   }
 

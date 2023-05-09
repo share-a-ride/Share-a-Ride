@@ -7,6 +7,8 @@ import {
     USER,
     USER_LOADING
 } from "./actionType"
+import Swal from 'sweetalert2'
+import axios from 'axios'
 
 
 export const loginLoading = (payload) => ({
@@ -88,7 +90,7 @@ export function fetchRides() {
 export function fetchUser() {
     return async (dispatch) => {
         try {
-            dispatch(userLoading(true));
+            
             let res = await fetch(`${BASE_URL}/users`, {
                 method: "get",
                 headers: {
@@ -100,8 +102,9 @@ export function fetchUser() {
             }
             let data = await res.json();
 
+            
             dispatch(fetchUserSuccess(data));
-            dispatch(userLoading(faSlse));
+            dispatch(userLoading(false));
         } catch (err) {
             dispatch(userLoading(false));
             throw JSON.parse(err);
@@ -109,22 +112,17 @@ export function fetchUser() {
     };
 }
 
-export function changeUserStatus(userId) {
+export function changeUserStatus(status,id) {
     return async function (dispatch) {
         try {
-            let res = await fetch(`${BASE_URL}/users/${userId}`, {
-                method: "patch",
-                headers: {
-                    "Content-Type": "application/json",
-                    access_token: localStorage.access_token,
-                },
-            });
-
-            if (!res.ok) {
-                throw await res.text();
-            }
-
-            let data = await res.json();
+            console.log(status,id,"<<<< dari reducer")
+           let data = await axios.patch(`${BASE_URL}/users/${id}`,
+            {status:status},
+            {   headers: {
+                access_token: localStorage.access_token,
+            }}
+         )
+            Swal.fire("Good job!", "Success !", "success");
 
             await dispatch(fetchUser());
             return data.message;

@@ -1,26 +1,57 @@
 const Hash = require("../helpers/bcrypt");
 const { generateToken } = require("../helpers/jwt");
-const { User } = require("../models");
+const { User, Vehicle } = require("../models");
+const ImageKit = require("imagekit");
+const uuid = require("uuid");
 
 class UserController {
   static async register(req, res, next) {
     try {
-      const { name, email, password, phoneNumber, photo, idCardImg } = req.body;
-      const newPass = Hash.create(password);
-      const status = "unverified";
-      await User.create({
-        name,
-        email,
-        newPass,
-        phoneNumber,
-        photo,
-        idCardImg,
-        status,
-      });
+      // const { name, email, password, phoneNumber, photo, idCardImg } = req.body;
+      // console.log(password);
+      // const newPass = Hash.create(password);
+      // const status = "unverified";
+      // await User.create({
+      //   name,
+      //   email,
+      //   password,
+      //   phoneNumber,
+      //   photo,
+      //   idCardImg,
+      //   status,
+      //   rating: 5,
+      // });
 
-      const message = `User ${name} has succesfully registered`;
+      var imagekit = new ImageKit({
+        publicKey: "public_598ryvTcQKwiS8vjsgNTeEUsvfY=",
+        privateKey: "private_8dPPtCNhJ11zMc2K2U/dQBJ6E5g=",
+        urlEndpoint: "https://ik.imagekit.io/pckjztu2z",
+      });
+      // console.log(req.files, "<<<<<<<<<");
+      imagekit
+        .upload({
+          file: req.files[0].buffer, //required
+          fileName: `${uuid}+${req.files[0].originalname}`, //required
+          extensions: [
+            {
+              name: "google-auto-tagging",
+              maxTags: 5,
+              minConfidence: 95,
+            },
+          ],
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      // console.log(req.files);
+      const message = `User ${4} has succesfully registered`;
       res.status(201).json({ message });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
@@ -28,6 +59,7 @@ class UserController {
   static async login(req, res, next) {
     try {
       const { email, password } = req.body;
+      // console.log("MASUK LOGIN!!");
       // console.log(req.body, "?????????????");
 
       if (!email || email === undefined) throw { name: "empty_email" };
@@ -48,14 +80,14 @@ class UserController {
       const token = generateToken({ id: selectedUser.id });
       res.status(200).json({
         access_token: token,
-        username: selectedUser.name,
+        name: selectedUser.name,
         email: selectedUser.email,
         phoneNumber: selectedUser.phoneNumber,
         photo: selectedUser.photo,
         rating: selectedUser.rating,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       next(error);
     }
   }
@@ -80,13 +112,32 @@ class UserController {
         attributes: {
           exclude: ["password"],
         },
+        include: Vehicle,
       });
-      console.log(user);
+      // console.log(user);
       if (!user) {
         throw { name: "not_found" };
       }
       res.status(200).json(user);
     } catch (error) {
+      // console.log(error);
+      next(error);
+    }
+  }
+
+  static async getCurrentUser(req, res, next) {
+    const userId = req.user.id;
+    try {
+      let currentUser = await User.findByPk(userId, {
+        attributes: {
+          exclude: ["password"],
+        },
+        include: Vehicle,
+      });
+      // console.log(user);
+      res.status(200).json(currentUser);
+    } catch (error) {
+      // console.log(error);
       next(error);
     }
   }
@@ -152,6 +203,7 @@ class UserController {
       const message = `Rated ${userToRate.name} with ${rating} successfully`;
       res.status(200).json({ message });
     } catch (error) {
+      // console.log(error);
       next(error);
     }
   }
