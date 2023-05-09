@@ -84,7 +84,7 @@ module.exports = (sequelize, DataTypes) => {
           notNull: { msg: "ID card photo is required" },
         },
       },
-      rating: DataTypes.INTEGER,
+      rating: DataTypes.FLOAT,
       status: DataTypes.STRING,
     },
     {

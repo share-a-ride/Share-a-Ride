@@ -17,6 +17,7 @@ class UserController {
         photo,
         idCardImg,
         status,
+        rating: 5,
       });
 
       const message = `User ${name} has succesfully registered`;
@@ -89,6 +90,26 @@ class UserController {
         throw { name: "not_found" };
       }
       res.status(200).json(user);
+    } catch (error) {
+      // console.log(error);
+      next(error);
+    }
+  }
+
+  static async getCurrentUser(req, res, next) {
+    const userId = req.user.id;
+    try {
+      let currentUser = await User.findByPk(userId, {
+        attributes: {
+          exclude: ["password"],
+        },
+        include: Vehicle,
+      });
+      // console.log(user);
+      if (!currentUser) {
+        throw { name: "not_found" };
+      }
+      res.status(200).json(currentUser);
     } catch (error) {
       // console.log(error);
       next(error);

@@ -2,12 +2,29 @@ const { Op } = require("sequelize");
 const { Ride, Vehicle, UserRide, User } = require("../models");
 const midtransClient = require("midtrans-client");
 const axios = require("axios");
-const { checkPaymentStatus } = require("../helpers/checkPayment");
+// const { checkPaymentStatus } = require("../helpers/checkPayment");
 
 class RideController {
   static async getAllRide(req, res, next) {
     try {
-      const data = await Ride.findAll();
+      const data = await Ride.findAll({
+        include: [
+          {
+            model: UserRide,
+            where: {
+              status: "creator",
+            },
+            include: [
+              {
+                model: User,
+                attributes: {
+                  exclude: "password",
+                },
+              },
+            ],
+          },
+        ],
+      });
       if (!data) {
         throw { name: "not_found" };
       }
@@ -50,6 +67,12 @@ class RideController {
         seats,
         createdBy: userId,
         VehicleId: user.Vehicle.id,
+      });
+
+      let newUserRide = await UserRide.create({
+        UserId: ride.createdBy,
+        RideId: ride.id,
+        status: "creator",
       });
 
       const message = `New ride with ${ride.id} created`;
