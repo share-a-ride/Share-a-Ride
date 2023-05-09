@@ -25,9 +25,6 @@ class RideController {
           },
         ],
       });
-      if (!data) {
-        throw { name: "not_found" };
-      }
       res.status(200).json(data);
     } catch (error) {
       next(error);
@@ -115,29 +112,6 @@ class RideController {
     }
   }
 
-  static async updateStatusPayment(req, res, next) {
-    try {
-      const { id } = req.user;
-      const userRideId = req.params.id;
-      const updatedRide = await UserRide.update(
-        { status: "paid" },
-        {
-          where: {
-            [Op.and]: [{ UserId: id }, { id: userRideId }],
-          },
-          returning: true,
-        }
-      );
-      if (!updatedRide[0]) {
-        throw { name: "invalid_token" };
-      }
-
-      res.status(200).json(updatedRide);
-    } catch (error) {
-      next(error);
-    }
-  }
-
   static async updateRide(req, res, next) {
     try {
       const id = req.params.id;
@@ -145,9 +119,6 @@ class RideController {
         include: [{ model: UserRide }],
       });
 
-      if (!ride) {
-        throw { name: "not_found" };
-      }
       let {
         startLocation,
         destination,
@@ -329,7 +300,7 @@ class RideController {
       }
       res.status(200).json(ride);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       next(error);
     }
   }
@@ -340,21 +311,27 @@ class RideController {
       const userId = req.user.id;
       const { status } = req.body;
 
+      const orderToUpdate = await UserRide.findByPk(id, {
+        include: [{ model: Ride }],
+      });
+
+      if (!orderToUpdate) {
+        throw { name: "not_found" };
+      }
+
+      if (orderToUpdate.Ride.createdBy !== userId) {
+        throw { name: "invalid_user" };
+      }
+
       const order = await UserRide.update(
         { status },
         {
           where: {
-            [Op.and]: [{ UserId: userId }, { id }, { status: "requested" }],
+            [Op.and]: [{ id }, { status: "requested" }],
           },
           returning: true,
         }
       );
-      if (!order) {
-        throw { name: "not_found" };
-      }
-      if (order.UserId !== userId) {
-        throw { name: "invalid_user" };
-      }
 
       const message = `Order request is ${status}`;
       res.status(200).json({ message });
@@ -363,8 +340,6 @@ class RideController {
       next(error);
     }
   }
-
-  
 }
 
 module.exports = RideController;

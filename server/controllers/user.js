@@ -203,7 +203,7 @@ class UserController {
       const message = `Rated ${userToRate.name} with ${rating} successfully`;
       res.status(200).json({ message });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       next(error);
     }
   }

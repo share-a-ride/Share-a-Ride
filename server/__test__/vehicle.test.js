@@ -198,7 +198,7 @@ describe("PUT /vehicles/:id", () => {
 });
 
 describe("DELETE /vehicles/:id", () => {
-  describe("DELETE /vehicles/:id", () => {
+  describe("DELETE /vehicles/:id success", () => {
     it("should response with status 200 and success message", async () => {
       const accesstoken2 = generateToken({ id: 2 });
       const { status, body } = await request(app)
@@ -211,7 +211,7 @@ describe("DELETE /vehicles/:id", () => {
     });
   });
 
-  describe("DELETE /vehicles/:id", () => {
+  describe("DELETE /vehicles/:id fail", () => {
     it("should response with status 403 and error message if vehicle does not belong to current user", async () => {
       const { status, body } = await request(app)
         .delete("/vehicles/3")
