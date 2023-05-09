@@ -38,7 +38,7 @@ const CardRequestRides = ({ item }) => {
           </View>
             <View>
             <TouchableOpacity onPress={() => {
-              navigation.navigate("Chat");
+              navigation.navigate("ChatBox",{item});
             }}>
               <Ionicons name="chatbox-ellipses-outline" size={30} color="white" />
             </TouchableOpacity>
