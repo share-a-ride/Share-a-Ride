@@ -98,7 +98,15 @@ _Response (200 - OK)_
     "createdBy": <creator (user) id>,
     "VehicleId": <creator's vehicle id>,
     "createdAt": "2023-05-06T09:20:14.194Z",
-    "updatedAt": "2023-05-06T09:20:14.194Z"
+    "updatedAt": "2023-05-06T09:20:14.194Z",
+    "UserRides": [
+      {
+        "id": <userRide id>,
+        "UserId": <user id>,
+        "RideId": <ride id>,
+        "status": <userRide status>
+      },
+    ]
 }
 ```
 
@@ -157,7 +165,7 @@ _Response (400 - Bad Request)_
 
 ### DELETE /rides/:id
 
-> Delete ride with <id>
+> Delete ride with "id"
 
 _Request Header_
 
@@ -193,7 +201,7 @@ _Response (404 - Not Found)_
 
 ### PATCH /rides/:id
 
-> Edit user ride payment status with userRideId <id>
+> Edit user ride payment status with userRideId "id" //deprecated
 
 _Request Header_
 
@@ -231,7 +239,7 @@ _Response (200 - OK)_
 
 ### PUT /rides/:id
 
-> Edit ride with <id>
+> Edit ride with "id"
 
 _Request Header_
 
@@ -319,7 +327,7 @@ _Response (400 - Bad Request)_
 
 ### POST /rides/order/:id
 
-> Create new order for ride with <id>
+> Create new order for ride with ride id "id"
 
 _Request Header_
 
@@ -363,7 +371,7 @@ _Response (400 - Bad Request)_
 
 ### DELETE /rides/order/:id
 
-> Cancel order with <id>
+> Cancel order with "id"
 
 _Request Header_
 
@@ -466,7 +474,7 @@ _Response (200 - OK)_
 ```
 {
   "access_token": "<access_token>",
-  "username": "<user username>",
+  "name": "<user username>",
   "email": "<user email>",
   "phoneNumber": "<user phone number>",
   "photo": "<user photo>",
@@ -518,7 +526,7 @@ _Response (200 - OK)_
     "id": 2,
     "UserId": 1,
     "RideId": 1,
-    "paymentStatus": "pending",
+    "status": "pending",
     "createdAt": "2023-05-06T09:20:14.203Z",
     "updatedAt": "2023-05-06T09:20:14.203Z",
     "Ride": {
@@ -539,7 +547,7 @@ _Response (200 - OK)_
     "id": "<user ride id>",
     "UserId": "<current user id>",
     "RideId": "<ride id>",
-    "paymentStatus": "<ride payment status>",
+    "status": "<ride payment status>",
     "createdAt": "2023-05-06T09:20:14.203Z",
     "updatedAt": "2023-05-06T09:20:14.203Z",
     "Ride": {
@@ -563,7 +571,7 @@ _Response (200 - OK)_
 
 ### PATCH /users/rate/:id
 
-> Rate another user with <id>
+> Rate another user with "id"
 
 _Request Header_
 
@@ -739,7 +747,7 @@ _Response (200 - OK)_
 
 ### GET /admin/users/:id
 
-> Get user by <id>
+> Get user by "id"
 
 _Request Header_
 
@@ -883,7 +891,7 @@ _Response (200 - OK)_
 
 ### DELETE /admin/rides/:id
 
-> Delete ride with <id>
+> Delete ride with "id"
 
 _Request Header_
 
