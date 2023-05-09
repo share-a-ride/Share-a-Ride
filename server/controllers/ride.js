@@ -2,12 +2,29 @@ const { Op } = require("sequelize");
 const { Ride, Vehicle, UserRide, User } = require("../models");
 const midtransClient = require("midtrans-client");
 const axios = require("axios");
-const { checkPaymentStatus } = require("../helpers/checkPayment");
+// const { checkPaymentStatus } = require("../helpers/checkPayment");
 
 class RideController {
   static async getAllRide(req, res, next) {
     try {
-      const data = await Ride.findAll();
+      const data = await Ride.findAll({
+        include: [
+          {
+            model: UserRide,
+            where: {
+              status: "creator",
+            },
+            include: [
+              {
+                model: User,
+                attributes: {
+                  exclude: "password",
+                },
+              },
+            ],
+          },
+        ],
+      });
       if (!data) {
         throw { name: "not_found" };
       }
@@ -37,6 +54,10 @@ class RideController {
         include: Vehicle,
       });
 
+      if (!user.Vehicle) {
+        throw { name: "no_vehicle" };
+      }
+
       let ride = await Ride.create({
         startLocation,
         destination,
@@ -47,6 +68,13 @@ class RideController {
         createdBy: userId,
         VehicleId: user.Vehicle.id,
       });
+
+      let newUserRide = await UserRide.create({
+        UserId: ride.createdBy,
+        RideId: ride.id,
+        status: "creator",
+      });
+
       const message = `New ride with ${ride.id} created`;
       res.status(201).json({ message });
     } catch (error) {
@@ -68,7 +96,7 @@ class RideController {
       const message = `Ride with id ${ride.id} deleted`;
       res.status(200).json({ message });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       next(error);
     }
   }
@@ -92,7 +120,7 @@ class RideController {
       const { id } = req.user;
       const userRideId = req.params.id;
       const updatedRide = await UserRide.update(
-        { paymentStatus: "paid" },
+        { status: "paid" },
         {
           where: {
             [Op.and]: [{ UserId: id }, { id: userRideId }],
@@ -152,33 +180,33 @@ class RideController {
 
       res.status(200).json({ message });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       next(error);
     }
   }
 
   static async genMidtransToken(req, res, next) {
     try {
-      console.log(1, "<<<<<<<<");
+      // console.log(1, "<<<<<<<<");
 
       const checkUser = await UserRide.findByPk(req.user.id, {
         include: User,
       });
 
-      console.log(checkUser.User.email, "<<<<<< checkUser.isPremium");
+      // console.log(checkUser.User.email, "<<<<<< checkUser.isPremium");
 
-      if (checkUser.paymentStatus === "paid") {
+      if (checkUser.status === "paid") {
         throw { name: "ALREADY_BOOKED" };
       }
 
-      console.log(3, "<<<<<<<<");
+      // console.log(3, "<<<<<<<<");
 
       let snap = new midtransClient.Snap({
         isProduction: false,
         serverKey: "SB-Mid-server-xvUL2muo6OumITLOfsgy0pMP",
       });
 
-      console.log(4, "<<<<<<<<");
+      // console.log(4, "<<<<<<<<");
 
       let parameter = {
         transaction_details: {
@@ -197,11 +225,11 @@ class RideController {
         },
       };
 
-      console.log(5, "<<<<<<<<");
+      // console.log(5, "<<<<<<<<");
 
       const midtransToken = await snap.createTransaction(parameter);
 
-      console.log(6, "<<<<<<<<");
+      // console.log(6, "<<<<<<<<");
 
       res.status(200).json(midtransToken);
 
@@ -212,14 +240,14 @@ class RideController {
       // }
 
       // Update UserRide payment status to 'paid'
-      await checkUser.update({ paymentStatus: "paid" });
+      await checkUser.update({ status: "paid" });
       const ride = await Ride.findByPk(checkUser.RideId);
       await Ride.update(
         { seats: ride.seats - 1 },
         { where: { id: checkUser.RideId } }
       );
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       next(err);
     }
   }
@@ -228,7 +256,7 @@ class RideController {
     try {
       const rideId = req.params.id;
       const userId = req.user.id;
-      console.log(req.user);
+      // console.log(req.user);
 
       const ride = await Ride.findByPk(rideId, {
         include: [{ model: UserRide }],
@@ -248,7 +276,7 @@ class RideController {
       let newUserRide = await UserRide.create({
         RideId: rideId,
         UserId: userId,
-        paymentStatus: "pending",
+        status: "requested",
       });
       const message = "Order received";
       res.status(201).json({ message });
@@ -281,7 +309,9 @@ class RideController {
   static async getRideById(req, res, next) {
     try {
       const { id } = req.params;
-      const ride = await Ride.findByPk(id);
+      const ride = await Ride.findByPk(id, {
+        include: [{ model: UserRide }],
+      });
       if (!ride) {
         throw { name: "not_found" };
       }
