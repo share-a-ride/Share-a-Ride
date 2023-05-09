@@ -1,4 +1,6 @@
 import React, { useLayoutEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   View,
   TextInput,
@@ -11,14 +13,19 @@ import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from 'expo-image-picker';
 import { Camera, CameraType } from 'expo-camera';
+import {handleRegister} from "../store/action/actionCreator";
+import axios from 'axios';
+const BASE_URL= "http://192.168.100.167:4002"
+
+
 
 export default function RegisterScreen() {
-  const [image, setImage] = useState(null);
+  const [idCardImg, setidCardImg] = useState(null);
+  const [photo, setPhoto] = useState(null);
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
-  
   const navigation = useNavigation();
-  const [username, setUsername] = useState("");
+  const [name, setUsername] = useState("");
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -27,11 +34,15 @@ export default function RegisterScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const dispatch = useDispatch()
+
   function toggleCameraType() {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   type()
     console.log("masu<<<k")
   }
+
+ 
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -45,27 +56,57 @@ export default function RegisterScreen() {
     console.log(result);
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setidCardImg(result.assets[0].uri);
     }
   };
 
-  const handleRegister = () => {
-    if (password !== confirmPassword) {
-      // show an error message or alert
-      return;
+  const pickPhoto = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setPhoto(result.assets[0].uri);
     }
-    navigation.navigate("Login")
-    // handle registration logic here
   };
 
-  const handleUploadIdCard = () => {
-    // handle upload ID card logic here
+
+
+  const handleRegisterSubmit = async () => {
+
+    try {
+      if (password !== confirmPassword) {
+        // show an error message or alert
+        return;
+      }
+      console.log(user,"<<<<<dari action")
+      let data = await axios.post (BASE_URL + '/users/register',{
+        name,
+        email,
+        password,
+        phoneNumber,
+        photo,
+        idCardImg,
+
+      })
+      // Swal.fire("Good job!", "Success Register!", "success");
+      dispatch(registerSuccess(data))
+    } catch (error) {
+      console.log(error)
+      // Swal.fire("Cancelled", `${error.response.data.message}`, "error");
+    }
+    navigation.navigate('Login');
+
+
   };
 
-  const handleUploadSelfie = () => {
-    // handle upload selfie logic here
-  };
-
+ 
   useLayoutEffect(()=>{
     navigation.setOptions({
       headerShown: false,
@@ -159,13 +200,13 @@ export default function RegisterScreen() {
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.uploadButton, { backgroundColor: "#fff" }]}
-        onPress={toggleCameraType}
+        onPress={pickPhoto}
       >
         <Text style={[styles.uploadButtonText, { color: "#1f2d5a" }]}>
           Upload Selfie
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
+      <TouchableOpacity style={styles.registerButton} onPress={handleRegisterSubmit}>
         <Text style={styles.registerButtonText}>Register</Text>
       </TouchableOpacity>
     </View>

@@ -1,4 +1,4 @@
-import { View, Text, Modal, TouchableOpacity,Image } from "react-native";
+import { View, Text, Modal, TouchableOpacity, Image } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -17,16 +17,19 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState({
     name: "John Doe",
-    image:"https://cdn.medcom.id/dynamic/content/2019/06/04/1029348/uPzxU4aEhF.jpg?w=700",
+    image:
+      "https://cdn.medcom.id/dynamic/content/2019/06/04/1029348/uPzxU4aEhF.jpg?w=700",
     address: "jl.jendral ahmad yani no.10",
-    phoneNumber:"876546889",
-    rating:4.5,
-    review:142,
+    phoneNumber: "876546889",
+    rating: 4.5,
+    review: 142,
   });
 
-  const changeModalVisible=(bol)=>{
-    setModalVisible(bol)
-  }
+  function handleLogout() {}
+
+  const changeModalVisible = (bol) => {
+    setModalVisible(bol);
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -35,31 +38,32 @@ const ProfileScreen = () => {
   }, []);
   return (
     <View className="relative w-full max-w-2xl h-full  bg-white">
-       <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            changeModalVisible(false);
-          }}>
-            <ModalAddVihecle
-            changeModalVisible={changeModalVisible}
-            />
-        </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          changeModalVisible(false);
+        }}
+      >
+        <ModalAddVihecle changeModalVisible={changeModalVisible} />
+      </Modal>
       <View className="mx-6 my-2">
-      <TouchableOpacity  onPress={() => {
-          navigation.navigate("Home");
-        }}>
-       <AntDesign name="arrowleft" size={24} color="black" />
-      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+        >
+          <AntDesign name="arrowleft" size={24} color="black" />
+        </TouchableOpacity>
       </View>
       <View className="flex-row mx-8 my-6 items-center">
         <View className="w-24 h-24 bg-slate-600 rounded-full border border-slate-600 ">
-        <Image
-                className="w-full h-full object-cover rounded-full "
-                source={{ uri: user?.image }}
-              />
+          <Image
+            className="w-full h-full object-cover rounded-full "
+            source={{ uri: user?.image }}
+          />
         </View>
         <View className="p-8">
           <Text className="text-2xl">{user?.name}</Text>
@@ -93,7 +97,6 @@ const ProfileScreen = () => {
         </View>
       </View>
 
-     
       <TouchableOpacity
         onPress={() => {
           navigation.navigate("MyRides");
@@ -116,19 +119,18 @@ const ProfileScreen = () => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          setModalVisible(true)
+          setModalVisible(true);
         }}
       >
         <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 py-4 bg-slate-100 rounded-md">
-         <AntDesign name="pluscircleo" size={24} color="black" />
+          <AntDesign name="pluscircleo" size={24} color="black" />
           <Text className="text-xl">Add Vehicle</Text>
         </View>
       </TouchableOpacity>
 
-
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Login");
+          handleLogout();
         }}
       >
         <View className="flex-row space-x-4 items-center  mt-14 mx-6 p-2 py-4 bg-slate-100 rounded-md">
@@ -136,12 +138,7 @@ const ProfileScreen = () => {
           <Text className="text-xl text-red-600">Log out</Text>
         </View>
       </TouchableOpacity>
-
-
-
     </View>
-
-
   );
 };
 

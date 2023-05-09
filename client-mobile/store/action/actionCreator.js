@@ -1,7 +1,7 @@
 import { BASE_URL, FETCH_RIDES,FETCH_DETAIL_RIDE,LOGIN_USER,ADD_USER } from "./actionType";
 import axios from 'axios';
 import Swal from 'sweetalert2'
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function loginSuccess(payload){
   return{
@@ -68,11 +68,14 @@ export function fetchDetailPost(id) {
 export function handleLogin(user) {
   return async(dispatch,getState)=>{
     try {
-      let {data} = await axios.post (this.baseUrl + '/pub/login',user)
-      localStorage.access_token = data.access_token
-      localStorage.email = data.email
-      console.log(user,"<<<<normallll")
-      dispatch(registerSuccess(data))
+      let {data} = await axios.post (BASE_URL + '/users/login',user)
+      // localStorage.access_token = data.access_token
+      // localStorage.email = data.email
+      // console.log(user,"<<<<normallll")
+      await AsyncStorage.setItem('access_token', data.access_token)
+      const value = await AsyncStorage.getItem('access_token')
+      console.log(value,"<<<<<data dari login")
+      dispatch(loginSuccess(data))
       Swal.fire("Good job!", "Success Login!", "success");
       
     } catch (error) {
@@ -86,10 +89,10 @@ export function handleLogin(user) {
 export function handleRegister(user){
   return async(dispatch,getState)=>{
     try {
-      console.log(user)
-      let data = await axios.post (this.baseUrl + '/pub/register',user)
-      Swal.fire("Good job!", "Success Register!", "success");
-      dispatch(addUser(data))
+      console.log(user,"<<<<<dari action")
+      let data = await axios.post (BASE_URL + '/users/register',user)
+      // Swal.fire("Good job!", "Success Register!", "success");
+      dispatch(registerSuccess(data))
     } catch (error) {
       console.log(error)
       Swal.fire("Cancelled", `${error.response.data.message}`, "error");

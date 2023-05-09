@@ -4,7 +4,7 @@ const initialState ={
   rides:[]
 };
 const ridesReducer = (state = initialState, action)=>{
-  console.log(action)
+  // console.log(action)
   switch (action.type) {
     case FETCH_RIDES:
       return {

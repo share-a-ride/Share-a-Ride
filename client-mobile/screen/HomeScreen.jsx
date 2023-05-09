@@ -99,14 +99,14 @@ export default function HomeScreen({ route }) {
     return state.ridesReducer.rides
   })
   
-  console.log(dataRides,"<<<<inid ari data home")
+  // console.log(dataRides,"<<<<inid ari data home")
 
 
  
 
   useEffect(() => {
     dispatch(fetchDataRides())
-    console.log("tesss")
+    // console.log("tesss")
     navigation.setOptions({
       headerShown: false,
     });

@@ -21,6 +21,7 @@ const ChatScreen = () => {
       headerShown: false,
     });
   }, []);
+  
   return (
     <View className="flex-1 bg-white">
       <View className="flex-row px-5 py-4 my-4 mb-4 bg-accent w-full items-center space-x-3">

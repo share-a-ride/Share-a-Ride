@@ -24,15 +24,24 @@ const CardRequestRides = ({ item }) => {
     <View className="flex-1 mt-3 items-center  ">
       <View className="mx-6 px-4 py-2 bg-background w-10/12 text-white shadow-3xl shadow-black-500/50 rounded-md mt-4 space-x-2">
         <View className="flex-row  "> 
-        <View className="flex-row space-x-3">
-            <View className="bg-slate-600 w-16 h-16 rounded-full border border-slate-400 ">
-              <Image
-                className="w-full h-full object-cover rounded-full "
-                source={{ uri: item?.image }}
-              />
-            </View>
-            <View className="justify-center items-start text-center">
-              <Text className="text-white text-xl">{item?.user}</Text>
+        <View className="flex-row space-x-3  w-full justify-between">
+          <View className="flex-row space-x-3">
+              <View className="bg-slate-600 w-16 h-16 rounded-full border border-slate-400 ">
+                <Image
+                  className="w-full h-full object-cover rounded-full "
+                  source={{ uri: item?.image }}
+                />
+              </View>
+              <View className="justify-center items-start text-center">
+                <Text className="text-white text-xl">{item?.user}</Text>
+              </View>
+          </View>
+            <View>
+            <TouchableOpacity onPress={() => {
+              navigation.navigate("Chat");
+            }}>
+              <Ionicons name="chatbox-ellipses-outline" size={30} color="white" />
+            </TouchableOpacity>
             </View>
         </View>
 
