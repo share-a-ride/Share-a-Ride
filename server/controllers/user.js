@@ -1,11 +1,16 @@
 const Hash = require("../helpers/bcrypt");
 const { generateToken } = require("../helpers/jwt");
 const { User } = require("../models");
+const uuid = require("uuid");
+const { s3Upload } = require("./s3service");
+const ImageKit = require("imagekit");
+
+// or
 
 class UserController {
   static async register(req, res, next) {
     try {
-      const { name, email, password, phoneNumber, photo, idCardImg } = req.body;
+      const { name, email, password, phoneNumber } = req.body;
       const newPass = Hash.create(password);
       const status = "unverified";
       await User.create({
@@ -18,9 +23,36 @@ class UserController {
         status,
       });
 
+      var imagekit = new ImageKit({
+        publicKey: "public_598ryvTcQKwiS8vjsgNTeEUsvfY=",
+        privateKey: "private_8dPPtCNhJ11zMc2K2U/dQBJ6E5g=",
+        urlEndpoint: "https://ik.imagekit.io/pckjztu2z",
+      });
+      // console.log(req.files, "<<<<<<<<<");
+      imagekit
+        .upload({
+          file: req.files[0].buffer, //required
+          fileName: `${uuid}+${file.originalname}`, //required
+          extensions: [
+            {
+              name: "google-auto-tagging",
+              maxTags: 5,
+              minConfidence: 95,
+            },
+          ],
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      // console.log(req.files);
       const message = `User ${name} has succesfully registered`;
       res.status(201).json({ message });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
