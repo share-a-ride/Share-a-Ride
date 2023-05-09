@@ -32,7 +32,7 @@ const CardPost = ({item}) => {
           <Text style={styles.price}>Rp.{item.price}</Text>
           <View style={styles.bottom}>
             <Text style={styles.seats}>
-              {item?.seatsFilled}/{item.seats} seats
+               seats: {item.seats}
             </Text>
           </View>
           <View className="flex flex-row items-center ">

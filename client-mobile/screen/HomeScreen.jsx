@@ -19,6 +19,7 @@ import { fetchDataRides } from "../store/action/actionCreator";
 const data = [
   {
     id: "1",
+    email: "jhone@mail.com",
     startLocation: "New York City",
     destination: "Boston",
     departureTime: "2023-05-10 10:00:00",
@@ -28,10 +29,11 @@ const data = [
     seatsFilled: 1,
     user: "John Doe",
     image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
+      "https://cdn.medcom.id/dynamic/content/2019/06/04/1029348/uPzxU4aEhF.jpg?w=700",
   },
   {
     id: "2",
+    email: "jane@mail.com",
     startLocation: "San Francisco",
     destination: "Los Angeles",
     departureTime: "2023-05-15 12:00:00",
@@ -41,10 +43,11 @@ const data = [
     seatsFilled: 3,
     user: "Jane Doe",
     image:
-      "https://thumbs.dreamstime.com/b/female-avatar-profile-picture-vector-female-avatar-profile-picture-vector-102690279.jpg",
+      "https://cdn.idntimes.com/content-images/community/2019/09/042635a0301ea0e29c95ee41bf05cad2-eb5fa26f5a5d889ef9066706f9b5eb7f.jpg",
   },
   {
     id: "3",
+    email: "BangJefri@mail.com",
     startLocation: "San Francisco",
     destination: "Los Angeles",
     departureTime: "2023-05-15 12:00:00",
@@ -52,12 +55,13 @@ const data = [
     price: 100,
     seats: 7,
     seatsFilled: 1,
-    user: "Jane Doe",
+    user: "Bang Jefri",
     image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
+      "https://upload.wikimedia.org/wikipedia/commons/4/49/Jefri_Nichol_in_2019.png",
   },
   {
     id: "4",
+    email: "Ariel@mail.com",
     startLocation: "San Francisco",
     destination: "Los Angeles",
     departureTime: "2023-05-15 12:00:00",
@@ -65,12 +69,14 @@ const data = [
     price: 100,
     seats: 7,
     seatsFilled: 1,
-    user: "Jane Doe",
+    user: "Ariel Noah",
     image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
+      "https://asset.kompas.com/crops/tmCWUWBKgJMx8BaWfmETsihsGgU=/0x0:0x0/750x500/data/photo/2022/08/30/630ddbb6c1787.jpeg",
   },
   {
     id: "5",
+    email: "DilanMilea@mail.com",
+
     startLocation: "San Francisco",
     destination: "Los Angeles",
     departureTime: "2023-05-15 12:00:00",
@@ -78,9 +84,9 @@ const data = [
     price: 100,
     seats: 7,
     seatsFilled: 1,
-    user: "Jane Doe",
+    user: "DilanMilea",
     image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRV8ROiqjQgZEmCVP2jwpazlCGeZp63KYs5M1fLHViZ&s",
   },
 ];
 
@@ -93,8 +99,7 @@ export default function HomeScreen({ route }) {
     return state.ridesReducer.rides
   })
   
-  console.log(dataRides,"<<<<inid ari data")
-  console.log(data,"<<<datid adat")
+  console.log(dataRides,"<<<<inid ari data home")
 
 
  
@@ -105,9 +110,6 @@ export default function HomeScreen({ route }) {
     navigation.setOptions({
       headerShown: false,
     });
-    console.log(data,"<<<datid adat")
-    console.log(dataRides,"<<<<inid ari data")
-
   }, []);
 
 
@@ -154,7 +156,7 @@ export default function HomeScreen({ route }) {
 
       <FlatList
         style={styles.list}
-        data={dataRides}
+        data={data}
         renderItem={({ item }) => <CardPost item={item} />}
         keyExtractor={(item) => item.id}
       />

@@ -17,7 +17,7 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState({
     name: "John Doe",
-    image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV3h_e9Ifvatg8isv6u1lwAmBCk4EneSGLccyF81Q&s",
+    image:"https://cdn.medcom.id/dynamic/content/2019/06/04/1029348/uPzxU4aEhF.jpg?w=700",
     address: "jl.jendral ahmad yani no.10",
     phoneNumber:"876546889",
     rating:4.5,

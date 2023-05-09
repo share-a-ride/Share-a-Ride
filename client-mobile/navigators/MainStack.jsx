@@ -13,6 +13,7 @@ import MyRides from "../screen/MyRides";
 import PostRideScreen from "../screen/PostRideScreen";
 import ChatScreen from "../screen/ChatScreen";
 import RideRequestScreen from "../screen/RideRequestScreen";
+import ChatBox from "../screen/ChatBox";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ export default function MainStack() {
         <Stack.Screen name="PostRide" component={PostRideScreen} />
         <Stack.Screen name="Chat" component={ChatScreen} />
         <Stack.Screen name="RideRequest" component={RideRequestScreen} />
+        <Stack.Screen name="ChatBox" component={ChatBox} />
       </Stack.Navigator>
   );
 }

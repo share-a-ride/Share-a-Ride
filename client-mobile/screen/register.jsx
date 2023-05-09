@@ -9,8 +9,14 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as ImagePicker from 'expo-image-picker';
+import { Camera, CameraType } from 'expo-camera';
 
 export default function RegisterScreen() {
+  const [image, setImage] = useState(null);
+  const [type, setType] = useState(CameraType.back);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+  
   const navigation = useNavigation();
   const [username, setUsername] = useState("");
   const [address, setAddress] = useState("");
@@ -20,6 +26,28 @@ export default function RegisterScreen() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  function toggleCameraType() {
+    setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
+  type()
+    console.log("masu<<<k")
+  }
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   const handleRegister = () => {
     if (password !== confirmPassword) {
@@ -123,7 +151,7 @@ export default function RegisterScreen() {
       </View>
       <TouchableOpacity
         style={[styles.uploadButton, { backgroundColor: "#fff" }]}
-        onPress={handleUploadIdCard}
+        onPress={pickImage}
       >
         <Text style={[styles.uploadButtonText, { color: "#1f2d5a" }]}>
           Upload ID Card Image
@@ -131,7 +159,7 @@ export default function RegisterScreen() {
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.uploadButton, { backgroundColor: "#fff" }]}
-        onPress={handleUploadSelfie}
+        onPress={toggleCameraType}
       >
         <Text style={[styles.uploadButtonText, { color: "#1f2d5a" }]}>
           Upload Selfie

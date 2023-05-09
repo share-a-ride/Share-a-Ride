@@ -91,7 +91,7 @@ const DetailScreen = () => {
             </View>
           </View>
           <View className="mr-4" >
-            <Text className="text-2xl font-bold">$ {item?.price}</Text>
+            <Text className="text-2xl font-bold">Rp {item?.price}</Text>
           </View>
         </View>
       </View>
@@ -118,7 +118,7 @@ const DetailScreen = () => {
         </View>
       </View>
       
-      <TouchableOpacity onPress={()=>navigation.navigate("Chat",{item})}>
+      <TouchableOpacity onPress={()=>navigation.navigate("ChatBox",{item})}>
         <View className="flex-row mt-6 mx-6 px-4 py-4 bg-slate-100 rounded-md shadow-md space-x-2 items-center "> 
           <Ionicons name="chatbox-ellipses-outline" size={24} color="black" />
           <Text className="text-xl">Chat</Text>
