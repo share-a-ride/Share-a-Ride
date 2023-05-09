@@ -11,13 +11,11 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import * as ImagePicker from 'expo-image-picker';
-import { Camera, CameraType } from 'expo-camera';
-import {handleRegister} from "../store/action/actionCreator";
-import axios from 'axios';
-const BASE_URL= "http://192.168.100.167:4002"
-
-
+import * as ImagePicker from "expo-image-picker";
+import { Camera, CameraType } from "expo-camera";
+import { handleRegister } from "../store/action/actionCreator";
+import axios from "axios";
+const BASE_URL = " https://a644-36-73-33-46.ngrok-free.app";
 
 export default function RegisterScreen() {
   const [idCardImg, setidCardImg] = useState(null);
@@ -34,15 +32,15 @@ export default function RegisterScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   function toggleCameraType() {
-    setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
-  type()
-    console.log("masu<<<k")
+    setType((current) =>
+      current === CameraType.back ? CameraType.front : CameraType.back
+    );
+    type();
+    console.log("masuk");
   }
-
- 
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -72,46 +70,50 @@ export default function RegisterScreen() {
     console.log(result);
 
     if (!result.canceled) {
-      setPhoto(result.assets[0].uri);
+      setPhoto(result.assets[0]);
     }
   };
 
-
-
   const handleRegisterSubmit = async () => {
-
+    let toInput = {
+      name,
+      email,
+      password,
+      phoneNumber,
+      photo,
+      idCardImg,
+    };
+    console.log(toInput, "<<<<<dari action");
     try {
       if (password !== confirmPassword) {
         // show an error message or alert
         return;
       }
-      console.log(user,"<<<<<dari action")
-      let data = await axios.post (BASE_URL + '/users/register',{
-        name,
-        email,
-        password,
-        phoneNumber,
-        photo,
-        idCardImg,
+      // let toInput = {
+      //   name,
+      //   email,
+      //   password,
+      //   phoneNumber,
+      //   photo,
+      //   idCardImg,
+      // };
 
-      })
-      // Swal.fire("Good job!", "Success Register!", "success");
-      dispatch(registerSuccess(data))
+      // let data = await axios.post(BASE_URL + "/users/register", toInput);
+      // // Swal.fire("Good job!", "Success Register!", "success");
+      // dispatch(registerSuccess(data));
     } catch (error) {
-      console.log(error)
+      console.log(error);
       // Swal.fire("Cancelled", `${error.response.data.message}`, "error");
     }
-    navigation.navigate('Login');
-
-
+    navigation.navigate("Login");
   };
 
- 
-  useLayoutEffect(()=>{
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
-    })
-  },[])
+    });
+    console.log( photo)
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -122,9 +124,9 @@ export default function RegisterScreen() {
       />
       <TextInput
         style={styles.input}
-        placeholder="Username"
+        placeholder="Name"
         placeholderTextColor="#8e9eb6"
-        value={username}
+        value={name}
         onChangeText={setUsername}
       />
       <TextInput
@@ -206,7 +208,10 @@ export default function RegisterScreen() {
           Upload Selfie
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.registerButton} onPress={handleRegisterSubmit}>
+      <TouchableOpacity
+        style={styles.registerButton}
+        onPress={handleRegisterSubmit}
+      >
         <Text style={styles.registerButtonText}>Register</Text>
       </TouchableOpacity>
     </View>

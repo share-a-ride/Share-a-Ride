@@ -10,6 +10,7 @@ import {
   Feather,
   SimpleLineIcons,
 } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import ModalAddVihecle from "../components/ModalAddVihecle";
 
 const ProfileScreen = () => {
@@ -25,7 +26,16 @@ const ProfileScreen = () => {
     review: 142,
   });
 
-  function handleLogout() {}
+  async function handleLogout() {
+    try {
+      await AsyncStorage.removeItem("access_token");
+      let access_token = await AsyncStorage.getItem("access_token");
+      console.log("disini",access_token)
+      navigation.navigate("Landing");
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const changeModalVisible = (bol) => {
     setModalVisible(bol);

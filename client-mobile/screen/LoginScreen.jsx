@@ -1,4 +1,4 @@
-import React, { useLayoutEffect,useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -10,44 +10,37 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { handleLogin } from "../store/action/actionCreator";
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+const BASE_URL = "http://localhost:4002";
 
-
-const BASE_URL= "http://192.168.100.167:4002"
 export default function LoginScreen() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch()
 
   const handleLogin = async () => {
-    // handle login logic here
     try {
-      let {data} = await axios.post (BASE_URL + '/users/login',{
-        email,password,
-      })
-      // localStorage.access_token = data.access_token
-      // localStorage.email = data.email
-      // console.log(user,"<<<<normallll")
-      await AsyncStorage.setItem('access_token', data.access_token)
-      const value = await AsyncStorage.getItem('access_token')
-      console.log(value,"<<<<<data dari login")
-    
-       navigation.navigate("Home")
-      
+      const { data } = await axios.post(BASE_URL + "/users/login", {
+        email,
+        password,
+      });
+      console.log("disini");
+      console.log(data);
+      await AsyncStorage.setItem("access_token", data.access_token);
+      const value = await AsyncStorage.getItem("access_token");
+      console.log(value);
+      navigation.navigate("Home");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-   
   };
 
-  useLayoutEffect(()=>{
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
-    })
-  },[])
-
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -81,8 +74,7 @@ export default function LoginScreen() {
       <TouchableOpacity
         style={styles.secondaryButton}
         onPress={() => navigation.navigate("Register")}
-      >
-      </TouchableOpacity>
+      ></TouchableOpacity>
     </View>
   );
 }

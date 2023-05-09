@@ -68,22 +68,13 @@ export function fetchDetailPost(id) {
 export function handleLogin(user) {
   return async(dispatch,getState)=>{
     try {
-      let {data} = await axios.post (BASE_URL + '/users/login',user)
-      // localStorage.access_token = data.access_token
-      // localStorage.email = data.email
-      // console.log(user,"<<<<normallll")
-      await AsyncStorage.setItem('access_token', data.access_token)
-      const value = await AsyncStorage.getItem('access_token')
-      console.log(value,"<<<<<data dari login")
-      dispatch(loginSuccess(data))
-      Swal.fire("Good job!", "Success Login!", "success");
-      
+      const { data } = await axios.post(BASE_URL + '/users/login', user);
+      await AsyncStorage.setItem('access_token', data.access_token);
+      dispatch(loginSuccess(data));
     } catch (error) {
-      console.log(error)
-      Swal.fire("Cancelled", `${error.response.data.message}`, "error");
+      // show error message to user
     }
   }
- 
 }
 
 export function handleRegister(user){
