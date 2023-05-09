@@ -327,7 +327,7 @@ describe("PATCH /admin/users/:userId", () => {
 
 describe("GET /admin/rides", () => {
   describe("GET /admin/rides success", () => {
-    it("should response with status 200 and array of rides", async () => {
+    it("should response with status 200 and array of rides with creator data", async () => {
       const { status, body } = await request(app)
         .get("/admin/rides")
         .set({ access_token: access_token });

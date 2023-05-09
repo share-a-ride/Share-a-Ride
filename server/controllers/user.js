@@ -106,9 +106,6 @@ class UserController {
         include: Vehicle,
       });
       // console.log(user);
-      if (!currentUser) {
-        throw { name: "not_found" };
-      }
       res.status(200).json(currentUser);
     } catch (error) {
       // console.log(error);

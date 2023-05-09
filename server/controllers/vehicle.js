@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const { Vehicle } = require("../models");
 
 class VehicleController {
@@ -29,40 +30,34 @@ class VehicleController {
       if (!vehicleToUpdate) {
         throw { name: "not_found" };
       }
-      if (
-        type === vehicleToUpdate.type &&
-        plateNumber === vehicleToUpdate.plateNumber
-      ) {
-        throw { name: "no_change" };
-      }
 
-      await Vehicle.update({
-        type,
-        plateNumber,
-      });
+      await Vehicle.update(
+        {
+          id,
+          type,
+          plateNumber,
+          UserId: userId,
+        },
+        { where: { id } }
+      );
 
       const message = `Edit success`;
       res.status(200).json({ message });
     } catch (error) {
+      // console.log(error);
       next(error);
     }
   }
 
   static async deleteVehicle(req, res, next) {
     try {
-      const userId = req.user.id;
+      // const userId = req.user.id;
       const { id } = req.params;
+      // console.log("masuk");
+      const vehicleToDelete = await Vehicle.findByPk(id);
 
-      const vehicleToUpdate = await Vehicle.findByPk(id);
-
-      if (!vehicleToUpdate) {
+      if (!vehicleToDelete) {
         throw { name: "not_found" };
-      }
-      if (
-        type === vehicleToUpdate.type &&
-        plateNumber === vehicleToUpdate.plateNumber
-      ) {
-        throw { name: "no_change" };
       }
 
       await Vehicle.destroy({ where: { id } });
@@ -70,6 +65,7 @@ class VehicleController {
       const message = `Vehicle deleted`;
       res.status(200).json({ message });
     } catch (error) {
+      // console.log(error);
       next(error);
     }
   }

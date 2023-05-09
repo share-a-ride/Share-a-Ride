@@ -17,7 +17,7 @@
     "price": 150000,
     "seats": 12,
     "VehicleId": 2,
-    "createdBy": 3
+    "createdBy": 2
   },
   {
     "startLocation": "Bandung",
@@ -27,7 +27,7 @@
     "price": 225000,
     "seats": 4,
     "VehicleId": 3,
-    "createdBy": 2
+    "createdBy": 3
   },
   {
     "startLocation": "Medan",
@@ -36,6 +36,16 @@
     "arrivalTime": "2023-06-03 16:00:00",
     "price": 350000,
     "seats": 5,
+    "VehicleId": 4,
+    "createdBy": 4
+  },
+  {
+    "startLocation": "Medan",
+    "destination": "Banda Aceh",
+    "departureTime": "2023-06-03 11:00:00",
+    "arrivalTime": "2023-06-03 16:00:00",
+    "price": 350000,
+    "seats": 0,
     "VehicleId": 4,
     "createdBy": 3
   }
