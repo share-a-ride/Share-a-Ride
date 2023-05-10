@@ -56,6 +56,9 @@ const errorHandler = (err, req, res, next) => {
   } else if (err.name === "no_vehicle") {
     message = "You need to register a vehicle to create ride";
     code = 400;
+  } else if (err.name === "vehicle_exists") {
+    message = "You can only register 1 vehicle";
+    code = 400;
   }
 
   res.status(code).json({ message });
