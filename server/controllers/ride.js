@@ -282,6 +282,7 @@ class RideController {
       const { id } = req.params;
       const ride = await Ride.findByPk(id, {
         include: [
+          { model: Vehicle },
           {
             model: UserRide,
             include: [
