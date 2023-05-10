@@ -6,7 +6,7 @@ const multiUpload = require("../middlewares/multer");
 const upload = require("../middlewares/multer");
 const userRouter = express.Router();
 
-userRouter.post("/register", upload.array("file"), UserController.register);
+userRouter.post("/register", UserController.register);
 userRouter.post("/login", UserController.login);
 userRouter.get(
   "/currentUser",

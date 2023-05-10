@@ -97,132 +97,132 @@ afterAll(async () => {
   );
 });
 
-// describe("POST /users/register", () => {
-//   describe("POST /users/register success", () => {
-//     it("should response with status 201 and return success message", async () => {
-//       const response = await request(app).post("/users/register").send(user1);
-//       expect(response.status).toBe(201);
-//       expect(response.body).toHaveProperty("message", expect.any(String));
-//       expect(response.body.message).toBe(
-//         "User Test User 1 has succesfully registered"
-//       );
-//     });
-//   });
+describe("POST /users/register", () => {
+  describe("POST /users/register success", () => {
+    it("should response with status 201 and return success message", async () => {
+      const response = await request(app).post("/users/register").send(user1);
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty("message", expect.any(String));
+      expect(response.body.message).toBe(
+        "User Test User 1 has succesfully registered"
+      );
+    });
+  });
 
-//   describe("POST /users/register fail", () => {
-//     it("should response with status 400 and return error message if email is null", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, email: null });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("Email is required");
-//     });
+  describe("POST /users/register fail", () => {
+    it("should response with status 400 and return error message if email is null", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, email: null });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Email is required");
+    });
 
-//     it("should response with status 400 and return error message if password is null", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, password: null });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("Password is required");
-//     });
+    it("should response with status 400 and return error message if password is null", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, password: null });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Password is required");
+    });
 
-//     it("should response with status 400 and return error message if name is null", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, name: null });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("Name is required");
-//     });
+    it("should response with status 400 and return error message if name is null", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, name: null });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Name is required");
+    });
 
-//     it("should response with status 400 and return error message if phone number is null", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, phoneNumber: null });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("Phone number is required");
-//     });
+    it("should response with status 400 and return error message if phone number is null", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, phoneNumber: null });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Phone number is required");
+    });
 
-//     it("should response with status 400 and return error message if photo is null", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, photo: null });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("Photo is required");
-//     });
+    it("should response with status 400 and return error message if photo is null", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, photo: null });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Photo is required");
+    });
 
-//     it("should response with status 400 and return error message if ID-card image is null", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, idCardImg: null });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("ID card photo is required");
-//     });
+    it("should response with status 400 and return error message if ID-card image is null", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, idCardImg: null });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("ID card photo is required");
+    });
 
-//     it("should response with status 400 and return error message if email is empty string", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, email: "" });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("Email is required");
-//     });
+    it("should response with status 400 and return error message if email is empty string", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, email: "" });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Email is required");
+    });
 
-//     it("should response with status 400 and return error message if password is empty string", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, password: "" });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("Password minimum 5 characters");
-//     });
+    it("should response with status 400 and return error message if password is empty string", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, password: "" });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Password minimum 5 characters");
+    });
 
-//     it("should response with status 400 and return error message if name is empty string", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, name: "" });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("Name is required");
-//     });
+    it("should response with status 400 and return error message if name is empty string", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, name: "" });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Name is required");
+    });
 
-//     it("should response with status 400 and return error message if phone number is empty string", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, phoneNumber: "" });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("Phone number is required");
-//     });
+    it("should response with status 400 and return error message if phone number is empty string", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, phoneNumber: "" });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Phone number is required");
+    });
 
-//     it("should response with status 400 and return error message if photo is empty string", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, photo: "" });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("Photo is required");
-//     });
+    it("should response with status 400 and return error message if photo is empty string", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, photo: "" });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Photo is required");
+    });
 
-//     it("should response with status 400 and return error message if ID-card image is empty string", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, idCardImg: "" });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("ID card photo is required");
-//     });
+    it("should response with status 400 and return error message if ID-card image is empty string", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, idCardImg: "" });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("ID card photo is required");
+    });
 
-//     it("should response with status 400 and return error message if email is registered", async () => {
-//       const response = await request(app).post("/users/register").send(user1);
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe(
-//         "Email is already used, please use another email"
-//       );
-//     });
+    it("should response with status 400 and return error message if email is registered", async () => {
+      const response = await request(app).post("/users/register").send(user1);
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe(
+        "Email is already used, please use another email"
+      );
+    });
 
-//     it("should response with status 400 and return error message if email format is invalid", async () => {
-//       const response = await request(app)
-//         .post("/users/register")
-//         .send({ ...user1, email: "test@test" });
-//       expect(response.status).toBe(400);
-//       expect(response.body.message).toBe("Invalid email format");
-//     });
-//   });
-// });
+    it("should response with status 400 and return error message if email format is invalid", async () => {
+      const response = await request(app)
+        .post("/users/register")
+        .send({ ...user1, email: "test@test" });
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Invalid email format");
+    });
+  });
+});
 
 describe("POST /users/login", () => {
   describe("POST /users/login success", () => {
