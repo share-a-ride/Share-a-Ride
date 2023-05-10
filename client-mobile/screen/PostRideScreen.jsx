@@ -8,40 +8,60 @@ import {
   FontAwesome,
   AntDesign,
 } from "@expo/vector-icons";
+import axios from 'axios'
+const BASE_URL = "http://192.168.100.167:4002";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
 
 const PostRideScreen = () => {
   const navigation = useNavigation();
-  const [ride,setRide]=useState({
-    origin: '',
-    destination: '',
-    departureTime: '',
-    arivalTime: '',
-    price: '',
-    seats: '',
-  })
-  console.log(ride.seats)
-  function handleChange(e){
-    const{value,name}= e.target
-    setRide({
-      ...ride, 
-      [name] : value
-    })
-  }
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+  const [departureTime, setDepartureTime] = useState("");
+  const [arivalTime, setArivalTime] = useState("");
+  const [price, setPrice] = useState("");
+  const [seats, setSeats] = useState("");
 
+ 
 
-  
-  const handleNewRide = (e) => {
-    e.preventDefault()
+  const handleRide = async () => {
+    const toPost = {
+      startLocation:origin,
+          destination,
+          departureTime,
+          arrivalTime:arivalTime,
+          price,
+          seats,
+    }
+   
+    // console.log(data);
+    try {
+      console.log(toPost,"<<<<< data add ne post");
+      const access_token = await AsyncStorage.getItem("access_token");
+      const res = await axios.post(
+        BASE_URL + "/rides",
+        toPost,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "access_token": access_token,
+          },
+        }
+      );
+      // console.log(res);
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
 
-    navigation.navigate("Home")
-    // handle registration logic here
+      console.log("Uploaded");
+    } catch (error) {
+      console.log(error);
+    }
+    navigation.navigate("Home");
   };
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, []);
+
 
   return (
     <View className="flex-1 bg-white">
@@ -64,32 +84,34 @@ const PostRideScreen = () => {
         className="bg-background py-4 w-10/12 text-white text-lg   mx-auto rounded-2xl mb-4 px-4"
         placeholder="Origin"
         placeholderTextColor="#8e9eb6"
-        onChangeText={newText => setRide({origin:newText})}
-        value={ride.origin}
+        onChangeText={setOrigin}
+        value={origin}
       />
       <TextInput
         name="destination"
         className="bg-background text-white text-lg  py-4 w-10/12 items-center justify-center mx-auto rounded-2xl mb-4 px-4"
         placeholder="Destination"
         placeholderTextColor="#8e9eb6"
-        onChangeText={newText => setRide({destination:newText})}
-        value={ride.destination}
+        onChangeText={setDestination}
+        value={destination}
       />
       <TextInput
+        keyboardType="date"
         name="departureTime"
         className="bg-background text-white text-lg  py-4 w-10/12 items-center justify-center mx-auto rounded-2xl mb-4 px-4"
         placeholder="Departure Time"
         placeholderTextColor="#8e9eb6"
-        onChangeText={newText => setRide({departureTime:newText})}
-        value={ride.departureTime}
+        onChangeText={setDepartureTime}
+        value={departureTime}
       />
       <TextInput
+        keyboardType="date"
         name="arivalTime"
         className="bg-background text-white text-lg  py-4 w-10/12 items-center justify-center mx-auto rounded-2xl mb-4 px-4"
         placeholder="Arival Time"
         placeholderTextColor="#8e9eb6"
-        onChangeText={newText => setRide({arivalTime:newText})}
-        value={ride.arivalTime}
+        onChangeText={setArivalTime}
+        value={arivalTime}
       />
     
       <TextInput
@@ -98,17 +120,8 @@ const PostRideScreen = () => {
         className="bg-background text-white text-lg  py-4 w-10/12 items-center justify-center mx-auto rounded-2xl mb-4 px-4"
         placeholder="Price"
         placeholderTextColor="#8e9eb6"
-        onChangeText={newText => setRide({price:newText})}
-        value={ride.price}
-      />
-      <TextInput
-        name="seats"
-        keyboardType="numeric"
-        className="bg-background text-white text-lg  py-4 w-10/12 items-center justify-center mx-auto rounded-2xl mb-4 px-4"
-        placeholder="Vehicle"
-        placeholderTextColor="#8e9eb6"
-        onChangeText={newText => setRide({seats:newText})}
-        value={ride.seats}
+        onChangeText={setPrice}
+        value={price}
       />
       <TextInput
         name="seats"
@@ -116,17 +129,15 @@ const PostRideScreen = () => {
         className="bg-background text-white text-lg  py-4 w-10/12 items-center justify-center mx-auto rounded-2xl mb-4 px-4"
         placeholder="Seats"
         placeholderTextColor="#8e9eb6"
-        onChangeText={newText => setRide({seats:newText})}
-        value={ride.seats}
+        onChangeText={setSeats}
+        value={seats}
       />
 
       
 
       <TouchableOpacity
         className="bg-accent mt-8 py-4 w-2/5 items-center justify-center mx-auto rounded-2xl mb-4"
-        onPress={() => {
-          navigation.navigate("Home");
-        }}
+        onPress={handleRide}
       >
         <Text className="text-white text-2xl text-center font-semibold">
           Submit

@@ -13,7 +13,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 
-const BASE_URL = "https://192.168.100.167:4002";
+const BASE_URL = "http://192.168.100.167:4002";
 
 export default function RegisterScreen() {
   const [idCardImg, setidCardImg] = useState(null);
@@ -89,7 +89,7 @@ export default function RegisterScreen() {
         // show an error message or alert
         return;
       }
-      console.log(data);
+      console.log(data,"<<<<<< data dari register ");
       const res = await axios.post(
         BASE_URL + "/users/register",
         data,

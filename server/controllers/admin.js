@@ -22,12 +22,10 @@ class AdminController {
   static async adminLogin(req, res, next) {
     try {
       const { email, password } = req.body;
-      // console.log("masuk login");
       if (!email || email === undefined) throw { name: "empty_email" };
       if (!password || password === undefined) throw { name: "empty_password" };
 
       const currentAdmin = await Admin.findOne({ where: { email } });
-      // console.log(currentAdmin, "<<<<<<<<");
       if (!currentAdmin) {
         throw { name: "unauthorized" };
       }

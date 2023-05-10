@@ -25,11 +25,13 @@ export default function LoginScreen() {
         email,
         password,
       });
-      console.log("disini");
-      console.log(data);
+      // console.log("disini");
+      // console.log(data);
+
       await AsyncStorage.setItem("access_token", data.access_token);
       const value = await AsyncStorage.getItem("access_token");
-      console.log(value);
+      
+      // console.log(value);
       navigation.navigate("Home");
     } catch (error) {
       console.log(error);

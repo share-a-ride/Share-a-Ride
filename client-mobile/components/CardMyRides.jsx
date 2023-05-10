@@ -31,26 +31,26 @@ const CardMyRides = ({item}) => {
       <View className="flex-row w-full justify-between">
         <View>
           <View>
-            <Text className="text-white">{item?.startLocation}</Text>
+            <Text className="text-white">{item?.Ride.startLocation}</Text>
             <Text className="text-[11px] text-white">{item?.departureTime}</Text>
           </View>
 
           <View className="h-[70px] w-1"></View>
           <View>
-            <Text className="text-white">{item?.destination}</Text>
+            <Text className="text-white">{item?.Ride.destination}</Text>
             <Text className="text-[11px] text-white">{item?.arrivalTime}</Text>
           </View>
         </View>
         <View className="mr-1 items-center">
-          <Text className="text-2xl font-bold text-white">$ {item?.price}</Text>
-          <Text className="font-bold my-8 text-white">Seat : {item?.seats}</Text>
+          <Text className="text-2xl font-bold text-white">Rp {item?.Ride.price}</Text>
+          <Text className="font-bold my-8 text-white">Seat : {item?.Ride.seats}</Text>
           <TouchableOpacity
           className=" py-3 rounded-lg px-5 bg-sky-400 "
             onPress={() => {
               navigation.navigate("Home");
             }}
           >
-            <Text className="text-center text-white text-[16px]">Paid</Text>
+            <Text className="text-center text-white text-[16px]"> {item?.status}</Text>
           </TouchableOpacity>
         </View>
       </View>

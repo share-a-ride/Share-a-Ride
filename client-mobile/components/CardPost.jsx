@@ -10,33 +10,51 @@ import {
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
-const CardPost = ({item}) => {
+const CardPost = ({ item }) => {
+  const formatIndonesianTime = (time) => {
+    const dateObj = new Date(time);
+  
+    const day = dateObj.getDate();
+    const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(dateObj);
+    const year = dateObj.getFullYear();
+    const hours = dateObj.getHours();
+    const minutes = dateObj.getMinutes();
+  
+    const formattedDate = `${day} ${month} ${year}`;
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  
+    return `${formattedDate} | ${formattedTime}`;
+  };
   const navigation = useNavigation();
   return (
-    <GestureDetector gesture={doubleTap = Gesture.Tap()
-      .maxDuration(250)
-      .numberOfTaps(2)
-      .onStart(() => {
-        navigation.navigate("Details",{item});
-      })
-  }>
+    <GestureDetector
+      gesture={
+        (doubleTap = Gesture.Tap()
+          .maxDuration(250)
+          .numberOfTaps(2)
+          .onStart(() => {
+            // navigation.navigate("Details", { id:item.id });
+            navigation.navigate("Details", { item });
+          }))
+      }
+    >
       <View style={styles.card}>
         <View style={styles.left}>
           <Text style={styles.leftText}>{item.startLocation}</Text>
-          <Text style={styles.leftText}>{item.departureTime}</Text>
+          <Text style={styles.leftText}>
+            {formatIndonesianTime(item.departureTime)}
+          </Text>
           <View style={styles.line} />
           <Text style={styles.leftText}>{item.destination}</Text>
-          <Text style={styles.leftText}>{item.arrivalTime}</Text>
+          <Text style={styles.leftText}>{formatIndonesianTime(item.arrivalTime)}</Text>
         </View>
         <View style={styles.right}>
           <Text style={styles.price}>Rp.{item.price}</Text>
           <View style={styles.bottom}>
-            <Text style={styles.seats}>
-               seats: {item.seats}
-            </Text>
+            <Text style={styles.seats}>seats: {item.seats}</Text>
           </View>
           <View className="flex flex-row items-center ">
-            <Text className="text-slate-500 mr-2">{item.user}</Text>
+            <Text className="text-slate-500 mr-2">{item?.name}</Text>
             <View className="bg-slate-200 rounded-full border w-10 h-10 justify-self-end ">
               <Image
                 className="w-full h-full object-cover rounded-full "
@@ -47,10 +65,8 @@ const CardPost = ({item}) => {
         </View>
       </View>
     </GestureDetector>
-  )
-}
-
-
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -127,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CardPost
+export default CardPost;

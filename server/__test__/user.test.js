@@ -375,3 +375,39 @@ describe("PATCH /users/rate/:id", () => {
     });
   });
 });
+
+describe("GET /users/currentUser", () => {
+  describe("GET /users/currentUser success", () => {
+    it("should response with status 200 and data of currently logged in user", async () => {
+      const { status, body } = await request(app)
+        .get("/users/currentUser")
+        .set({ access_token: access_token });
+      expect(status).toBe(200);
+      expect(body).toBeInstanceOf(Object);
+      expect(body.id).toBe(1);
+      expect(body.name).toBe("Andi Susanto");
+      expect(body.email).toBe("andisusanto@contoh.com");
+      expect(body.phoneNumber).toBe("555-1234");
+      expect(body.Vehicle).toBeInstanceOf(Object);
+      expect(body.Vehicle.UserId).toBe(1);
+    });
+  });
+
+  describe("GET /users/currentUser fail", () => {
+    it("should response with status 400 and error message if access token is not given", async () => {
+      const { status, body } = await request(app).get("/users/currentUser");
+      expect(status).toBe(400);
+      expect(body).toBeInstanceOf(Object);
+      expect(body.message).toBe("Access Token Missing");
+    });
+
+    it("should response with status 403 and error message if access token is invalid", async () => {
+      const { status, body } = await request(app)
+        .get("/users/currentUser")
+        .set({ access_token: "wrongaccesstoken" });
+      expect(status).toBe(403);
+      expect(body).toBeInstanceOf(Object);
+      expect(body.message).toBe("Forbidden");
+    });
+  });
+});
