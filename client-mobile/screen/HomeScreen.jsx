@@ -17,79 +17,6 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const BASE_URL = "http://192.168.100.167:4002";
 
-const data = [
-  {
-    id: "1",
-    email: "jhone@mail.com",
-    startLocation: "New York City",
-    destination: "Boston",
-    departureTime: "2023-05-10 10:00:00",
-    arrivalTime: "2023-05-10 13:00:00",
-    price: 50,
-    seats: 4,
-    seatsFilled: 1,
-    user: "John Doe",
-    image:
-      "https://cdn.medcom.id/dynamic/content/2019/06/04/1029348/uPzxU4aEhF.jpg?w=700",
-  },
-  {
-    id: "2",
-    email: "jane@mail.com",
-    startLocation: "San Francisco",
-    destination: "Los Angeles",
-    departureTime: "2023-05-15 12:00:00",
-    arrivalTime: "2023-05-15 18:00:00",
-    price: 100,
-    seats: 7,
-    seatsFilled: 3,
-    user: "Jane Doe",
-    image:
-      "https://cdn.idntimes.com/content-images/community/2019/09/042635a0301ea0e29c95ee41bf05cad2-eb5fa26f5a5d889ef9066706f9b5eb7f.jpg",
-  },
-  {
-    id: "3",
-    email: "BangJefri@mail.com",
-    startLocation: "San Francisco",
-    destination: "Los Angeles",
-    departureTime: "2023-05-15 12:00:00",
-    arrivalTime: "2023-05-15 18:00:00",
-    price: 100,
-    seats: 7,
-    seatsFilled: 1,
-    user: "Bang Jefri",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/4/49/Jefri_Nichol_in_2019.png",
-  },
-  {
-    id: "4",
-    email: "Ariel@mail.com",
-    startLocation: "San Francisco",
-    destination: "Los Angeles",
-    departureTime: "2023-05-15 12:00:00",
-    arrivalTime: "2023-05-15 18:00:00",
-    price: 100,
-    seats: 7,
-    seatsFilled: 1,
-    user: "Ariel Noah",
-    image:
-      "https://asset.kompas.com/crops/tmCWUWBKgJMx8BaWfmETsihsGgU=/0x0:0x0/750x500/data/photo/2022/08/30/630ddbb6c1787.jpeg",
-  },
-  {
-    id: "5",
-    email: "DilanMilea@mail.com",
-
-    startLocation: "San Francisco",
-    destination: "Los Angeles",
-    departureTime: "2023-05-15 12:00:00",
-    arrivalTime: "2023-05-15 18:00:00",
-    price: 100,
-    seats: 7,
-    seatsFilled: 1,
-    user: "DilanMilea",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRV8ROiqjQgZEmCVP2jwpazlCGeZp63KYs5M1fLHViZ&s",
-  },
-];
 
 export default function HomeScreen({ route }) {
   const navigation = useNavigation();
@@ -101,7 +28,6 @@ export default function HomeScreen({ route }) {
       const { data } = await axios.get(BASE_URL + "/users/currentUser", {
         headers: { access_token: await AsyncStorage.getItem("access_token") },
       });
-      // console.log(data, "<< ini data dari home ");
       setCurrentUser(data);
     } catch (error) {
       console.log(error);
@@ -119,31 +45,24 @@ export default function HomeScreen({ route }) {
   useEffect(() => {
     fetchCurrentUser();
     fetchRides();
-    // console.log(user.name, "ini user");
-    // console.log(rides, "ini rides");
     navigation.setOptions({
       headerShown: false,
     });
   }, []);
-  // useEffect(() => {
-  //   fetchCurrentUser();
-    
-  // }, [user]);
-
+  
   return (
-    // <View><Text>DISINI</Text></View>
     <View style={styles.container}>
       <View className="flex-row justify-between items-center  w-11/12 mt-5 mb-5 bg-slate-200 py-3 px-4 rounded-md">
         <View>
           <Text className="">Share A Ride</Text>
-          <Text className="text-xl text-green-900">Welcome, {user.name}!</Text>
+          <Text className="text-xl text-green-900">Welcome, {user?.name}!</Text>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
           <View className="w-12 h-12 bg-slate-300 rounded-md items-center justify-center">
             <Image
               className="w-full h-full "
               source={{
-                uri: user.image,
+                uri: user?.photo,
               }}
             />
           </View>

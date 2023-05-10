@@ -8,7 +8,7 @@ import {
   Image,
   FlatList,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   Octicons,
@@ -25,20 +25,24 @@ const BASE_URL = "http://192.168.100.167:4002";
 
 const RideRequestScreen = () => {
   const navigation = useNavigation();
+  const [ride, setDataRequest] = useState({});
+
+  // console.log(ride,"<<<<ride dari request screen")
 
   const fetchRequetedRides = async () => {
     try {
-      const { data } = await axios.get(BASE_URL + "/users/currentUser", {
+      const { data } = await axios.get(BASE_URL + "/rides/requests", {
         headers: { access_token: await AsyncStorage.getItem("access_token") },
       });
-      console.log(data, "ini data");
-      setCurrentUser(data);
+      // console.log(data, "<<<< ini data dari requst");
+      setDataRequest(data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useLayoutEffect(() => {
+    fetchRequetedRides()
     navigation.setOptions({
       headerShown: false,
     });
@@ -61,7 +65,7 @@ const RideRequestScreen = () => {
       </View>
 
       <FlatList
-        data={data}
+        data={ride}
         renderItem={({ item }) => <CardRequestRides item={item} />}
         keyExtractor={(item) => item.id}
       />

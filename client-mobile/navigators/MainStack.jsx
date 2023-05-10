@@ -17,6 +17,7 @@ import ChatScreen from "../screen/ChatScreen";
 import RideRequestScreen from "../screen/RideRequestScreen";
 import ChatBox from "../screen/ChatBox";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Payment from "../components/Payment";
 
 const Stack = createNativeStackNavigator();
 
@@ -41,35 +42,37 @@ export default function MainStack() {
   }, []);
   console.log(verified);
   return (
+    // <Stack.Navigator initialRouteName="Home">
+    //   <Stack.Screen name="Home" component={HomeScreen} />
+    //   <Stack.Screen name="Details" component={DetailScreen} />
+    //   <Stack.Screen name="Profile" component={ProfileScreen} />
+    //   <Stack.Screen name="MyRides" component={MyRides} />
+    //   <Stack.Screen name="PostRide" component={PostRideScreen} />
+    //   <Stack.Screen name="Chat" component={ChatScreen} />
+    //   <Stack.Screen name="RideRequest" component={RideRequestScreen} />
+    //   <Stack.Screen name="ChatBox" component={ChatBox} />
+    //   <Stack.Screen name="Landing" component={LandingScreen} />
+    //   <Stack.Screen name="Login" component={LoginScreen} />
+    //   <Stack.Screen name="Register" component={RegisterScreen} />
+    //   <Stack.Screen name="Payment" component={Payment} />
+    // </Stack.Navigator>
     <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Details" component={DetailScreen} />
-      <Stack.Screen name="Profile" component={ProfileScreen} />
-      <Stack.Screen name="MyRides" component={MyRides} />
-      <Stack.Screen name="PostRide" component={PostRideScreen} />
-      <Stack.Screen name="Chat" component={ChatScreen} />
-      <Stack.Screen name="RideRequest" component={RideRequestScreen} />
-      <Stack.Screen name="ChatBox" component={ChatBox} />
+      {verified && (
+        <>
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Details" component={DetailScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="MyRides" component={MyRides} />
+          <Stack.Screen name="PostRide" component={PostRideScreen} />
+          <Stack.Screen name="Chat" component={ChatScreen} />
+          <Stack.Screen name="RideRequest" component={RideRequestScreen} />
+          <Stack.Screen name="ChatBox" component={ChatBox} />
+          <Stack.Screen name="Payment" component={Payment} />
+        </>
+      )}
       <Stack.Screen name="Landing" component={LandingScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
     </Stack.Navigator>
-    // <Stack.Navigator initialRouteName="Home">
-    //   {verified && (
-    //     <>
-    //       <Stack.Screen name="Home" component={HomeScreen} />
-    //       <Stack.Screen name="Details" component={DetailScreen} />
-    //       <Stack.Screen name="Profile" component={ProfileScreen} />
-    //       <Stack.Screen name="MyRides" component={MyRides} />
-    //       <Stack.Screen name="PostRide" component={PostRideScreen} />
-    //       <Stack.Screen name="Chat" component={ChatScreen} />
-    //       <Stack.Screen name="RideRequest" component={RideRequestScreen} />
-    //       <Stack.Screen name="ChatBox" component={ChatBox} />
-    //     </>
-    //   )}
-    //   <Stack.Screen name="Landing" component={LandingScreen} />
-    //   <Stack.Screen name="Login" component={LoginScreen} />
-    //   <Stack.Screen name="Register" component={RegisterScreen} />
-    // </Stack.Navigator>
   );
 }

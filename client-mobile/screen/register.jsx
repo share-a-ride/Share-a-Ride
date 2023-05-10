@@ -16,6 +16,8 @@ import axios from "axios";
 const BASE_URL = "http://192.168.100.167:4002";
 
 export default function RegisterScreen() {
+  const [photoUploaded, setPhotoUploaded] = useState(false);
+  const [idUploaded, setidUploaded] = useState(false);
   const [idCardImg, setidCardImg] = useState(null);
   const [photo, setPhoto] = useState(null);
   const navigation = useNavigation();
@@ -48,6 +50,7 @@ export default function RegisterScreen() {
         type: `image/${ext}`,
         name,
       });
+      setidUploaded(true);
     }
   };
 
@@ -71,6 +74,7 @@ export default function RegisterScreen() {
         type: `image/${ext}`,
         name,
       });
+      setPhotoUploaded(true);
     }
   };
 
@@ -89,16 +93,12 @@ export default function RegisterScreen() {
         // show an error message or alert
         return;
       }
-      console.log(data,"<<<<<< data dari register ");
-      const res = await axios.post(
-        BASE_URL + "/users/register",
-        data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      console.log(data, "<<<<<< data dari register ");
+      const res = await axios.post(BASE_URL + "/users/register", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       // console.log(res);
       if (!res.ok) {
         throw new Error(await res.text());
@@ -197,20 +197,20 @@ export default function RegisterScreen() {
           />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={[styles.uploadButton, { backgroundColor: "#fff" }]}
-        onPress={pickImage}
-      >
+
+      <TouchableOpacity style={[styles.uploadButton]} onPress={pickImage}>
         <Text style={[styles.uploadButtonText, { color: "#1f2d5a" }]}>
-          Upload ID Card Image
+          {idUploaded ? "ID Upload Success" : "Upload ID Card Image"}
         </Text>
       </TouchableOpacity>
+
+
       <TouchableOpacity
         style={[styles.uploadButton, { backgroundColor: "#fff" }]}
         onPress={pickPhoto}
       >
         <Text style={[styles.uploadButtonText, { color: "#1f2d5a" }]}>
-          Upload Selfie
+        {photoUploaded ? "Photo Upload Success" : "Upload Photo"}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity

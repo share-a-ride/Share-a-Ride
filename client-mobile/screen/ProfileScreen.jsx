@@ -79,7 +79,7 @@ const ProfileScreen = () => {
         <View className="w-24 h-24 bg-slate-600 rounded-full border border-slate-600 ">
           <Image
             className="w-full h-full object-cover rounded-full "
-            source={{ uri: user?.image }}
+            source={{ uri: user?.photo }}
           />
         </View>
         <View className="p-8">
@@ -99,18 +99,18 @@ const ProfileScreen = () => {
       </View>
       <View className="flex-row  mx-8 mt-3 space-x-4 items-center">
         <FontAwesome5 name="car" size={24} color="black" />
-        <Text> Avanza </Text>
-        <Text> B - 60789 </Text>
+        <Text> {user?.Vehicle?.type} </Text>
+        <Text> {user?.Vehicle?.plateNumber}  </Text>
       </View>
 
-      <View className="flex-row   mt-6">
+      <View className="flex-row mx-5 space-x-3 mt-6">
         <View className="flex-1 items-center justify-center py-6 border border-slate-400 rounded-lg">
           <Text className=""> Ratings</Text>
           <Text className="text-2xl font-semibold">{user?.rating} / 5 </Text>
         </View>
-        <View className="flex-1 items-center justify-center py-6 border border-slate-400 rounded-lg">
-          <Text>Review </Text>
-          <Text className="text-2xl font-semibold">{user?.review} 142</Text>
+        <View className="flex-1  items-center justify-center py-6 border border-slate-400 rounded-lg">
+          <Text>Saldo</Text>
+          <Text className="text-2xl font-semibold">{user?.money}</Text>
         </View>
       </View>
 

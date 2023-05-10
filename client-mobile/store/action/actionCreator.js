@@ -30,6 +30,16 @@ export function  fetchDetailRideSuccess (payload) {
   }
 }
 
+export const setCurrentUser = (user) => ({
+  type: 'SET_CURRENT_USER',
+  payload: user,
+});
+
+export const setRides = (rides) => ({
+  type: 'SET_RIDES',
+  payload: rides,
+});
+
 
 
 
@@ -91,3 +101,22 @@ export function handleRegister(user){
 
   }
 }
+
+
+export const fetchCurrentUser = () => async (dispatch) => {
+  try {
+    const { data } = await axios.get(BASE_URL + '/users/currentUser', {
+      headers: { access_token: await AsyncStorage.getItem('access_token') },
+    });
+    dispatch(setCurrentUser(data));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchRides = () => async (dispatch) => {
+  const { data } = await axios.get(BASE_URL + '/rides', {
+    headers: { access_token: await AsyncStorage.getItem('access_token') },
+  });
+  dispatch(setRides(data));
+};

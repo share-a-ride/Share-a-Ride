@@ -16,10 +16,48 @@ import {
   FontAwesome,
   AntDesign,
 } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios"
+import AsyncStorage from "@react-native-async-storage/async-storage";
+const BASE_URL = "http://192.168.100.167:4002";
 
 const CardRequestRides = ({ item }) => {
   const navigation = useNavigation();
+  console.log(item.UserRides)
+  const handleAccept = async () => {
+    try {
+      const { data } = await axios.patch(
+        BASE_URL + `/rides/order/${item.id}`,{status:"unpaid"},
+        {
+          headers: {
+            "access_token": await AsyncStorage.getItem("access_token"),
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+      console.log(data);//alert succes untuk pergantian status
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleReject = async () => {
+    try {
+      const { data } = await axios.patch(
+        BASE_URL + `/rides/order/${item.id}`,{status:"rejected"},
+        {
+          headers: {
+            "access_token": await AsyncStorage.getItem("access_token"),
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+      console.log(data);//alert succes untuk pergantian status
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View className="flex-1 mt-3 items-center  ">
       <View className="mx-6 px-4 py-2 bg-background w-10/12 text-white shadow-3xl shadow-black-500/50 rounded-md mt-4 space-x-2">
@@ -29,11 +67,11 @@ const CardRequestRides = ({ item }) => {
               <View className="bg-slate-600 w-16 h-16 rounded-full border border-slate-400 ">
                 <Image
                   className="w-full h-full object-cover rounded-full "
-                  source={{ uri: item?.image }}
+                  source={{ uri: item?.User.photo }}
                 />
               </View>
               <View className="justify-center items-start text-center">
-                <Text className="text-white text-xl">{item?.user}</Text>
+                <Text className="text-white text-xl">{item?.User.name}</Text>
               </View>
           </View>
             <View>
@@ -61,17 +99,17 @@ const CardRequestRides = ({ item }) => {
           <View className="flex-row space-x-2">
           <TouchableOpacity
           className=" py-3 rounded-lg px-2 bg-sky-400 "
-            onPress={() => {
-              navigation.navigate("Home");
-            }}
+            onPress={handleAccept}
           >
                <Text className="text-center text-white text-[16px]">Accept</Text>
           </TouchableOpacity>
+
+
+
+          
           <TouchableOpacity
           className=" py-3 rounded-lg px-3 bg-red-400 "
-            onPress={() => {
-              navigation.navigate("Home");
-            }}
+          onPress={handleReject}
           >
                <Text className="text-center  text-white text-[16px]">Reject</Text>
           </TouchableOpacity>

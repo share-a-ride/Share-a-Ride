@@ -1,19 +1,17 @@
-import { BASE_URL, FETCH_RIDES } from "../action/actionType";
-
-const initialState ={
-  rides:[]
+const initialState = {
+  currentUser: {},
+  rides: [],
 };
-const ridesReducer = (state = initialState, action)=>{
-  // console.log(action)
+
+const ridesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_RIDES:
-      return {
-        ...state,
-        rides: action.payload,
-        
-      };
+    case 'SET_CURRENT_USER':
+      return { ...state, currentUser: action.payload };
+    case 'SET_RIDES':
+      return { ...state, rides: action.payload };
     default:
-      return state
+      return state;
   }
-}
+};
+
 export default ridesReducer;

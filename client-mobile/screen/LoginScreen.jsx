@@ -32,7 +32,7 @@ export default function LoginScreen() {
       const value = await AsyncStorage.getItem("access_token");
       
       // console.log(value);
-      navigation.navigate("Home");
+      navigation.replace("Home");
     } catch (error) {
       console.log(error);
     }

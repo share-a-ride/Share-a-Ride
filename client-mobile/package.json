@@ -36,7 +36,8 @@
     "redux-thunk": "^2.4.2",
     "sweetalert2": "^11.7.5",
     "tailwindcss": "^3.3.2",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "react-native-webview": "11.26.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
