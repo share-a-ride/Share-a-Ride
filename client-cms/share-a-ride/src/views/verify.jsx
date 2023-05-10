@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import UserModal from "../components/verificationModal";
-import { fetchUser,changeUserStatus } from "../store/actions/actionCreator";
+import { fetchUser, changeUserStatus } from "../store/actions/actionCreator";
 
 export default function UnverifiedUserList() {
   // const [users, setUsers] = useState([
@@ -32,13 +32,13 @@ export default function UnverifiedUserList() {
   //   },
   // ]);
 
-  const dispatch = useDispatch()
-  const navigate =useNavigate()
-  const {user,userLoading} = useSelector((state)=>{
-    return state.usersReducer
-  })
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, userLoading } = useSelector((state) => {
+    return state.usersReducer;
+  });
 
-  console.log(user,"<<<<ini dai user")
+  console.log(user, "<<<<ini dai user");
 
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -50,30 +50,28 @@ export default function UnverifiedUserList() {
     setSelectedUser(null);
   };
 
-
   const handleVerifyUser = (user) => {
     // TODO: Update the user's status to "verified"
-    dispatch(changeUserStatus("verify",user.id))
+    dispatch(changeUserStatus("verified", user.id));
     console.log(`Verifying user: ${user.id}`);
-    navigate("/unverified-users")
+    navigate("/unverified-users");
   };
 
   const handleRejectUser = (user) => {
     // TODO: Send email to the user about their rejected verification
-    dispatch(changeUserStatus("rejected",user.id))
+    dispatch(changeUserStatus("rejected", user.id));
     console.log(`Rejecting user: ${user.name}`);
   };
 
   useEffect(() => {
-    dispatch(fetchUser())
+    dispatch(fetchUser());
   }, []);
-
-
+  
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 bg-blue-900">
       <div className="mx-auto max-w-lg">
         <h1 className="text-center text-2xl font-bold text-white sm:text-3xl">
-          Unverified Users
+        Unverified Users
         </h1>
         <div className="flex justify-center mt-6">
           <table className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -84,41 +82,50 @@ export default function UnverifiedUserList() {
                 <th className="p-2">Phone</th>
                 <th className="p-2">Rating</th>
                 <th className="p-2">Actions</th>
+                <th className="p-2 px-10">Status</th>
               </tr>
             </thead>
             <tbody>
-              {
-              userLoading ?
-              <div>Loading......................</div> 
-             : user.filter((user) => user.status === "unverified")
-                .map((user) => (
-                  <tr key={user.id}>
-                    <td className="p-2">{user.name} {user.status}</td>
-                    <td className="p-2">{user.email}</td>
-                    <td className="p-2">{user.phoneNumber}</td>
-                    <td className="p-2">{user.rating}</td>
-                    <td className="p-2 flex space-x-2">
-                      <button
-                        className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded"
-                        onClick={() => handleViewIdAndPhoto(user)}
-                      >
-                        View
-                      </button>
-                      <button
-                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-2 rounded"
-                        onClick={() => handleVerifyUser(user)}
-                      >
-                        Verify
-                      </button>
-                      <button
-                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
-                        onClick={() => handleRejectUser(user)}
-                      >
-                        Reject
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+              {userLoading ? (
+                <div>Loading......................</div>
+              ) : (
+                user
+                  .filter((user) => user.status === "unverified")
+                  .map((user) => (
+                    <tr key={user.id} className="border">
+                      <td className="p-2">{user.name}</td>
+                      <td className="p-2">{user.email}</td>
+                      <td className="p-2">{user.phoneNumber}</td>
+                      <td className="p-2">{user.rating}</td>
+                      <td className="p-2 flex space-x-2 justify-center">
+                        <button
+                          className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded"
+                          onClick={() => handleViewIdAndPhoto(user)}
+                        >
+                          View
+                        </button>
+                        {user.status !== "verified" && (
+                          <button
+                            className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-2 rounded"
+                            onClick={() => handleVerifyUser(user)}
+                          >
+                            Verify
+                          </button>
+                        )}
+
+                        <button
+                          className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
+                          onClick={() => handleRejectUser(user)}
+                        >
+                          Reject
+                        </button>
+                      </td>
+                      <td className="p-2 text-center text-transform: uppercase text-red-800 ">
+                        {user.status}
+                      </td>
+                    </tr>
+                  ))
+              )}
             </tbody>
           </table>
         </div>

@@ -14,6 +14,7 @@ export default function VerifiedUsersPage() {
     // console.log(state.usersReducer, "<><><><>");
     return state.usersReducer
   });
+  
 
   const verifiedUsers = user
   const loading = userLoading;
@@ -22,11 +23,12 @@ export default function VerifiedUsersPage() {
 
   const handleEditUser = (user) => {
     //TODO
+    
   };
 
   async function handleBanUser(userId) {
     try {
-      let message = await dispatch(changeUserStatus(userId));
+      let message = await dispatch(changeUserStatus("Ban",userId));
       toast.success(message, {
         autoClose: 700,
         pauseOnFocusLoss: false,
@@ -70,7 +72,7 @@ export default function VerifiedUsersPage() {
             {
             userLoading?
             <div>Loadinggg ................</div>
-            :verifiedUsers.map((user) => (
+            :verifiedUsers.filter((user) => user.status === "unverified").map((user) => (
               <tr key={user.id}>
                 <td className="p-2">{user.name}</td>
                 <td className="p-2">{user.email}</td>

@@ -9,12 +9,14 @@ class RideController {
     try {
       const data = await Ride.findAll({
         include: [
+          {model:Vehicle},
           {
             model: UserRide,
-            where: {
-              status: "creator",
-            },
+            // where: {
+            //   status: "creator",
+            // },
             include: [
+
               {
                 model: User,
                 attributes: {

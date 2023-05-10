@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import DetailsRideModal from "../components/detailRideModal";
+
 
 function TableRide({ items }) {
     // let [rides, setRides] = useState(items)
@@ -9,6 +11,17 @@ function TableRide({ items }) {
 
     // const navigate = useNavigate()
     // const dispatch = useDispatch()
+
+    const [selectedRide, setSelectedRide] = useState(null);
+
+    const handleModalDetailsRide = (ride) => {
+        setSelectedRide(ride);
+    };
+  
+    const handleCloseModal = () => {
+        setSelectedRide(null);
+    };
+  
 
     return (
         <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 bg-blue-900">
@@ -38,7 +51,7 @@ function TableRide({ items }) {
                                 <td className="p-2">
                                     <button
                                         className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded"
-                                        // onClick={() => handleViewRide(ride)}
+                                        onClick={() => handleModalDetailsRide(ride)}
                                     >
                                         View
                                     </button>
@@ -51,6 +64,9 @@ function TableRide({ items }) {
           <RideModal ride={selectedRide} onClose={handleCloseModal} />
         )} */}
             </div>
+            {selectedRide && (
+          <DetailsRideModal ride={selectedRide} onClose={handleCloseModal} />
+        )}
         </div>
     )
 }

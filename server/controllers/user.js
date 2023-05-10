@@ -98,6 +98,9 @@ class UserController {
         attributes: {
           exclude: ["password"],
         },
+        order:[
+          ['status','ASC']
+        ]
       });
       res.status(200).json(users);
     } catch (error) {

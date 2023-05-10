@@ -17,7 +17,7 @@ export default function UserModal({ user, onClose }) {
                   <div className="mb-2 mr-2">
                     <p className="text-sm font-medium text-gray-700 mb-1">ID Card</p>
                     <img
-                      src={user.idCardImage}
+                      src={user.idCardImg}
                       alt={`${user.name}'s ID Card`}
                       className="max-w-full h-auto mx-auto"
                     />

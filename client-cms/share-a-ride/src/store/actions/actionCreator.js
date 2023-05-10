@@ -67,7 +67,7 @@ export function fetchRides() {
     return async (dispatch) => {
         try {
             dispatch(ridesLoading(true));
-            let res = await fetch(`${BASE_URL2}/`, {
+            let res = await fetch(`${BASE_URL}/rides`, {
                 method: "get",
                 headers: {
                     access_token: localStorage.access_token,
