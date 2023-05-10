@@ -8,6 +8,7 @@ class RideController {
   static async getAllRide(req, res, next) {
     try {
       const data = await Ride.findAll({
+        order: [["updatedAt", "DESC"]],
         include: [
           {
             model: UserRide,
@@ -25,9 +26,6 @@ class RideController {
           },
         ],
       });
-      if (!data) {
-        throw { name: "not_found" };
-      }
       res.status(200).json(data);
     } catch (error) {
       next(error);
@@ -106,33 +104,13 @@ class RideController {
       const { id } = req.user;
       // console.log(id,"<<<<<");
       const ridesPerUser = await UserRide.findAll({
-        where: { UserId: id },
+        order: [["updatedAt", "DESC"]],
+        where: {
+          [Op.and]: [{ UserId: id }, { status: { [Op.not]: "creator" } }],
+        },
         include: Ride,
       });
       res.status(200).json(ridesPerUser);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async updateStatusPayment(req, res, next) {
-    try {
-      const { id } = req.user;
-      const userRideId = req.params.id;
-      const updatedRide = await UserRide.update(
-        { status: "paid" },
-        {
-          where: {
-            [Op.and]: [{ UserId: id }, { id: userRideId }],
-          },
-          returning: true,
-        }
-      );
-      if (!updatedRide[0]) {
-        throw { name: "invalid_token" };
-      }
-
-      res.status(200).json(updatedRide);
     } catch (error) {
       next(error);
     }
@@ -145,9 +123,6 @@ class RideController {
         include: [{ model: UserRide }],
       });
 
-      if (!ride) {
-        throw { name: "not_found" };
-      }
       let {
         startLocation,
         destination,
@@ -246,6 +221,12 @@ class RideController {
         { seats: ride.seats - 1 },
         { where: { id: checkUser.RideId } }
       );
+      // masuk duit ke pemberi tumpangan
+      const creator = await User.findByPk(ride.createdBy);
+      await User.update(
+        { money: creator.money + ride.price },
+        { where: { id: ride.createdBy } }
+      );
     } catch (err) {
       // console.log(err);
       next(err);
@@ -311,6 +292,7 @@ class RideController {
       const { id } = req.params;
       const ride = await Ride.findByPk(id, {
         include: [
+          { model: Vehicle },
           {
             model: UserRide,
             include: [
@@ -327,9 +309,10 @@ class RideController {
       if (!ride) {
         throw { name: "not_found" };
       }
+      // console.log(ride);
       res.status(200).json(ride);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       next(error);
     }
   }
@@ -340,21 +323,27 @@ class RideController {
       const userId = req.user.id;
       const { status } = req.body;
 
+      const orderToUpdate = await UserRide.findByPk(id, {
+        include: [{ model: Ride }],
+      });
+
+      if (!orderToUpdate) {
+        throw { name: "not_found" };
+      }
+
+      if (orderToUpdate.Ride.createdBy !== userId) {
+        throw { name: "invalid_user" };
+      }
+
       const order = await UserRide.update(
         { status },
         {
           where: {
-            [Op.and]: [{ UserId: userId }, { id }, { status: "requested" }],
+            [Op.and]: [{ id }, { status: "requested" }],
           },
           returning: true,
         }
       );
-      if (!order) {
-        throw { name: "not_found" };
-      }
-      if (order.UserId !== userId) {
-        throw { name: "invalid_user" };
-      }
 
       const message = `Order request is ${status}`;
       res.status(200).json({ message });
@@ -364,7 +353,26 @@ class RideController {
     }
   }
 
-  
+  static async getRequests(req, res, next) {
+    try {
+      const { id } = req.user;
+      // console.log(id,"<<<<<");
+      const ridesPerUser = await Ride.findAll({
+        where: { createdBy: id },
+        include: [
+          {
+            model: UserRide,
+            where: {
+              status: "requested",
+            },
+          },
+        ],
+      });
+      res.status(200).json(ridesPerUser);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = RideController;

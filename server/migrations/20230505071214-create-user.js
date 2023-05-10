@@ -26,6 +26,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      address: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       photo: {
         allowNull: false,
         type: Sequelize.TEXT,
@@ -39,6 +43,10 @@ module.exports = {
       },
       status: {
         type: Sequelize.STRING,
+      },
+      money: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,

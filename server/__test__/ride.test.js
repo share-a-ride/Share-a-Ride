@@ -288,31 +288,6 @@ describe("POST /rides", () => {
   });
 });
 
-describe("PATCH /rides/:id", () => {
-  describe("PATCH /rides/:id success", () => {
-    it("should response with status 200 and order data with updated status", async () => {
-      const { status, body } = await request(app)
-        .patch("/rides/6")
-        .set({ access_token: access_token });
-      expect(status).toBe(200);
-      expect(body).toBeInstanceOf(Object);
-      expect(body[1][0].UserId).toBe(1);
-      expect(body[1][0].status).toBe("paid");
-    });
-  });
-
-  describe("PATCH /rides/:id fail", () => {
-    it("should response with status 400 and error message if different user", async () => {
-      const { status, body } = await request(app)
-        .patch("/rides/5")
-        .set({ access_token: wrongaccesstoken });
-      expect(status).toBe(403);
-      expect(body).toBeInstanceOf(Object);
-      expect(body.message).toBe("Forbidden");
-    });
-  });
-});
-
 describe("PUT /rides/:id", () => {
   describe("PUT /rides/:id success", () => {
     it("should response with status 200 and success message", async () => {
@@ -377,7 +352,7 @@ describe("POST /rides/generate-midtrans-token", () => {
 });
 
 describe("POST /rides/order/:id", () => {
-  describe("POST /rides/order/:id", () => {
+  describe("POST /rides/order/:id success", () => {
     it("should response with status 201 and success message", async () => {
       const { status, body } = await request(app)
         .post("/rides/order/3")
@@ -389,7 +364,7 @@ describe("POST /rides/order/:id", () => {
     });
   });
 
-  describe("POST /rides/order/:id", () => {
+  describe("POST /rides/order/:id fail", () => {
     it("should response with status 400 and error message if you already order this ride before", async () => {
       const { status, body } = await request(app)
         .post("/rides/order/3")
@@ -422,8 +397,47 @@ describe("POST /rides/order/:id", () => {
   });
 });
 
+describe("PATCH /rides/order/:id", () => {
+  describe("PATCH /rides/order/:id success", () => {
+    it("should response with status 200 and success message", async () => {
+      const { status, body } = await request(app)
+        .patch("/rides/order/8")
+        .set({ access_token: access_token })
+        .send({ status: "accepted" });
+      expect(status).toBe(200);
+      expect(body).toBeInstanceOf(Object);
+      expect(body).toHaveProperty("message", expect.any(String));
+      expect(body.message).toBe("Order request is accepted");
+    });
+  });
+
+  describe("PATCH /rides/order/:id fail", () => {
+    it("should response with status 403 and error message if ride does not belong to current user", async () => {
+      const { status, body } = await request(app)
+        .patch("/rides/order/6")
+        .set({ access_token: access_token })
+        .send({ status: "accepted" });
+      expect(status).toBe(403);
+      expect(body).toBeInstanceOf(Object);
+      expect(body).toHaveProperty("message", expect.any(String));
+      expect(body.message).toBe("Forbidden");
+    });
+
+    it("should response with status 404 and error message if no order with <id>", async () => {
+      const { status, body } = await request(app)
+        .patch("/rides/order/100")
+        .set({ access_token: access_token })
+        .send({ status: "accepted" });
+      expect(status).toBe(404);
+      expect(body).toBeInstanceOf(Object);
+      expect(body).toHaveProperty("message", expect.any(String));
+      expect(body.message).toBe("Data not found");
+    });
+  });
+});
+
 describe("DELETE /rides/order/:id", () => {
-  describe("DELETE /rides/order/:id", () => {
+  describe("DELETE /rides/order/:id success", () => {
     it("should response with status 200 and success message", async () => {
       const { status, body } = await request(app)
         .delete("/rides/order/8")
@@ -435,7 +449,7 @@ describe("DELETE /rides/order/:id", () => {
     });
   });
 
-  describe("DELETE /rides/order/:id", () => {
+  describe("DELETE /rides/order/:id fail", () => {
     it("should response with status 403 and error message if ride does not belong to current user", async () => {
       const { status, body } = await request(app)
         .delete("/rides/order/3")

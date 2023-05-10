@@ -31,6 +31,10 @@ class VehicleController {
         throw { name: "not_found" };
       }
 
+      if (vehicleToUpdate.UserId !== userId) {
+        throw { name: "invalid_user" };
+      }
+
       await Vehicle.update(
         {
           id,
@@ -51,7 +55,7 @@ class VehicleController {
 
   static async deleteVehicle(req, res, next) {
     try {
-      // const userId = req.user.id;
+      const userId = req.user.id;
       const { id } = req.params;
       // console.log("masuk");
       const vehicleToDelete = await Vehicle.findByPk(id);
@@ -60,12 +64,16 @@ class VehicleController {
         throw { name: "not_found" };
       }
 
+      if (vehicleToDelete.UserId !== userId) {
+        throw { name: "invalid_user" };
+      }
+
       await Vehicle.destroy({ where: { id } });
 
       const message = `Vehicle deleted`;
       res.status(200).json({ message });
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       next(error);
     }
   }

@@ -5,6 +5,7 @@ const userAuthorization = require("../middlewares/authorization");
 
 rideRouter.get("/", RideController.getAllRide);
 rideRouter.post("/", RideController.createRide);
+rideRouter.get("/requests", RideController.getRequests);
 rideRouter.delete("/:id", userAuthorization, RideController.deleteRide);
 rideRouter.get("/:id", RideController.getRideById);
 rideRouter.put("/:id", userAuthorization, RideController.updateRide);
