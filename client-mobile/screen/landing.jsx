@@ -1,6 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 import { View, Image, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+const BASE_URL = "https://192.168.100.167:4002";
 
 export default function LandingScreen() {
   const navigation = useNavigation();

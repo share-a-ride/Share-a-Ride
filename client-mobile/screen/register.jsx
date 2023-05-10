@@ -1,5 +1,4 @@
 import React, { useLayoutEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 import {
   View,
@@ -12,16 +11,13 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { Camera, CameraType } from "expo-camera";
-import { handleRegister } from "../store/action/actionCreator";
 import axios from "axios";
-const BASE_URL = " https://a644-36-73-33-46.ngrok-free.app";
+
+const BASE_URL = "https://192.168.100.167:4002";
 
 export default function RegisterScreen() {
   const [idCardImg, setidCardImg] = useState(null);
   const [photo, setPhoto] = useState(null);
-  const [type, setType] = useState(CameraType.back);
-  const [permission, requestPermission] = Camera.useCameraPermissions();
   const navigation = useNavigation();
   const [name, setUsername] = useState("");
   const [address, setAddress] = useState("");
@@ -32,16 +28,6 @@ export default function RegisterScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const dispatch = useDispatch();
-
-  function toggleCameraType() {
-    setType((current) =>
-      current === CameraType.back ? CameraType.front : CameraType.back
-    );
-    type();
-    console.log("masuk");
-  }
-
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -51,10 +37,17 @@ export default function RegisterScreen() {
       quality: 1,
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.canceled) {
-      setidCardImg(result.assets[0].uri);
+      const { uri } = result.assets[0];
+      const ext = uri.split(".").pop();
+      const name = uri.split("/").pop();
+      setidCardImg({
+        uri: uri,
+        type: `image/${ext}`,
+        name,
+      });
     }
   };
 
@@ -67,43 +60,53 @@ export default function RegisterScreen() {
       quality: 1,
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.canceled) {
-      setPhoto(result.assets[0]);
+      const { uri } = result.assets[0];
+      const ext = uri.split(".").pop();
+      const name = uri.split("/").pop();
+      setPhoto({
+        uri: uri,
+        type: `image/${ext}`,
+        name,
+      });
     }
   };
 
   const handleRegisterSubmit = async () => {
-    let toInput = {
-      name,
-      email,
-      password,
-      phoneNumber,
-      photo,
-      idCardImg,
-    };
-    console.log(toInput, "<<<<<dari action");
+    const data = new FormData();
+    data.append("name", name);
+    data.append("address", address);
+    data.append("email", email);
+    data.append("phoneNumber", phoneNumber);
+    data.append("password", password);
+    data.append("photo", photo);
+    data.append("idCardImg", idCardImg);
+    // console.log(data);
     try {
       if (password !== confirmPassword) {
         // show an error message or alert
         return;
       }
-      // let toInput = {
-      //   name,
-      //   email,
-      //   password,
-      //   phoneNumber,
-      //   photo,
-      //   idCardImg,
-      // };
+      console.log(data);
+      const res = await axios.post(
+        BASE_URL + "/users/register",
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      // console.log(res);
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
 
-      // let data = await axios.post(BASE_URL + "/users/register", toInput);
-      // // Swal.fire("Good job!", "Success Register!", "success");
-      // dispatch(registerSuccess(data));
+      console.log("Uploaded");
     } catch (error) {
       console.log(error);
-      // Swal.fire("Cancelled", `${error.response.data.message}`, "error");
     }
     navigation.navigate("Login");
   };
@@ -112,7 +115,7 @@ export default function RegisterScreen() {
     navigation.setOptions({
       headerShown: false,
     });
-    console.log( photo)
+    // console.log(photo);
   }, []);
 
   return (
@@ -142,6 +145,8 @@ export default function RegisterScreen() {
         placeholderTextColor="#8e9eb6"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
+        textContentType="emailAddress"
       />
       <TextInput
         style={styles.input}
