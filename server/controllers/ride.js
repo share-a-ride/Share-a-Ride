@@ -8,6 +8,7 @@ class RideController {
   static async getAllRide(req, res, next) {
     try {
       const data = await Ride.findAll({
+        order: [["updatedAt", "DESC"]],
         include: [
           {
             model: UserRide,
@@ -103,7 +104,10 @@ class RideController {
       const { id } = req.user;
       // console.log(id,"<<<<<");
       const ridesPerUser = await UserRide.findAll({
-        where: { UserId: id },
+        order: [["updatedAt", "DESC"]],
+        where: {
+          [Op.and]: [{ UserId: id }, { status: { [Op.not]: "creator" } }],
+        },
         include: Ride,
       });
       res.status(200).json(ridesPerUser);
@@ -217,6 +221,12 @@ class RideController {
         { seats: ride.seats - 1 },
         { where: { id: checkUser.RideId } }
       );
+      // masuk duit ke pemberi tumpangan
+      const creator = await User.findByPk(ride.createdBy);
+      await User.update(
+        { money: creator.money + ride.price },
+        { where: { id: ride.createdBy } }
+      );
     } catch (err) {
       // console.log(err);
       next(err);
@@ -299,6 +309,7 @@ class RideController {
       if (!ride) {
         throw { name: "not_found" };
       }
+      // console.log(ride);
       res.status(200).json(ride);
     } catch (error) {
       // console.log(error);
@@ -338,6 +349,27 @@ class RideController {
       res.status(200).json({ message });
     } catch (error) {
       console.log(error);
+      next(error);
+    }
+  }
+
+  static async getRequests(req, res, next) {
+    try {
+      const { id } = req.user;
+      // console.log(id,"<<<<<");
+      const ridesPerUser = await Ride.findAll({
+        where: { createdBy: id },
+        include: [
+          {
+            model: UserRide,
+            where: {
+              status: "requested",
+            },
+          },
+        ],
+      });
+      res.status(200).json(ridesPerUser);
+    } catch (error) {
       next(error);
     }
   }

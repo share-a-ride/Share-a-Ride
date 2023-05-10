@@ -68,6 +68,14 @@ module.exports = (sequelize, DataTypes) => {
           notNull: { msg: "Phone number is required" },
         },
       },
+      // address: {
+      //   type: DataTypes.STRING,
+      //   allowNull: false,
+      //   validate: {
+      //     notEmpty: { msg: "Address is required" },
+      //     notNull: { msg: "Address is required" },
+      //   },
+      // },
       photo: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -86,6 +94,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       rating: DataTypes.FLOAT,
       status: DataTypes.STRING,
+      // money: DataTypes.INTEGER,
     },
     {
       hooks: {
