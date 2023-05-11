@@ -1,8 +1,8 @@
 const dateFormatter = (date) => {
-  const datePart = date.toLocaleDateString("id-ID", {
-    weekday: "long",
+  const datePart = date.toLocaleDateString("en-GB", {
+    weekday: "short",
     year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
   });
   // console.log(datePart, "formatter");

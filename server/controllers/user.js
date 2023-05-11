@@ -4,6 +4,7 @@ const { User, Vehicle } = require("../models");
 const ImageKit = require("imagekit");
 const uuid = require("uuid");
 const multer = require("multer");
+const { priceFormatter } = require("../helpers/formatter");
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
@@ -138,6 +139,7 @@ class UserController {
       if (!user) {
         throw { name: "not_found" };
       }
+      user.money= priceFormatter(user.money)
       res.status(200).json(user);
     } catch (error) {
       // console.log(error);
@@ -155,6 +157,7 @@ class UserController {
         include: Vehicle,
       });
       // console.log(user);
+      currentUser.money= priceFormatter(currentUser.money)
       res.status(200).json(currentUser);
     } catch (error) {
       // console.log(error);

@@ -128,12 +128,14 @@ export default function RegisterScreen() {
       <TextInput
         style={styles.input}
         placeholder="Name"
+        autoCapitalize="words"
         placeholderTextColor="#8e9eb6"
         value={name}
         onChangeText={setUsername}
       />
       <TextInput
         style={styles.input}
+        
         placeholder="Address"
         placeholderTextColor="#8e9eb6"
         value={address}
@@ -142,6 +144,7 @@ export default function RegisterScreen() {
       <TextInput
         style={styles.input}
         placeholder="Email"
+        autoCapitalize="none"
         placeholderTextColor="#8e9eb6"
         value={email}
         onChangeText={setEmail}

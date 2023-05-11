@@ -42,10 +42,12 @@ const DetailScreen = () => {
   const id = route.params.item.id;
   // const rides = route.params.item;
 
-  console.log(rides, "<<<<<<<<< ini route params");
-  console.log(route.params, "<<<<<<");
+  // console.log(rides, "<<<<<<<<< ini route params");
+  // console.log(route.params, "<<<<<<");
+  console.log(id,"<<<<< details booke")
 
   const fetchDetailRide = async () => {
+  
     const { data } = await axios.get(BASE_URL + `/rides/${id}`, {
       headers: {
         access_token: await AsyncStorage.getItem("access_token"),
@@ -57,6 +59,7 @@ const DetailScreen = () => {
 
   const handleBookRide = async () => {
     try {
+      console.log(id,"<<<masuk ")
       const { data } = await axios.post(
         BASE_URL + `/rides/order/${id}`,{},
         {

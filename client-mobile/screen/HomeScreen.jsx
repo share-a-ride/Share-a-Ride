@@ -36,7 +36,7 @@ export default function HomeScreen({ route }) {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  
+  console.log(destination,origin,"<<<<<ini coba search")
   const handleSearch = () => {
     // Lakukan sesuatu setelah user melakukan pencarian
     

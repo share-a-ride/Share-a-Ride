@@ -4,6 +4,7 @@ const midtransClient = require("midtrans-client");
 const axios = require("axios");
 const { dateFormatter, priceFormatter } = require("../helpers/formatter");
 // const { checkPaymentStatus } = require("../helpers/checkPayment");
+const mailTransporter = require("../helpers/nodeMailer");
 
 class RideController {
   static async getAllRide(req, res, next) {
@@ -54,7 +55,7 @@ class RideController {
       // console.log(rides);
       res.status(200).json(rides);
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       next(error);
     }
   }
@@ -144,8 +145,12 @@ class RideController {
       });
 
       const ridesPerUser = data.map((el) => {
-        el.Ride.departureTime = dateFormatter(el.Ride.departureTime);
-        el.Ride.arrivalTime = dateFormatter(el.Ride.arrivalTime);
+        el.dataValues.Ride.dataValues.departureTime = dateFormatter(
+          el.Ride.departureTime
+        );
+        el.dataValues.Ride.dataValues.arrivalTime = dateFormatter(
+          el.Ride.arrivalTime
+        );
         el.Ride.price = priceFormatter(el.Ride.price);
         return el;
       });
@@ -237,6 +242,7 @@ class RideController {
         credit_card: {
           secure: true,
         },
+
         customer_details: {
           email: checkUser.User.email,
         },
@@ -250,6 +256,17 @@ class RideController {
 
       res.status(200).json(midtransToken);
 
+      let details = {
+        from: "sharearide.indo@gmail.com",
+        to: checkUser.User.email,
+        subject: "Share-a-ride notification ",
+        text: "Share-a-ride payment is succeed",
+      };
+
+      mailTransporter.sendMail(details, (err) => {
+        if (err) console.log(err);
+        else console.log("e-mail has sent");
+      });
       // const paymentStatus = await checkPaymentStatus(orderId);
 
       // if (!paymentStatus.success) {
@@ -284,6 +301,7 @@ class RideController {
       const ride = await Ride.findByPk(rideId, {
         include: [{ model: UserRide }],
       });
+      
       // console.log(ride.UserRides);
       // check if user is in the ride
       if (!ride) {
@@ -295,15 +313,28 @@ class RideController {
       if (ride.seats <= 0) {
         throw { name: "full_booked" };
       }
+      const checkUser = await User.findByPk(ride.createdBy);
 
-      let newUserRide = await UserRide.create({
+      let  newUserRide = await UserRide.create({
         RideId: rideId,
         UserId: userId,
         status: "requested",
       });
+      let details = {
+        from: "sharearide.indo@gmail.com",
+        to: checkUser.email,
+        subject: "Share-a-ride notification ",
+        text: "You have a new order request. please check your app! ",
+      };
+
+      mailTransporter.sendMail(details, (err) => {
+        if (err) console.log(err);
+        else console.log("e-mail has sent");
+      });
       const message = "Order received";
       res.status(201).json({ message });
     } catch (error) {
+      console.log(error)
       next(error);
     }
   }
@@ -370,11 +401,38 @@ class RideController {
       const { status } = req.body;
 
       const orderToUpdate = await UserRide.findByPk(id, {
-        include: [{ model: Ride }],
+        include: [
+          { model: Ride },
+          { model: User, attributes: ["name", "email"] },
+        ],
       });
-
+      
       if (!orderToUpdate) {
         throw { name: "not_found" };
+      }
+
+      let details = {
+        from: "sharearide.indo@gmail.com",
+        to: orderToUpdate.User.email,
+        subject: "Share-a-ride notification ",
+      };
+
+      if (status === "unpaid") {
+        details.text =
+          "Share-a-ride ride is accepted, please complete the payment";
+      } else if (status === "rejected") {
+        details.text =
+          "Share-a-ride ride is canceled by the driver, please book your new ride";
+      }
+
+      console.log(details.text);
+      mailTransporter.sendMail(details, (err) => {
+        if (err) console.log(err);
+        else console.log("e-mail has sent");
+      });
+
+      if (orderToUpdate.Ride.createdBy !== userId) {
+        throw { name: "invalid_user" };
       }
 
       if (orderToUpdate.Ride.createdBy !== userId) {
@@ -390,6 +448,7 @@ class RideController {
           returning: true,
         }
       );
+
 
       const message = `Order request is ${status}`;
       res.status(200).json({ message });
