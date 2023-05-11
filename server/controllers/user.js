@@ -16,10 +16,10 @@ class UserController {
       }
       const { name, address, email, phoneNumber, password } = req.body;
 
+      const lcEmail = email.toLowerCase();
+
       const selfie = req.files.find((file) => file.fieldname === "photo");
-      const idCard = req.files.find(
-        (file) => file.fieldname === "idCardImg"
-      );
+      const idCard = req.files.find((file) => file.fieldname === "idCardImg");
       console.log(selfie, "photo");
       console.log(idCard, "id");
       var imagekit = new ImageKit({
@@ -51,15 +51,15 @@ class UserController {
             },
           ],
         });
-        let photo = selfieUrl.url
-        let idCardImg = idCardUrl.url
-        console.log(name,email,password,phoneNumber,photo,idCardImg)
+        let photo = selfieUrl.url;
+        let idCardImg = idCardUrl.url;
+        console.log(name, email, password, phoneNumber, photo, idCardImg);
         await User.create({
           name,
-          address,
-          email,
+          email: lcEmail,
           password,
           phoneNumber,
+          address,
           photo,
           idCardImg,
           status: "unverified",
@@ -83,8 +83,10 @@ class UserController {
       if (!email || email === undefined) throw { name: "empty_email" };
       if (!password || password === undefined) throw { name: "empty_password" };
 
+      const lcEmail = email.toLowerCase();
+
       const selectedUser = await User.findOne({
-        where: { email },
+        where: { email: lcEmail },
       });
 
       if (!selectedUser) {

@@ -15,6 +15,7 @@ import {
   Ionicons,
   FontAwesome,
   AntDesign,
+  Entypo,
 } from "@expo/vector-icons";import React from 'react'
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -23,6 +24,7 @@ const BASE_URL = "http://192.168.100.167:4002";
 
 const CardMyRides = ({item}) => {
   const navigation = useNavigation();
+  console.log(item,"<<<< ini dari card my ride")
 
   const handlePayments= async () => {
     try {
@@ -65,30 +67,42 @@ const CardMyRides = ({item}) => {
           </View>
         </View>
         <View className="mr-1 items-center">
-          <Text className="text-2xl font-bold text-white">Rp {item?.Ride.price}</Text>
+          <Text className="text-2xl font-bold text-white">{item?.Ride.price}</Text>
           <Text className="font-bold my-8 text-white">Seat : {item?.Ride.seats}</Text>
           {
             item?.status ==="requested" ? (
               <TouchableOpacity
-              className=" py-3 rounded-lg px-4  bg-red-600 "
+              className=" py-3 rounded-lg px-4  "
                 onPress={handlePayments}
               >
                 <Text className="text-center uppercase text-white text-[16px]"> {item?.status}</Text>
               </TouchableOpacity>
             ):item?.status ==="paid"?(
-              <TouchableOpacity
-              className=" py-3 rounded-lg px-5 bg-green-500  "
-                onPress={handlePayments}
-              >
-                <Text className="text-center uppercase text-white text-[16px]"> {item?.status}</Text>
-              </TouchableOpacity>
+              <View className="flex-row  items-center justify-end">
+
+                <TouchableOpacity
+                className="  rounded-lg px-5   "
+                  onPress={handlePayments}
+                >
+                  <Text className="text-center uppercase text-white text-[16px]"> {item?.status}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                className=" py-3 rounded-lg "
+                  onPress={handlePayments}
+                >
+                <Entypo name="star-outlined" size={24} color="white" />
+                </TouchableOpacity>
+
+              </View>
+
 
             ):(
               <TouchableOpacity
-              className=" py-3 rounded-lg px-5 bg-sky-500 "
+              className=" py-3 rounded-lg px-5 bg-sky-400  "
                 onPress={handlePayments}
               >
-                <Text className="text-center uppercase text-white text-[16px]"> {item?.status}</Text>
+                <Text className="text-center uppercase text-white text-[16px]"> Unpaid </Text>
               </TouchableOpacity>
             )
           }

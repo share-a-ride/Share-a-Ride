@@ -10,10 +10,12 @@ import {
   SafeAreaView,
   TextInput,
   Button,
-  Keyboard
+  Keyboard,
+  DatePickerAndroid  ,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { MaterialCommunityIcons, MaterialIcons,Feather, Entypo } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons,Feather, Entypo,  EvilIcons,AntDesign 
+} from "@expo/vector-icons";
 import { Gesture, GestureDetector, } from "react-native-gesture-handler";
 import CardPost from "../components/CardPost";
 import axios from "axios";
@@ -23,15 +25,37 @@ const BASE_URL = "http://192.168.100.167:4002";
 
 export default function HomeScreen({ route }) {
   const navigation = useNavigation();
+  
   const [user, setCurrentUser] = useState({});
   const [rides, setRides] = useState([]);
   const [clicked, setCLicked] = useState(null);
   const [searchPhrase, setSearchPhrase] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [destination, setDestination] = useState('');
+  const [origin, setOrigin] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
+  
   const handleSearch = () => {
     // Lakukan sesuatu setelah user melakukan pencarian
-    setSearchPhrase("")
+    
+    setDestination("")
+    setOrigin("")
+  }
+
+  const handleDateChange = async () => {
+    try {
+      const { action, year, month, day } = await DatePickerAndroid.open({
+        date: date,
+        mode: 'spinner' // pilihan mode 'default', 'calendar', 'spinner'
+      });
+      if (action !== DatePickerAndroid.dismissedAction) {
+        setDate(new Date(year, month, day));
+      }
+    } catch ({ code, message }) {
+      console.warn('Cannot open date picker', message);
+    }
   }
 
   const fetchCurrentUser = async () => {
@@ -39,19 +63,23 @@ export default function HomeScreen({ route }) {
       const { data } = await axios.get(BASE_URL + "/users/currentUser", {
         headers: { access_token: await AsyncStorage.getItem("access_token") },
       });
+
       setCurrentUser(data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log()
+  console.log(origin,destination,"<<<<< dari home search")
 
   const fetchRides = async () => {
-    const { data } = await axios.get(BASE_URL + "/rides", {
+    console.log(origin,destination,"<<< dari search")
+    const { data } = await axios.get(BASE_URL + `/rides?origin=${origin}&dest=${destination}`, {
       headers: { access_token: await AsyncStorage.getItem("access_token") },
     });
     setRides(data);
+    setOrigin("")
+    setDestination("")
   };
   useEffect(() => {
     fetchCurrentUser();
@@ -60,6 +88,8 @@ export default function HomeScreen({ route }) {
       headerShown: false,
     });
   }, []);
+
+
   
   return (
     <View style={styles.container}>
@@ -80,18 +110,17 @@ export default function HomeScreen({ route }) {
         </TouchableOpacity>
       </View>
       <View className="flex-row  w-full">
-
-      <View className="flex w-full items-center justify-center">
+      <View className="flex flex-row w-full items-center space-x-1 justify-center">
         <View
           className={
             clicked
-              ? "bg-white flex-row w-11/12 mb-2 justify-evenly rounded-xl p-2 px-3 items-center "
-              : "bg-white flex-row w-11/12  mb-2   rounded-xl p-2 items-center "
+              ? "bg-white flex-row w-40 mb-2 justify-evenly rounded-xl p-2 px-3 items-center "
+              : "bg-white flex-row w-40 mb-2   rounded-xl p-2 items-center "
           }
         >
           {/* search Icon */}
-          <Feather
-            name="search"
+          <EvilIcons
+            name="location"
             size={20}
             color="black"
             style={{ marginLeft: 1 }}
@@ -99,10 +128,43 @@ export default function HomeScreen({ route }) {
           {/* Input field */}
           <TextInput
             style={styles.input}
-            placeholder="Search"
-            value={searchPhrase}
-            onChangeText={setSearchPhrase}
-            onSubmitEditing={handleSearch}
+            className="text-sm"
+            placeholder="Origin"
+            value={origin}
+            onChangeText={setOrigin}
+            returnKeyType="search"
+            onFocus={() => {
+              setCLicked(true);
+            }}
+          />
+          {/* cross Icon, depending on whether the search bar is clicked or not */}
+          {clicked && (
+
+            <Entypo name="cross" size={20} color="black" style={{ padding: 1 }} onPress={() => {
+                setSearchPhrase("")
+            }}/>
+          )}
+        </View>
+        <View
+          className={
+            clicked
+              ? "bg-white flex-row w-40  mb-2 justify-evenly rounded-xl p-2 px-3 items-center "
+              : "bg-white flex-row w-40  mb-2   rounded-xl p-2 items-center "
+          }
+        >
+          {/* search Icon */}
+          <EvilIcons
+            name="location"
+            size={20}
+            color="black"
+            style={{ marginLeft: 1 }}
+          />
+          {/* Input field */}
+          <TextInput
+            style={styles.input}
+            placeholder="Destination"
+            value={destination}
+            onChangeText={setDestination}
             returnKeyType="search"
             onFocus={() => {
               setCLicked(true);
@@ -115,6 +177,11 @@ export default function HomeScreen({ route }) {
             }}/>
           )}
         </View>
+        <TouchableOpacity onPress={fetchRides}>
+            <View className="bg-white w-10 h-10 rounded-xl items-center justify-center mb-2">
+              <AntDesign name="search1" size={24} color="black" />
+            </View>
+        </TouchableOpacity>
       </View>
       {/* cancel button, depending on whether the search bar is clicked or not */}
      
@@ -239,7 +306,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   input: {
-    fontSize: 20,
+    fontSize: 16,
     marginLeft: 10,
     width: "90%",
   },

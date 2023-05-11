@@ -109,7 +109,7 @@ const ProfileScreen = () => {
           <Text className="text-2xl font-semibold">{user?.rating} / 5 </Text>
         </View>
         <View className="flex-1  items-center justify-center py-6 border border-slate-400 rounded-lg">
-          <Text>Saldo</Text>
+          <Text>Balance</Text>
           <Text className="text-2xl font-semibold">{user?.money}</Text>
         </View>
       </View>
@@ -119,8 +119,8 @@ const ProfileScreen = () => {
           navigation.replace("PostRide");
         }}
       >
-        <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 py-4 bg-slate-100 rounded-md">
-          <MaterialIcons name="add-circle-outline" size={24} color="black" />
+        <View className="flex-row space-x-4 items-center  mt-2 mx-6 px-4 py-4 bg-slate-100 rounded-md">
+         
           <Text className="text-xl">Add Post Ride</Text>
         </View>
       </TouchableOpacity>
@@ -129,8 +129,8 @@ const ProfileScreen = () => {
           navigation.replace("MyRides");
         }}
       >
-        <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 py-4 bg-slate-100 rounded-md">
-          <MaterialIcons name="payment" size={24} color="black" />
+        <View className="flex-row space-x-4 items-center mt-2 mx-6 px-4  py-4 bg-slate-100 rounded-md">
+         
           <Text className="text-xl">My Rides</Text>
         </View>
       </TouchableOpacity>
@@ -139,8 +139,8 @@ const ProfileScreen = () => {
           navigation.replace("RideRequest");
         }}
       >
-        <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 py-4 bg-slate-100 rounded-md">
-          <AntDesign name="disconnect" size={24} color="black" />
+        <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 px-4  py-4 bg-slate-100 rounded-md">
+         
           <Text className="text-xl">Requested Rides</Text>
         </View>
       </TouchableOpacity>
@@ -149,8 +149,8 @@ const ProfileScreen = () => {
           setModalVisible(true);
         }}
       >
-        <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 py-4 bg-slate-100 rounded-md">
-          <AntDesign name="pluscircleo" size={24} color="black" />
+        <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 px-4 py-4 bg-slate-100 rounded-md">
+         
           <Text className="text-xl">Add Vehicle</Text>
         </View>
       </TouchableOpacity>
@@ -160,7 +160,7 @@ const ProfileScreen = () => {
           handleLogout();
         }}
       >
-        <View className="flex-row space-x-4 items-center  mt-6 mx-6 p-2 py-4 bg-slate-100 rounded-md">
+        <View className="flex-row space-x-4 items-center  mt-6 mx-6 p-2  py-4 bg-slate-100 rounded-md">
           <SimpleLineIcons name="logout" size={24} color="red" />
           <Text className="text-xl text-red-600">Log out</Text>
         </View>

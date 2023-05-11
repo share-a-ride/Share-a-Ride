@@ -102,7 +102,8 @@ const DetailScreen = () => {
           <View className="bg-slate-600 w-16 h-16 rounded-full border border-slate-400 ">
             <Image
               className="w-full h-full object-cover rounded-full "
-              source={rides?.UserRides[0].User.photo}
+              // source={rides?.UserRides[0].User.photo}
+              source={{uri:rides?.UserRides[0].User.photo}}
             />
           </View>
           <View>
@@ -151,7 +152,7 @@ const DetailScreen = () => {
             </View>
           </View>
           <View className="mr-4">
-            <Text className="text-2xl font-bold">Rp.{rides?.price}</Text>
+            <Text className="text-2xl font-bold">{rides?.price}</Text>
           </View>
         </View>
       </View>

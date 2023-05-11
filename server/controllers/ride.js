@@ -2,38 +2,65 @@ const { Op } = require("sequelize");
 const { Ride, Vehicle, UserRide, User } = require("../models");
 const midtransClient = require("midtrans-client");
 const axios = require("axios");
+const { dateFormatter, priceFormatter } = require("../helpers/formatter");
 // const { checkPaymentStatus } = require("../helpers/checkPayment");
 
 class RideController {
   static async getAllRide(req, res, next) {
-    try {
-      const data = await Ride.findAll({
-        order: [["updatedAt", "DESC"]],
-        include: [
-          {
-            model: UserRide,
-            where: {
-              status: "creator",
-            },
-            include: [
-              {
-                model: User,
-                attributes: {
-                  exclude: "password",
-                },
-              },
-            ],
+    const { origin, dest } = req.query;
+    let params = {
+      where: {},
+      order: [["updatedAt", "DESC"]],
+      include: [
+        {
+          model: UserRide,
+          where: {
+            status: "creator",
           },
-        ],
+          include: [
+            {
+              model: User,
+              attributes: {
+                exclude: "password",
+              },
+            },
+          ],
+        },
+      ],
+    };
+
+    if (origin !== "" && typeof origin !== "undefined") {
+      params.where.startLocation = {
+        [Op.iLike]: "%" + origin + "%",
+      };
+    }
+
+    if (dest !== "" && typeof dest !== "undefined") {
+      params.where.destination = {
+        [Op.iLike]: "%" + dest + "%",
+      };
+    }
+
+    try {
+      const data = await Ride.findAll(params);
+      // console.log(data);
+
+      const rides = data.map((el) => {
+        el.dataValues.departureTime = dateFormatter(el.departureTime);
+        el.dataValues.arrivalTime = dateFormatter(el.arrivalTime);
+        el.price = priceFormatter(el.price);
+        return el;
       });
-      res.status(200).json(data);
+      // console.log(rides);
+      res.status(200).json(rides);
     } catch (error) {
+      // console.log(error);
       next(error);
     }
   }
 
   static async createRide(req, res, next) {
-    console.log(req.body,"<<<< dari server")
+    // console.log(req.body, "<<<< dari server");
     try {
       let userId = req.user.id;
       const {
@@ -77,7 +104,7 @@ class RideController {
       const message = `New ride with ${ride.id} created`;
       res.status(201).json({ message });
     } catch (error) {
-      console.log(error)
+      // console.log(error);
       next(error);
     }
   }
@@ -105,13 +132,24 @@ class RideController {
     try {
       const { id } = req.user;
       // console.log(id,"<<<<<");
-      const ridesPerUser = await UserRide.findAll({
-        order: [["updatedAt", "DESC"]],
+      const data = await UserRide.findAll({
+        order: [
+          ["status", "DESC"],
+          ["updatedAt", "DESC"],
+        ],
         where: {
           [Op.and]: [{ UserId: id }, { status: { [Op.not]: "creator" } }],
         },
         include: Ride,
       });
+
+      const ridesPerUser = data.map((el) => {
+        el.Ride.departureTime = dateFormatter(el.Ride.departureTime);
+        el.Ride.arrivalTime = dateFormatter(el.Ride.arrivalTime);
+        el.Ride.price = priceFormatter(el.Ride.price);
+        return el;
+      });
+
       res.status(200).json(ridesPerUser);
     } catch (error) {
       next(error);
@@ -313,7 +351,11 @@ class RideController {
       if (!ride) {
         throw { name: "not_found" };
       }
-      // console.log(ride);
+
+      ride.dataValues.departureTime = dateFormatter(ride.departureTime);
+      ride.dataValues.arrivalTime = dateFormatter(ride.arrivalTime);
+      ride.price = priceFormatter(ride.price);
+
       res.status(200).json(ride);
     } catch (error) {
       // console.log(error);
@@ -352,7 +394,7 @@ class RideController {
       const message = `Order request is ${status}`;
       res.status(200).json({ message });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       next(error);
     }
   }
@@ -361,9 +403,9 @@ class RideController {
     try {
       const { id } = req.user;
       // console.log(id,"<<<<<");
-      const ridesPerUser = await UserRide.findAll({
-        where: { status: "requested" },
-
+      const data = await Ride.findAll({
+        where: { createdBy: id },
+        order: ["updatedAt"],
         include: [
           {
             model: Ride,
@@ -377,8 +419,15 @@ class RideController {
           }
         ],
       });
+      const ridesPerUser = data.map((el) => {
+        el.dataValues.departureTime = dateFormatter(el.departureTime);
+        el.dataValues.arrivalTime = dateFormatter(el.arrivalTime);
+        el.price = priceFormatter(el.price);
+        return el;
+      });
       res.status(200).json(ridesPerUser);
     } catch (error) {
+      // console.log(error);
       next(error);
     }
   }

@@ -6,9 +6,20 @@ class VehicleController {
     try {
       const userId = req.user.id;
       const { type, plateNumber } = req.body;
+
+      const ucPlate = plateNumber.toUpperCase();
+
+      const existingVehicle = await Vehicle.findOne({
+        where: { UserId: userId },
+      });
+
+      if (existingVehicle) {
+        throw { name: "vehicle_exists" };
+      }
+
       await Vehicle.create({
         type,
-        plateNumber,
+        plateNumber: ucPlate,
         UserId: userId,
       });
 
@@ -25,6 +36,8 @@ class VehicleController {
       const { type, plateNumber } = req.body;
       const { id } = req.params;
 
+      const ucPlate = plateNumber.toUpperCase();
+
       const vehicleToUpdate = await Vehicle.findByPk(id);
 
       if (!vehicleToUpdate) {
@@ -39,7 +52,7 @@ class VehicleController {
         {
           id,
           type,
-          plateNumber,
+          plateNumber: ucPlate,
           UserId: userId,
         },
         { where: { id } }

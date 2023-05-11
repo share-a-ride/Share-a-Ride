@@ -11,6 +11,7 @@ import {
 import axios from 'axios'
 const BASE_URL = "http://192.168.100.167:4002";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
 
 
@@ -22,7 +23,8 @@ const PostRideScreen = () => {
   const [arivalTime, setArivalTime] = useState("");
   const [price, setPrice] = useState("");
   const [seats, setSeats] = useState("");
-
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
  
 
   const handleRide = async () => {
@@ -106,8 +108,10 @@ const PostRideScreen = () => {
         className="bg-background text-white text-lg  py-4 w-10/12 items-center justify-center mx-auto rounded-2xl mb-4 px-4"
         placeholder="Departure Time"
         placeholderTextColor="#8e9eb6"
-        onChangeText={setDepartureTime}
-        value={departureTime}
+        // onChangeText={setDepartureTime}
+        value={date.toLocaleDateString()}
+        onFocus={() => handleDateChange()}
+        editable={false}
       />
       <TextInput
         keyboardType="date"

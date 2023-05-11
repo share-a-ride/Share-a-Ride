@@ -9,22 +9,10 @@ import {
 } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { EvilIcons } from '@expo/vector-icons';
 
 const CardPost = ({ item }) => {
-  const formatIndonesianTime = (time) => {
-    const dateObj = new Date(time);
-  
-    const day = dateObj.getDate();
-    const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(dateObj);
-    const year = dateObj.getFullYear();
-    const hours = dateObj.getHours();
-    const minutes = dateObj.getMinutes();
-  
-    const formattedDate = `${day} ${month} ${year}`;
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-  
-    return `${formattedDate} | ${formattedTime}`;
-  };
+  console.log(item,"<<<<<dari hom card")
   const navigation = useNavigation();
   return (
     <GestureDetector
@@ -40,25 +28,41 @@ const CardPost = ({ item }) => {
     >
       <View style={styles.card}>
         <View style={styles.left}>
-          <Text style={styles.leftText}>{item.startLocation}</Text>
-          <Text style={styles.leftText}>
-            {formatIndonesianTime(item.departureTime)}
-          </Text>
-          <View style={styles.line} />
-          <Text style={styles.leftText}>{item.destination}</Text>
-          <Text style={styles.leftText}>{formatIndonesianTime(item.arrivalTime)}</Text>
+          <View className="">
+            <View className="flex-row items-center ">
+            <EvilIcons name="location" size={24} color="black" />
+               <Text style={styles.leftText}>{item.startLocation}</Text>
+            </View>
+            
+            <View className="ml-3 flex-row space-x-2">
+           
+              <View className="w-1 h-20 bg-slate-400">
+              </View>
+              <Text style={styles.leftText}>
+              {item.departureTime}
+            </Text>
+            </View>
+            <View className="flex-row items-center">
+            <EvilIcons name="location" size={24} color="black" />
+            <Text style={styles.leftText}>{item.destination}</Text> 
+            </View>
+            <View className="ml-4">
+               <Text style={styles.leftText}>{item.arrivalTime}</Text>
+            </View>
+
+          </View>
         </View>
         <View style={styles.right}>
-          <Text style={styles.price}>Rp.{item?.price}</Text>
+          <Text style={styles.price}>{item?.price}</Text>
           <View style={styles.bottom}>
             <Text style={styles.seats}>seats: {item?.seats}</Text>
           </View>
           <View className="flex flex-row items-center ">
-            <Text className="text-slate-500 mr-2">{item?.name}</Text>
+            <Text className="text-slate-500 mr-2">{item?.UserRides[0].User.name}</Text>
             <View className="bg-slate-200 rounded-full border w-10 h-10 justify-self-end ">
               <Image
                 className="w-full h-full object-cover rounded-full "
-                source={{ uri: item?.image }}
+                source={{ uri: item?.UserRides[0].User.photo }}
               />
             </View>
           </View>
