@@ -54,7 +54,7 @@ const RideRequestScreen = () => {
         <View className="mx-6 my-4  ">
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Home");
+            navigation.replace("Home");
           }}
         >
           <AntDesign name="arrowleft" size={28} color="black" />

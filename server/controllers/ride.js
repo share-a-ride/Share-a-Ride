@@ -164,10 +164,12 @@ class RideController {
 
   static async genMidtransToken(req, res, next) {
     try {
-      // console.log(1, "<<<<<<<<");
-
-      const checkUser = await UserRide.findByPk(req.user.id, {
+      console.log(1, "<<<<<<<<");
+      console.log(req.body,"<daricontoleer")
+      const checkUser = await UserRide.findByPk(req.params.id, {
+        where:{UserId:req.user.id},
         include: User,
+        
       });
 
       // console.log(checkUser.User.email, "<<<<<< checkUser.isPremium");
@@ -176,15 +178,15 @@ class RideController {
         throw { name: "ALREADY_BOOKED" };
       }
 
-      // console.log(3, "<<<<<<<<");
+      console.log(3, "<<<<<<<<");
 
       let snap = new midtransClient.Snap({
         isProduction: false,
         serverKey: "SB-Mid-server-xvUL2muo6OumITLOfsgy0pMP",
       });
 
-      // console.log(4, "<<<<<<<<");
-
+      console.log(4, "<<<<<<<<");
+      const ride = await Ride.findByPk(checkUser.RideId);
       let parameter = {
         transaction_details: {
           order_id:
@@ -192,7 +194,7 @@ class RideController {
             Math.floor(
               Math.random() * (9999999999 - 100000000 + 1) + 100000000
             ),
-          gross_amount: 2000000, // 1juta
+          gross_amount: ride.price, // 1juta
         },
         credit_card: {
           secure: true,
@@ -218,7 +220,7 @@ class RideController {
 
       // Update UserRide payment status to 'paid'
       await checkUser.update({ status: "paid" });
-      const ride = await Ride.findByPk(checkUser.RideId);
+      
       await Ride.update(
         { seats: ride.seats - 1 },
         { where: { id: checkUser.RideId } }
@@ -230,7 +232,7 @@ class RideController {
         { where: { id: ride.createdBy } }
       );
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       next(err);
     }
   }
@@ -359,15 +361,20 @@ class RideController {
     try {
       const { id } = req.user;
       // console.log(id,"<<<<<");
-      const ridesPerUser = await Ride.findAll({
-        where: { createdBy: id },
+      const ridesPerUser = await UserRide.findAll({
+        where: { status: "requested" },
+
         include: [
           {
-            model: UserRide,
+            model: Ride,
             where: {
-              status: "requested",
+              createdBy: id,
             },
+
           },
+          {
+            model: User,
+          }
         ],
       });
       res.status(200).json(ridesPerUser);

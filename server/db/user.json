@@ -7,7 +7,8 @@
     "photo": "https://contoh.com/andisusanto.png",
     "idCardImg": "https://contoh.com/andisusanto-id.png",
     "rating": 4.5,
-    "status": "unverified"
+    "status": "unverified",
+    "address": "Jl. Pahlawan No. 12, Kel. Merdeka, Kec. Bandung"
   },
   {
     "name": "Dewi Rahayu",
@@ -17,7 +18,8 @@
     "photo": "https://contoh.com/dewirahayu.png",
     "idCardImg": "https://contoh.com/dewirahayu-id.png",
     "rating": 3.8,
-    "status": "unverified"
+    "status": "unverified",
+    "address": "Jl. Jenderal Sudirman No. 123, Kel. Simpang Lima, Kec. Semarang"
   },
   {
     "name": "Bambang Surya",
@@ -27,7 +29,8 @@
     "photo": "https://contoh.com/bambangsurya.png",
     "idCardImg": "https://contoh.com/bambangsurya-id.png",
     "rating": 4.2,
-    "status": "unverified"
+    "status": "unverified",
+    "address": "Jl. Gajah Mada No. 456, Kel. Pabean Cantian, Kec. Surabaya"
   },
   {
     "name": "Anita Wijaya",
@@ -37,6 +40,7 @@
     "photo": "https://contoh.com/anitawijaya.png",
     "idCardImg": "https://contoh.com/anitawijaya-id.png",
     "rating": 4.7,
-    "status": "unverified"
+    "status": "unverified",
+    "address": "Jl. Diponegoro No. 789, Kel. Sisingamangaraja, Kec. Medan"
   }
 ]

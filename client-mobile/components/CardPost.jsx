@@ -49,9 +49,9 @@ const CardPost = ({ item }) => {
           <Text style={styles.leftText}>{formatIndonesianTime(item.arrivalTime)}</Text>
         </View>
         <View style={styles.right}>
-          <Text style={styles.price}>Rp.{item.price}</Text>
+          <Text style={styles.price}>Rp.{item?.price}</Text>
           <View style={styles.bottom}>
-            <Text style={styles.seats}>seats: {item.seats}</Text>
+            <Text style={styles.seats}>seats: {item?.seats}</Text>
           </View>
           <View className="flex flex-row items-center ">
             <Text className="text-slate-500 mr-2">{item?.name}</Text>

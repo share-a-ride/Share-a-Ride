@@ -8,10 +8,13 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
+  TextInput,
+  Button,
+  Keyboard
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { MaterialCommunityIcons, MaterialIcons,Feather, Entypo } from "@expo/vector-icons";
+import { Gesture, GestureDetector, } from "react-native-gesture-handler";
 import CardPost from "../components/CardPost";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -22,6 +25,14 @@ export default function HomeScreen({ route }) {
   const navigation = useNavigation();
   const [user, setCurrentUser] = useState({});
   const [rides, setRides] = useState([]);
+  const [clicked, setCLicked] = useState(null);
+  const [searchPhrase, setSearchPhrase] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = () => {
+    // Lakukan sesuatu setelah user melakukan pencarian
+    setSearchPhrase("")
+  }
 
   const fetchCurrentUser = async () => {
     try {
@@ -57,7 +68,7 @@ export default function HomeScreen({ route }) {
           <Text className="">Share A Ride</Text>
           <Text className="text-xl text-green-900">Welcome, {user?.name}!</Text>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+        <TouchableOpacity onPress={() => navigation.replace("Profile")}>
           <View className="w-12 h-12 bg-slate-300 rounded-md items-center justify-center">
             <Image
               className="w-full h-full "
@@ -68,13 +79,53 @@ export default function HomeScreen({ route }) {
           </View>
         </TouchableOpacity>
       </View>
-      <View className="flex-row justify-end items-end w-full">
-        <View style={styles.filter}>
+      <View className="flex-row  w-full">
+
+      <View className="flex w-full items-center justify-center">
+        <View
+          className={
+            clicked
+              ? "bg-white flex-row w-11/12 mb-2 justify-evenly rounded-xl p-2 px-3 items-center "
+              : "bg-white flex-row w-11/12  mb-2   rounded-xl p-2 items-center "
+          }
+        >
+          {/* search Icon */}
+          <Feather
+            name="search"
+            size={20}
+            color="black"
+            style={{ marginLeft: 1 }}
+          />
+          {/* Input field */}
+          <TextInput
+            style={styles.input}
+            placeholder="Search"
+            value={searchPhrase}
+            onChangeText={setSearchPhrase}
+            onSubmitEditing={handleSearch}
+            returnKeyType="search"
+            onFocus={() => {
+              setCLicked(true);
+            }}
+          />
+          {/* cross Icon, depending on whether the search bar is clicked or not */}
+          {clicked && (
+            <Entypo name="cross" size={20} color="black" style={{ padding: 1 }} onPress={() => {
+                setSearchPhrase("")
+            }}/>
+          )}
+        </View>
+      </View>
+      {/* cancel button, depending on whether the search bar is clicked or not */}
+     
+
+
+        {/* <View style={styles.filter}>
           <TouchableOpacity onPress={() => navigation.navigate("PostRide")}>
             <MaterialIcons name="add-location-alt" size={24} color="grey" />
           </TouchableOpacity>
-        </View>
-        <View style={styles.filter}>
+        </View> */}
+        {/* <View style={styles.filter}>
           <TouchableOpacity onPress={() => navigation.navigate("Landing")}>
             <MaterialCommunityIcons
               name="filter-variant"
@@ -82,7 +133,7 @@ export default function HomeScreen({ route }) {
               color="#8e9eb6"
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
 
       <FlatList
@@ -168,4 +219,30 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 10,
   },
+
+ 
+  searchBar__unclicked: {
+    padding: 10,
+    flexDirection: "row",
+    width: "95%",
+    backgroundColor: "#d9dbda",
+    borderRadius: 15,
+    alignItems: "center",
+  },
+  searchBar__clicked: {
+    padding: 10,
+    flexDirection: "row",
+    width: "80%",
+    backgroundColor: "#d9dbda",
+    borderRadius: 15,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  input: {
+    fontSize: 20,
+    marginLeft: 10,
+    width: "90%",
+  },
+
 });
+

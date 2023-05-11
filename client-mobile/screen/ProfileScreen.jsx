@@ -37,7 +37,7 @@ const ProfileScreen = () => {
       await AsyncStorage.removeItem("access_token");
       let access_token = await AsyncStorage.getItem("access_token");
       console.log("disini",access_token)
-      navigation.navigate("Landing");
+      navigation.replace("Landing");
     } catch (error) {
       console.log(error);
     }
@@ -69,7 +69,7 @@ const ProfileScreen = () => {
       <View className="mx-6 my-2">
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Home");
+            navigation.replace("Home");
           }}
         >
           <AntDesign name="arrowleft" size={24} color="black" />
@@ -95,7 +95,7 @@ const ProfileScreen = () => {
 
       <View className="flex-row  mx-8 space-x-4 items-center">
         <Entypo name="address" size={24} color="black" />
-        <Text> {user?.address}</Text>
+        <Text className="mr-2 text-justify"> {user?.address}</Text>
       </View>
       <View className="flex-row  mx-8 mt-3 space-x-4 items-center">
         <FontAwesome5 name="car" size={24} color="black" />
@@ -116,7 +116,17 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("MyRides");
+          navigation.replace("PostRide");
+        }}
+      >
+        <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 py-4 bg-slate-100 rounded-md">
+          <MaterialIcons name="add-circle-outline" size={24} color="black" />
+          <Text className="text-xl">Add Post Ride</Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.replace("MyRides");
         }}
       >
         <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 py-4 bg-slate-100 rounded-md">
@@ -126,12 +136,12 @@ const ProfileScreen = () => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("RideRequest");
+          navigation.replace("RideRequest");
         }}
       >
         <View className="flex-row space-x-4 items-center  mt-2 mx-6 p-2 py-4 bg-slate-100 rounded-md">
           <AntDesign name="disconnect" size={24} color="black" />
-          <Text className="text-xl">Requested Ride</Text>
+          <Text className="text-xl">Requested Rides</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity
@@ -150,7 +160,7 @@ const ProfileScreen = () => {
           handleLogout();
         }}
       >
-        <View className="flex-row space-x-4 items-center  mt-14 mx-6 p-2 py-4 bg-slate-100 rounded-md">
+        <View className="flex-row space-x-4 items-center  mt-6 mx-6 p-2 py-4 bg-slate-100 rounded-md">
           <SimpleLineIcons name="logout" size={24} color="red" />
           <Text className="text-xl text-red-600">Log out</Text>
         </View>

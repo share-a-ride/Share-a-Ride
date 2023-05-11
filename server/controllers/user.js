@@ -56,6 +56,7 @@ class UserController {
         console.log(name,email,password,phoneNumber,photo,idCardImg)
         await User.create({
           name,
+          address,
           email,
           password,
           phoneNumber,

@@ -67,7 +67,7 @@ const DetailScreen = () => {
         }
       );
       console.log(data);//alert succes untuk book
-      navigation.navigate("Home");
+      navigation.replace("Home");
     } catch (error) {
       console.log(error);
     }
@@ -90,7 +90,7 @@ const DetailScreen = () => {
       <View className="mx-6 my-4 mb-4 ">
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Home");
+            navigation.replace("Home");
           }}
         >
           <AntDesign name="arrowleft" size={28} color="white" />
@@ -121,7 +121,7 @@ const DetailScreen = () => {
             </Text>
             <Octicons name="dot-fill" size={24} color="grey" />
             <Text className=" text-sky-700 font-bold  text-[16px]  ">
-              {`${rides?.seats}/12 Seats`}
+              {`Seats:${rides?.seats} `}
             </Text>
           </View>
         </View>
@@ -186,13 +186,14 @@ const DetailScreen = () => {
         </View>
       </TouchableOpacity>
 
-      <View className="flex-1   ">
-        <TouchableOpacity onPress={handleBookRide}>
-          <View className="bg-accent mx-4 mt-4  py-4 px-6 rounded-lg w-full">
-            <Text className="text-3xl text-center">Book This Ride</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+       onPress={handleBookRide}
+      >
+        <View className=" bg-sky-400 mt-8 mx-6 px-4 py-4  rounded-2xl shadow-md space-x-2 items-center ">
+          <Text className="text-3xl text-center">Book This Ride</Text>
+        </View>
+      </TouchableOpacity>
+
     </View>
   );
 };

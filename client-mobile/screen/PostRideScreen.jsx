@@ -58,17 +58,21 @@ const PostRideScreen = () => {
     } catch (error) {
       console.log(error);
     }
-    navigation.navigate("Home");
+    navigation.replace("Home");
   };
 
-
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, []);
 
   return (
     <View className="flex-1 bg-white">
        <View className="mx-6 my-4 mb-4 ">
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Home");
+            navigation.replace("Home");
           }}
         >
           <AntDesign name="arrowleft" size={28} color="black" />
@@ -85,7 +89,8 @@ const PostRideScreen = () => {
         placeholder="Origin"
         placeholderTextColor="#8e9eb6"
         onChangeText={setOrigin}
-        value={origin}
+        val
+        ue={origin}
       />
       <TextInput
         name="destination"

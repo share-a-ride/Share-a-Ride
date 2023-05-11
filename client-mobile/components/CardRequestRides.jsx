@@ -23,7 +23,7 @@ const BASE_URL = "http://192.168.100.167:4002";
 
 const CardRequestRides = ({ item }) => {
   const navigation = useNavigation();
-  console.log(item.UserRides)
+  console.log(item,"<<<< dari card requsted ride")
   const handleAccept = async () => {
     try {
       const { data } = await axios.patch(
@@ -76,7 +76,7 @@ const CardRequestRides = ({ item }) => {
           </View>
             <View>
             <TouchableOpacity onPress={() => {
-              navigation.navigate("ChatBox",{item});
+              navigation.navigate("ChatBox",{item:item.User});
             }}>
               <Ionicons name="chatbox-ellipses-outline" size={30} color="white" />
             </TouchableOpacity>
