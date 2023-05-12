@@ -25,7 +25,6 @@ const BASE_URL = "http://192.168.100.167:4002";
 
 export default function HomeScreen({ route }) {
   const navigation = useNavigation();
-  
   const [user, setCurrentUser] = useState({});
   const [rides, setRides] = useState([]);
   const [clicked, setCLicked] = useState(null);
@@ -36,7 +35,6 @@ export default function HomeScreen({ route }) {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  console.log(destination,origin,"<<<<<ini coba search")
   const handleSearch = () => {
     // Lakukan sesuatu setelah user melakukan pencarian
     
@@ -70,10 +68,8 @@ export default function HomeScreen({ route }) {
     }
   };
 
-  console.log(origin,destination,"<<<<< dari home search")
 
   const fetchRides = async () => {
-    console.log(origin,destination,"<<< dari search")
     const { data } = await axios.get(BASE_URL + `/rides?origin=${origin}&dest=${destination}`, {
       headers: { access_token: await AsyncStorage.getItem("access_token") },
     });

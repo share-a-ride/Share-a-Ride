@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Alert
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
@@ -17,35 +18,16 @@ import {
   FontAwesome,
   AntDesign,
 } from "@expo/vector-icons";
+import SweetAlert from 'react-native-sweet-alert';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const BASE_URL = "http://192.168.100.167:4002";
 
 const DetailScreen = () => {
-  //  const formatIndonesianTime = (time) => {
-  //   const dateObj = new Date(time);
-
-  //   const day = dateObj.getDate();
-  //   const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(dateObj);
-  //   const year = dateObj.getFullYear();
-  //   const hours = dateObj.getHours();
-  //   const minutes = dateObj.getMinutes();
-
-  //   const formattedDate = `${day} ${month} ${year}`;
-  //   const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-
-  //   return `${formattedDate} | ${formattedTime}`;
-  // };
-
   const [rides, setRides] = useState(null);
   const navigation = useNavigation();
   const route = useRoute();
   const id = route.params.item.id;
-  // const rides = route.params.item;
-
-  // console.log(rides, "<<<<<<<<< ini route params");
-  // console.log(route.params, "<<<<<<");
-  console.log(id,"<<<<< details booke")
-
+ 
   const fetchDetailRide = async () => {
   
     const { data } = await axios.get(BASE_URL + `/rides/${id}`, {
@@ -55,11 +37,9 @@ const DetailScreen = () => {
     });
     setRides(data);
   };
-  console.log(rides, " <<<< ini rides dari screeen details");
 
   const handleBookRide = async () => {
     try {
-      console.log(id,"<<<masuk ")
       const { data } = await axios.post(
         BASE_URL + `/rides/order/${id}`,{},
         {
@@ -69,15 +49,15 @@ const DetailScreen = () => {
           },
         }
       );
-      console.log(data);//alert succes untuk book
-      navigation.replace("Home");
+      Alert.alert('Booking Success');
+      
+      navigation.replace("MyRides");
     } catch (error) {
       console.log(error);
     }
   };
 
   useLayoutEffect(() => {
-    // console.log(rides.UserRides, "ini user rides");
     navigation.setOptions({
       headerShown: false,
     });
@@ -85,7 +65,6 @@ const DetailScreen = () => {
 
   useEffect(() => {
     fetchDetailRide();
-    console.log(rides, "<<<<<<<Dari");
   }, []);
 
   return (
@@ -105,7 +84,6 @@ const DetailScreen = () => {
           <View className="bg-slate-600 w-16 h-16 rounded-full border border-slate-400 ">
             <Image
               className="w-full h-full object-cover rounded-full "
-              // source={rides?.UserRides[0].User.photo}
               source={{uri:rides?.UserRides[0].User.photo}}
             />
           </View>
@@ -144,14 +122,14 @@ const DetailScreen = () => {
         <View className="flex-row w-full justify-between">
           <View>
             <View>
-              <Text>{rides?.startLocation}</Text>
-              <Text className="text-[11px]">{rides?.departureTime}</Text>
+              <Text className="text-xl font-semibold">{rides?.startLocation}</Text>
+              <Text className="text-[14px]">{rides?.departureTime}</Text>
             </View>
 
-            <View className="h-[70px] w-1"></View>
+            <View className="h-[40px] w-1"></View>
             <View>
-              <Text>{rides?.destination}</Text>
-              <Text className="text-[11px]">{rides?.arrivalTime}</Text>
+              <Text className="text-xl font-semibold">{rides?.destination}</Text>
+              <Text className="text-[14px]">{rides?.arrivalTime}</Text>
             </View>
           </View>
           <View className="mr-4">

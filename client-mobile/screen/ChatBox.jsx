@@ -23,14 +23,14 @@ const ChatBox = () => {
       const { data } = await axios.get(BASE_URL + "/users/currentUser", {
         headers: { access_token: await AsyncStorage.getItem("access_token") },
       });
-      console.log(data, "ini data");
+      // console.log(data, "ini data");
       setUser(data);
     } catch (error) {
-      console.log(error);
+      console.log(error,"<<<<disini");
     }
   };
 
-  console.log(item,"<<<< dari chat")
+  // console.log(item,"<<<< dari chat")
 
 
   const me = {
@@ -38,7 +38,7 @@ const ChatBox = () => {
     name: user?.name,
     email: user?.email,
     photoUrl: user?.photo,
-    welcomeMessage: "Hey there! How are you? :-)",
+    welcomeMessage: "https://goo.gl/maps/UqirXTSDcPzGkUBWA",
     role: "default",
   };
 

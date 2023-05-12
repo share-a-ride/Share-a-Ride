@@ -9,8 +9,13 @@ const mailTransporter = require("../helpers/nodeMailer");
 class RideController {
   static async getAllRide(req, res, next) {
     const { origin, dest } = req.query;
+    const {id} =req.user
     let params = {
-      where: {},
+      where: {
+        createdBy:{
+          [Op.not]:id
+        }
+      },
       order: [["updatedAt", "DESC"]],
       include: [
         {
@@ -462,8 +467,8 @@ class RideController {
     try {
       const { id } = req.user;
       // console.log(id,"<<<<<");
-      const data = await Ride.findAll({
-        where: { createdBy: id },
+      const data = await UserRide.findAll({
+        where: { status: "requested" },
         order: ["updatedAt"],
         include: [
           {
@@ -479,14 +484,18 @@ class RideController {
         ],
       });
       const ridesPerUser = data.map((el) => {
-        el.dataValues.departureTime = dateFormatter(el.departureTime);
-        el.dataValues.arrivalTime = dateFormatter(el.arrivalTime);
-        el.price = priceFormatter(el.price);
+        el.dataValues.Ride.dataValues.departureTime = dateFormatter(
+          el.Ride.departureTime
+        );
+        el.dataValues.Ride.dataValues.arrivalTime = dateFormatter(
+          el.Ride.arrivalTime
+        );
+        el.Ride.price = priceFormatter(el.Ride.price);
         return el;
       });
       res.status(200).json(ridesPerUser);
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       next(error);
     }
   }

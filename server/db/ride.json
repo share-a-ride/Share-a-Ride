@@ -48,5 +48,25 @@
     "seats": 0,
     "VehicleId": 4,
     "createdBy": 3
+  },
+  {
+    "startLocation": "Yogyakarta",
+    "destination": "Surabaya",
+    "departureTime": "2023-05-20 08:00:00",
+    "arrivalTime": "2023-05-20 14:00:00",
+    "price": 180000,
+    "seats": 6,
+    "VehicleId": 5,
+    "createdBy": 5
+  },
+  {
+    "startLocation": "Bali",
+    "destination": "Lombok",
+    "departureTime": "2023-05-25 09:00:00",
+    "arrivalTime": "2023-05-25 12:00:00",
+    "price": 120000,
+    "seats": 8,
+    "VehicleId": 6,
+    "createdBy": 6
   }
 ]

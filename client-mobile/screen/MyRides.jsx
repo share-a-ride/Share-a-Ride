@@ -31,7 +31,6 @@ const MyRides = () => {
       const { data } = await axios.get(BASE_URL + "/users/rides", {
         headers: { access_token: await AsyncStorage.getItem("access_token") },
       });
-      console.log(data, "ini data");
       setRides(data);
     } catch (error) {
       console.log(error);
@@ -43,14 +42,14 @@ const MyRides = () => {
     navigation.setOptions({
       headerShown: false,
     });
-  }, []);
+  }, [rides]);
 
   return (
     <View className="flex-1 bg-white">
       <View className="mx-6 my-4  ">
         <TouchableOpacity
           onPress={() => {
-            navigation.replace("Home");
+            navigation.replace("Profile");
           }}
         >
           <AntDesign name="arrowleft" size={28} color="black" />

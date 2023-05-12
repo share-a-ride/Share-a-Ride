@@ -42,7 +42,7 @@ const RatingModal = ({ isVisible, onClose, onRatingSelected,id }) => {
     <Modal visible={isVisible} animationType="fade" transparent>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.title}>Rate the App</Text>
+          <Text style={styles.title}>Rate This Driver</Text>
           <View style={styles.starContainer}>
             {[1, 2, 3, 4, 5].map((rating) => (
               <TouchableOpacity

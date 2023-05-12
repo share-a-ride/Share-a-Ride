@@ -25,7 +25,6 @@ const ProfileScreen = () => {
       const { data } = await axios.get(BASE_URL + "/users/currentUser", {
         headers: { access_token: await AsyncStorage.getItem("access_token") },
       });
-      console.log(data, "ini data");
       setCurrentUser(data);
     } catch (error) {
       console.log(error);
@@ -36,7 +35,6 @@ const ProfileScreen = () => {
     try {
       await AsyncStorage.removeItem("access_token");
       let access_token = await AsyncStorage.getItem("access_token");
-      console.log("disini",access_token)
       navigation.replace("Landing");
     } catch (error) {
       console.log(error);
@@ -52,7 +50,7 @@ const ProfileScreen = () => {
     navigation.setOptions({
       headerShown: false,
     });
-  }, []);
+  }, [user]);
   return (
     <View className="relative w-full max-w-2xl h-full  bg-white">
       <Modal
@@ -84,7 +82,6 @@ const ProfileScreen = () => {
         </View>
         <View className="p-8">
           <Text className="text-2xl">{user?.name}</Text>
-          <Text className="text-slate-700 ">jakarta, Indonesia</Text>
         </View>
       </View>
 

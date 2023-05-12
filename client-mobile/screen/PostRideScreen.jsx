@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, Button } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Button,Alert } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -7,6 +7,7 @@ import {
   Ionicons,
   FontAwesome,
   AntDesign,
+  
 } from "@expo/vector-icons";
 import axios from "axios";
 const BASE_URL = "http://192.168.100.167:4002";
@@ -51,7 +52,7 @@ const PostRideScreen = () => {
       if (!res.ok) {
         throw new Error(await res.text());
       }
-
+      Alert.alert('Success Adding New Ride');
       console.log("Uploaded");
     } catch (error) {
       console.log(error);

@@ -12,7 +12,6 @@ import { useNavigation } from "@react-navigation/native";
 import { EvilIcons } from '@expo/vector-icons';
 
 const CardPost = ({ item }) => {
-  console.log(item,"<<<<<dari hom card")
   const navigation = useNavigation();
   return (
     <GestureDetector
@@ -29,9 +28,9 @@ const CardPost = ({ item }) => {
       <View style={styles.card}>
         <View style={styles.left}>
           <View className="">
-            <View className="flex-row items-center ">
+            <View className="flex-row items-center  ">
             <EvilIcons name="location" size={24} color="black" />
-               <Text style={styles.leftText}>{item.startLocation}</Text>
+               <Text className="text-xl font-semibold">{item.startLocation}</Text>
             </View>
             
             <View className="ml-3 flex-row space-x-2">
@@ -44,7 +43,7 @@ const CardPost = ({ item }) => {
             </View>
             <View className="flex-row items-center">
             <EvilIcons name="location" size={24} color="black" />
-            <Text style={styles.leftText}>{item.destination}</Text> 
+            <Text className="text-xl font-semibold">{item.destination}</Text> 
             </View>
             <View className="ml-4">
                <Text style={styles.leftText}>{item.arrivalTime}</Text>

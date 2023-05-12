@@ -35,6 +35,7 @@ const CardRequestRides = ({ item }) => {
           },
         }
       );
+      navigation.replace('RideRequest')
       console.log(data);//alert succes untuk pergantian status
     } catch (error) {
       console.log(error);
@@ -52,6 +53,7 @@ const CardRequestRides = ({ item }) => {
           },
         }
       );
+      navigation.replace('RideRequest')
       console.log(data);//alert succes untuk pergantian status
     } catch (error) {
       console.log(error);

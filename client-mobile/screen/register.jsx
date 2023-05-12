@@ -135,9 +135,9 @@ export default function RegisterScreen() {
       />
       <TextInput
         style={styles.input}
-        
         placeholder="Address"
         placeholderTextColor="#8e9eb6"
+        autoCapitalize="words"
         value={address}
         onChangeText={setAddress}
       />

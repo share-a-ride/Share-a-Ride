@@ -3,15 +3,17 @@ import {Alert, Modal, StyleSheet, Text, Pressable, View,TextInput} from 'react-n
 import axios from 'axios'
 const BASE_URL = "http://192.168.100.167:4002";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from '@react-navigation/native';
 
 
 const ModalAddVihecle = (props) => {
   const [type, setType] = useState("");
   const [plateNumber, setPlateNumber] = useState("");
+ const navigation =useNavigation()
 
   const closeModal= async (bool,data) =>{
     try {
-      console.log(type,plateNumber,"<<<<< data add ne modal");
+      // console.log(type,plateNumber,"<<<<< data add ne modal");
       const access_token = await AsyncStorage.getItem("access_token");
       const res = await axios.post(
         BASE_URL + "/vehicles",
@@ -28,7 +30,8 @@ const ModalAddVihecle = (props) => {
         throw new Error(await res.text());
       }
 
-      console.log("Uploaded");
+      // console.log("Uploaded");
+      navigation.replace('Profile')
     } catch (error) {
       console.log(error);
     }
@@ -42,6 +45,7 @@ const ModalAddVihecle = (props) => {
             name="type"
             className="bg-background py-4 w-11/12 text-white text-lg   mx-auto rounded-2xl mb-4 px-4"
             placeholder="Vehicle"
+            autoCapitalize="words"
             placeholderTextColor="#8e9eb6"
             onChangeText={setType}
             value={type}
@@ -51,6 +55,7 @@ const ModalAddVihecle = (props) => {
             name="plateNumber"
             className="bg-background py-4 w-11/12 text-white text-lg   mx-auto rounded-2xl mb-4 px-4"
             placeholder="Plate Number"
+            autoCapitalize="characters"
             placeholderTextColor="#8e9eb6"
             onChangeText={setPlateNumber}
             value={plateNumber}

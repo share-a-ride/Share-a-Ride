@@ -25,13 +25,10 @@ import RatingModal from "./RatingModal";
 
 const CardMyRides = ({ item }) => {
   const navigation = useNavigation();
-  console.log(item, "<<<< ini dari card my ride");
-
 
   const [modalVisible, setModalVisible] = useState(false);
   const [rating, setRating] = useState(0);
   const id = item.Ride.createdBy; // Replace with your ID
-  console.log(rating,"<<<< ratinggg ")
   const handleRatingSelected = (selectedRating) => {
     setRating(selectedRating);
 
@@ -49,7 +46,6 @@ const CardMyRides = ({ item }) => {
           },
         }
       );
-      console.log(data, "<<<<dari card myride payments"); //alert succes untuk book
       navigation.navigate("Payment", data);
     } catch (error) {
       console.log(error);
@@ -70,7 +66,7 @@ const CardMyRides = ({ item }) => {
         <View className="flex-row w-full justify-between">
           <View>
             <View>
-              <Text className="text-white">{item?.Ride.startLocation}</Text>
+              <Text className="text-white text-lg">{item?.Ride.startLocation}</Text>
               <Text className="text-[11px] text-white">
                 {item?.Ride.departureTime}
               </Text>
@@ -78,7 +74,7 @@ const CardMyRides = ({ item }) => {
 
             <View className="h-[70px] w-1"></View>
             <View>
-              <Text className="text-white">{item?.Ride.destination}</Text>
+              <Text className="text-white text-lg">{item?.Ride.destination}</Text>
               <Text className="text-[11px] text-white">
                 {item?.Ride.arrivalTime}
               </Text>
