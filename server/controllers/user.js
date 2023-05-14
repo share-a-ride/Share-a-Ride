@@ -77,7 +77,7 @@ class UserController {
     try {
       const { email, password } = req.body;
       // console.log("MASUK LOGIN!!");
-      console.log(req.body, "?????????????");
+      // console.log(req.body, "?????????????");
 
       if (!email || email === undefined) throw { name: "empty_email" };
       if (!password || password === undefined) throw { name: "empty_password" };

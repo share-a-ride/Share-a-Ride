@@ -17,3 +17,4 @@ userRouter.get("/rides", userAuthentication, RideController.ridePerUser);
 userRouter.patch("/rate/:id", userAuthentication, UserController.rateUser);
 
 module.exports = userRouter;
+  

@@ -3,6 +3,8 @@ const { Ride, Vehicle, UserRide, User } = require("../models");
 const midtransClient = require("midtrans-client");
 const axios = require("axios");
 // const { checkPaymentStatus } = require("../helpers/checkPayment");
+const nodemailer = require("nodemailer");
+const mailTransporter = require("../helpers/nodemailer");
 
 class RideController {
   static async getAllRide(req, res, next) {
@@ -215,6 +217,18 @@ class RideController {
       // }
 
       // Update UserRide payment status to 'paid'
+      let details = {
+        from: "ridetest321@gmail.com",
+        to: checkUser.User.email,
+        subject: "Share-a-ride notification ",
+        text: "Share-a-ride payment is succeed",
+      };
+
+      mailTransporter.sendMail(details, (err) => {
+        if (err) console.log(err);
+        else console.log("e-mail has sent");
+      });
+
       await checkUser.update({ status: "paid" });
       const ride = await Ride.findByPk(checkUser.RideId);
       await Ride.update(
@@ -238,11 +252,14 @@ class RideController {
       const rideId = req.params.id;
       const userId = req.user.id;
       // console.log(req.user);
+      // console.log(checkUser.User.email, "<<<<<<<<<");
 
       const ride = await Ride.findByPk(rideId, {
         include: [{ model: UserRide }],
       });
-      // console.log(ride.UserRides);
+      // console.log(ride.createdBy);
+      const checkUser = await User.findByPk(ride.createdBy);
+      // console.log(checkUser.email);
       // check if user is in the ride
       if (!ride) {
         throw { name: "not_found" };
@@ -259,9 +276,22 @@ class RideController {
         UserId: userId,
         status: "requested",
       });
+
+      let details = {
+        from: "ridetest321@gmail.com",
+        to: checkUser.email,
+        subject: "Share-a-ride notification ",
+        text: "Share-a-ride payment is succeed",
+      };
+
+      mailTransporter.sendMail(details, (err) => {
+        if (err) console.log(err);
+        else console.log("e-mail has sent");
+      });
       const message = "Order received";
       res.status(201).json({ message });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
@@ -269,20 +299,43 @@ class RideController {
   static async cancelOrder(req, res, next) {
     try {
       const id = req.params.id;
-      const userId = req.user.id;
+      // const userId = req.user.id;
 
-      const order = await UserRide.findByPk(id);
-      if (!order) {
-        throw { name: "not_found" };
-      }
-      if (order.UserId !== userId) {
-        throw { name: "invalid_user" };
-      }
+      // const order = await UserRide.findByPk(id);
+      // if (!order) {
+      //   throw { name: "not_found" };
+      // }
+      // if (order.UserId !== userId) {
+      //   throw { name: "invalid_user" };
+      // }
 
-      await UserRide.destroy({ where: { id } });
+      // await UserRide.destroy({ where: { id } });
+
+      const checkUser = await UserRide.findAll({
+        where: { RideId: id },
+        include: {
+          model: User,
+          attributes: ["name", "email"],
+        },
+      });
+      // console.log(checkUser);
+
+      // let details = {
+      //   from: "ridetest321@gmail.com",
+      //   to: checkUser.User.email,
+      //   subject: "Share-a-ride notification ",
+      //   text: "Share-a-ride payment is succeed",
+      // };
+
+      // mailTransporter.sendMail(details, (err) => {
+      //   if (err) console.log(err);
+      //   else console.log("e-mail has sent");
+      // });
+
       const message = `Order is cancelled`;
-      res.status(200).json({ message });
+      res.status(200).json({ message, checkUser });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
@@ -324,12 +377,35 @@ class RideController {
       const { status } = req.body;
 
       const orderToUpdate = await UserRide.findByPk(id, {
-        include: [{ model: Ride }],
+        include: [
+          { model: Ride },
+          { model: User, attributes: ["name", "email"] },
+        ],
       });
 
       if (!orderToUpdate) {
         throw { name: "not_found" };
       }
+
+      let details = {
+        from: "ridetest321@gmail.com",
+        to: orderToUpdate.User.email,
+        subject: "Share-a-ride notification ",
+      };
+
+      if (status === "accepted") {
+        details.text =
+          "Share-a-ride ride is accepted, please complete the payment";
+      } else if (status === "rejected") {
+        details.text =
+          "Share-a-ride ride is canceled by the driver, please book your new ride";
+      }
+
+      console.log(details.text);
+      mailTransporter.sendMail(details, (err) => {
+        if (err) console.log(err);
+        else console.log("e-mail has sent");
+      });
 
       if (orderToUpdate.Ride.createdBy !== userId) {
         throw { name: "invalid_user" };
