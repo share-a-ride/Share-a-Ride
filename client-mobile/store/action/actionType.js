@@ -1,6 +1,6 @@
 
 //URL
-export const BASE_URL = "http://192.168.100.167:4002";
+export const BASE_URL = "https://share-a-ride-production.up.railway.app";
 
 //action for all Post
 export const FETCH_RIDES ="fetchrIDE"

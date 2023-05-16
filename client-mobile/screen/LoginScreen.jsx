@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { handleLogin } from "../store/action/actionCreator";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const BASE_URL = "http://192.168.100.167:4002";
+const BASE_URL = "https://share-a-ride-production.up.railway.app";
 
 export default function LoginScreen() {
   const navigation = useNavigation();

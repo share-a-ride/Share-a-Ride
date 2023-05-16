@@ -20,7 +20,7 @@ import {
 } from "@expo/vector-icons";
 import SweetAlert from 'react-native-sweet-alert';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const BASE_URL = "http://192.168.100.167:4002";
+const BASE_URL = "https://share-a-ride-production.up.railway.app";
 
 const DetailScreen = () => {
   const [rides, setRides] = useState(null);
@@ -49,6 +49,7 @@ const DetailScreen = () => {
           },
         }
       );
+      console.log(data, "<><><><>><><>");
       Alert.alert('Booking Success');
       
       navigation.replace("MyRides");

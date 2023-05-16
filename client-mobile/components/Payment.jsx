@@ -5,7 +5,7 @@ import Constants from 'expo-constants';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useNavigation, useRoute } from '@react-navigation/native';
-const BASE_URL = "http://192.168.100.167:4002";
+const BASE_URL = "https://share-a-ride-production.up.railway.app";
 
 
 export default function Payment() {

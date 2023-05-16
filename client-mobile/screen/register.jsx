@@ -13,7 +13,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 
-const BASE_URL = "http://192.168.100.167:4002";
+const BASE_URL = "https://share-a-ride-production.up.railway.app";
 
 export default function RegisterScreen() {
   const [photoUploaded, setPhotoUploaded] = useState(false);
