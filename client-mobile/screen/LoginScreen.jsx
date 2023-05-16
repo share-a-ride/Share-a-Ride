@@ -1,60 +1,84 @@
+import React, { useLayoutEffect, useState } from "react";
 import {
   View,
-  Text,
-  StyleSheet,
-  Image,
-  ImageBackground,
   TextInput,
   TouchableOpacity,
+  StyleSheet,
+  Text,
+  Image,
 } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { handleLogin } from "../store/action/actionCreator";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+const BASE_URL = "http://192.168.100.167:4002";
+
 export default function LoginScreen() {
+  const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    try {
+      const { data } = await axios.post(BASE_URL + "/users/login", {
+        email,
+        password,
+      });
+      // console.log("disini");
+      // console.log(data);
+
+      await AsyncStorage.setItem("access_token", data.access_token);
+      const value = await AsyncStorage.getItem("access_token");
+      
+      // console.log(value);
+      navigation.replace("Home");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, []);
+
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={{
-          uri: "https://i.imgur.com/b8kFuGs.png",
-        }}
-        resizeMode="cover"
-        style={styles.image}
-      >
-        <View style={styles.head}></View>
-        <View style={styles.body}>
-          <TextInput
-            style={styles.input}
-            underlineColorAndroid="transparent"
-            placeholder="Email"
-            placeholderTextColor="white"
-            autoCapitalize="none"
-            onChangeText={this.handleEmail}
-          />
+      <Image
+        source={require("../assets/logo-no-background.png")}
+        style={styles.logo}
+        resizeMode="contain"
+      />
 
-          <TextInput
-            style={styles.input}
-            underlineColorAndroid="transparent"
-            placeholder="Password"
-            placeholderTextColor="white"
-            autoCapitalize="none"
-            onChangeText={this.handlePassword}
-          />
-          
-          <TouchableOpacity
-          style={styles.submitButton}
-          onPress={() => this.login(this.state.email, this.state.password)}
-        >
-          <Text style={styles.submitButtonText}> Submit </Text>
-          
-        </TouchableOpacity>
-          <TouchableOpacity
-          style={styles.submitButton}
-          onPress={() => this.login(this.state.email, this.state.password)}
-        >
-          <Text style={styles.submitButtonText}> Register </Text>
-          
-        </TouchableOpacity>
-        </View>
-       
-      </ImageBackground>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        autoCapitalize="none"
+        placeholderTextColor="#8e9eb6"
+        value={email}
+        onChangeText={setEmail}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        autoCapitalize="none"
+        placeholderTextColor="#8e9eb6"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.secondaryButton}
+        onPress={() => navigation.navigate("Register")}
+      ></TouchableOpacity>
     </View>
   );
 }
@@ -62,38 +86,46 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  
-  },
-  image: {
-    flex: 1,
-  },
-  head: {
-    flex: 1,
-  },
-  body: {
-    flex: 1,
-    backgroundColor: "black",
     alignItems: "center",
-    
+    justifyContent: "center",
+    backgroundColor: "#1f2d5a",
+  },
+  logo: {
+    width: "80%",
+    height: undefined,
+    aspectRatio: 1,
+    marginBottom: 50,
   },
   input: {
-    marginTop:30 ,
-    height: 40,
-    padding:5,
-    borderColor: "white",
-    borderWidth: 1,
-    width: "90%"
+    width: "80%",
+    height: 50,
+    backgroundColor: "#fff",
+    borderRadius: 25,
+    paddingLeft: 20,
+    marginBottom: 10,
+    fontSize: 18,
+    color: "#000",
   },
-  submitButton: {
-    backgroundColor: 'blue',
-    padding: 10,
-   
-    height: 40,
-    width: "50%",
-    marginTop:30 ,
- },
- submitButtonText:{
-    color: 'white',
-    textAlign: "center",
- }
+  button: {
+    width: "80%",
+    height: 50,
+    backgroundColor: "#3a66b2",
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  secondaryButton: {
+    marginTop: 20,
+  },
+  secondaryButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    textDecorationLine: "underline",
+  },
 });

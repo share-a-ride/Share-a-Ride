@@ -6,9 +6,10 @@ class AdminController {
   static async adminRegister(req, res, next) {
     try {
       const { name, email, password } = req.body;
+      const lcEmail = email.toLowerCase();
       let newAdmin = await Admin.create({
         name,
-        email,
+        email: lcEmail,
         password,
       });
 
@@ -22,14 +23,16 @@ class AdminController {
   static async adminLogin(req, res, next) {
     try {
       const { email, password } = req.body;
-
       if (!email || email === undefined) throw { name: "empty_email" };
       if (!password || password === undefined) throw { name: "empty_password" };
 
-      const currentAdmin = await Admin.findOne({ email });
+      const lcEmail = email.toLowerCase();
+
+      const currentAdmin = await Admin.findOne({ where: { email: lcEmail } });
       if (!currentAdmin) {
         throw { name: "unauthorized" };
       }
+
       if (!Hash.verify(password, currentAdmin.password)) {
         throw { name: "unauthorized" };
       }

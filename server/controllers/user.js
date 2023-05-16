@@ -1,40 +1,93 @@
 const Hash = require("../helpers/bcrypt");
 const { generateToken } = require("../helpers/jwt");
-const { User } = require("../models");
+const { User, Vehicle } = require("../models");
+const ImageKit = require("imagekit");
+const uuid = require("uuid");
+const multer = require("multer");
+const { priceFormatter } = require("../helpers/formatter");
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 class UserController {
   static async register(req, res, next) {
-    try {
-      const { name, email, password, phoneNumber, photo, idCardImg } = req.body;
-      const newPass = Hash.create(password);
-      const status = "unverified";
-      await User.create({
-        name,
-        email,
-        newPass,
-        phoneNumber,
-        photo,
-        idCardImg,
-        status,
-      });
+    upload.any()(req, res, async function (err) {
+      if (err) {
+        console.error(err);
+        return res.status(400).send({ error: "Error uploading files" });
+      }
+      const { name, address, email, phoneNumber, password } = req.body;
 
-      const message = `User ${name} has succesfully registered`;
-      res.status(201).json({ message });
-    } catch (error) {
-      next(error);
-    }
+      const lcEmail = email.toLowerCase();
+
+      const selfie = req.files.find((file) => file.fieldname === "photo");
+      const idCard = req.files.find((file) => file.fieldname === "idCardImg");
+      console.log(selfie, "photo");
+      console.log(idCard, "id");
+      var imagekit = new ImageKit({
+        publicKey: "public_598ryvTcQKwiS8vjsgNTeEUsvfY=",
+        privateKey: "private_8dPPtCNhJ11zMc2K2U/dQBJ6E5g=",
+        urlEndpoint: "https://ik.imagekit.io/pckjztu2z",
+      });
+      try {
+        const selfieUrl = await imagekit.upload({
+          file: selfie.buffer, //required
+          fileName: `${selfie.originalname}`, //required
+          extensions: [
+            {
+              name: "google-auto-tagging",
+              maxTags: 5,
+              minConfidence: 95,
+            },
+          ],
+        });
+
+        const idCardUrl = await imagekit.upload({
+          file: idCard.buffer, //required
+          fileName: `${idCard.originalname}`, //required
+          extensions: [
+            {
+              name: "google-auto-tagging",
+              maxTags: 5,
+              minConfidence: 95,
+            },
+          ],
+        });
+        let photo = selfieUrl.url;
+        let idCardImg = idCardUrl.url;
+        console.log(name, email, password, phoneNumber, photo, idCardImg);
+        await User.create({
+          name,
+          email: lcEmail,
+          password,
+          phoneNumber,
+          address,
+          photo,
+          idCardImg,
+          status: "unverified",
+          rating: 5,
+        });
+        const message = `User ${name} has succesfully registered`;
+        res.status(201).json({ message });
+      } catch (error) {
+        console.error(error);
+        return res.status(500).send({ error: "Server error" });
+      }
+    });
   }
 
   static async login(req, res, next) {
     try {
       const { email, password } = req.body;
-      // console.log(req.body, "?????????????");
+      // console.log("MASUK LOGIN!!");
+      console.log(req.body, "?????????????");
 
       if (!email || email === undefined) throw { name: "empty_email" };
       if (!password || password === undefined) throw { name: "empty_password" };
 
+      const lcEmail = email.toLowerCase();
+
       const selectedUser = await User.findOne({
-        where: { email },
+        where: { email: lcEmail },
       });
 
       if (!selectedUser) {
@@ -48,14 +101,14 @@ class UserController {
       const token = generateToken({ id: selectedUser.id });
       res.status(200).json({
         access_token: token,
-        username: selectedUser.name,
+        name: selectedUser.name,
         email: selectedUser.email,
         phoneNumber: selectedUser.phoneNumber,
         photo: selectedUser.photo,
         rating: selectedUser.rating,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       next(error);
     }
   }
@@ -80,13 +133,34 @@ class UserController {
         attributes: {
           exclude: ["password"],
         },
+        include: Vehicle,
       });
-      console.log(user);
+      // console.log(user);
       if (!user) {
         throw { name: "not_found" };
       }
+      user.money= priceFormatter(user.money)
       res.status(200).json(user);
     } catch (error) {
+      // console.log(error);
+      next(error);
+    }
+  }
+
+  static async getCurrentUser(req, res, next) {
+    const userId = req.user.id;
+    try {
+      let currentUser = await User.findByPk(userId, {
+        attributes: {
+          exclude: ["password"],
+        },
+        include: Vehicle,
+      });
+      // console.log(user);
+      currentUser.money= priceFormatter(currentUser.money)
+      res.status(200).json(currentUser);
+    } catch (error) {
+      // console.log(error);
       next(error);
     }
   }
@@ -152,6 +226,7 @@ class UserController {
       const message = `Rated ${userToRate.name} with ${rating} successfully`;
       res.status(200).json({ message });
     } catch (error) {
+      // console.log(error);
       next(error);
     }
   }
